@@ -34,7 +34,7 @@ def main():
     assert dst.exists() and dst.stat().st_size == src.stat().st_size, "copy failed"
     print(f"[resume_gm] placed: {dst} ({dst.stat().st_size} bytes), ckpt={ckpt_num}", flush=True)
 
-    train_args = sys.argv[1:] + ["--resume", "--load_run=gm_resume", f"--checkpoint={ckpt_num}"]
+    train_args = sys.argv[1:] + ["--resume", "--load_run=gm_resume", f"--checkpoint=.*{ckpt_num}.*"]
     print(f"[resume_gm] exec: {TRAIN_PY.name} {' '.join(train_args)}", flush=True)
     ret = subprocess.run([sys.executable, str(TRAIN_PY), *train_args])
     sys.exit(ret.returncode)
