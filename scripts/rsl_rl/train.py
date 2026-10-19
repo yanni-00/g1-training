@@ -89,6 +89,7 @@ import gymnasium as gym
 import inspect
 import os
 import shutil
+import time
 import torch
 from datetime import datetime
 
@@ -201,10 +202,66 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     )
 
     # run training
+    if os.environ.get("GM_CHECKPOINT_RELAY") == "1":
+        import threading
+
+        relay = threading.Thread(target=_gm_checkpoint_relay, args=(agent_cfg.experiment_name,), daemon=True)
+        relay.start()
+        print("[gm_relay] background checkpoint relay started (5 min cycle)", flush=True)
     runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+    if os.environ.get("GM_CHECKPOINT_RELAY") == "1":
+        # 终局兜底：把最后一个 checkpoint 也中继出去（任务自然结束时 SDK 仍会短暂上传）
+        try:
+            repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            log_root = os.path.abspath(os.path.join("logs", "rsl_rl", agent_cfg.experiment_name))
+            import glob
+
+            models = sorted(
+                glob.glob(os.path.join(log_root, "*", "model_*.pt")),
+                key=lambda p: os.path.getmtime(p),
+            )
+            if models:
+                dst = os.path.join(repo_root, os.path.basename(models[-1]))
+                if not os.path.exists(dst):
+                    shutil.copy2(models[-1], dst)
+                    print(f"[gm_relay] final checkpoint relayed: {os.path.basename(models[-1])}", flush=True)
+        except Exception as e:
+            print(f"[gm_relay] final relay error: {e}", flush=True)
 
     # close the simulator
     env.close()
+
+
+def _gm_relay_pass(log_root: str, repo_root: str, only_milestones: bool):
+    """把 log 目录里的 checkpoint 复制到仓库根（g1-training/）——GM SDK 只可靠扫描该目录。"""
+    import glob
+
+    moved = []
+    for f in sorted(glob.glob(os.path.join(log_root, "*", "model_*.pt"))):
+        num = "".join(ch for ch in os.path.basename(f) if ch.isdigit())
+        if only_milestones and num and int(num) % 500 != 0:
+            continue
+        dst = os.path.join(repo_root, os.path.basename(f))
+        if not os.path.exists(dst):
+            shutil.copy2(f, dst)
+            moved.append(os.path.basename(f))
+    if moved:
+        print(f"[gm_relay] copied to repo root: {moved}", flush=True)
+    return moved
+
+
+def _gm_checkpoint_relay(experiment_name: str):
+    """后台线程：每 5 分钟把里程碑 checkpoint 中继到仓库根，供 GM SDK 上传（防中途停止丢模型）。"""
+    import threading
+
+    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    log_root = os.path.abspath(os.path.join("logs", "rsl_rl", experiment_name))
+    while True:
+        time.sleep(300)
+        try:
+            _gm_relay_pass(log_root, repo_root, only_milestones=True)
+        except Exception as e:
+            print(f"[gm_relay] pass error: {e}", flush=True)
 
 
 if __name__ == "__main__":

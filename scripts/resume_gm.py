@@ -35,7 +35,11 @@ def main():
 
     train_args = sys.argv[1:] + ["--resume", "--load_run=gm_resume", f"--checkpoint=.*{ckpt_num}.*"]
     print(f"[resume_gm] exec: {TRAIN_PY.name} {' '.join(train_args)}", flush=True)
-    # 关键：用 execv 替换进程而非 subprocess 子进程。
+    # GM SDK 只可靠扫描仓库根目录的 PT 文件（实证：挂载的 model_4999 每次都被重新上传，
+    # 而 subprocess/execv 形式训练写入 logs/ 的新 checkpoint 从不被上传）——
+    # 开启 train.py 内置的 checkpoint 中继线程，把里程碑+终版模型复制到仓库根供 SDK 上传。
+    os.environ["GM_CHECKPOINT_RELAY"] = "1"
+    # 用 execv 替换进程（保持 gm-run 直接子进程关系）。
     # 实证（TASK_20261014_031）：SDK 只对 gm-run 的"直接子进程"追踪 PT 上传——
     # subprocess 包装时 15000 个新 checkpoint 全部未上传；execv 保持同一 PID，
     # SDK 视角与直接 gm-run train.py 一致（TASK_20261013_084/088 上传正常）。
