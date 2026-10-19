@@ -170,7 +170,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         # GM 云端续训自举：--resume 且未显式指定 load_run 时，从 OSS URL（CLI 参数或
         # scripts/rsl_rl/resume_url.txt）下载 checkpoint 到 logs 结构的 gm_resume 目录，
         # 并设定 load_run/checkpoint。容器可直连 OSS（SDK 上传同通道），本地网络不通也能续训。
-        if agent_cfg.resume and agent_cfg.load_run is None:
+        if agent_cfg.resume and args_cli.load_run is None:
             import re as _re
             import urllib.request
 
@@ -190,7 +190,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     urllib.request.urlretrieve(url, dst)
                     print(f"[gm_resume] saved: {dst} ({os.path.getsize(dst)} bytes)", flush=True)
             existing = glob.glob(os.path.join(gm_run_dir, "model_*.pt"))
-            if existing and agent_cfg.load_run is None:
+            if existing and args_cli.load_run is None:
                 ckpt_num = "".join(ch for ch in os.path.basename(existing[0]) if ch.isdigit())
                 agent_cfg.load_run = "gm_resume"
                 agent_cfg.load_checkpoint = f".*{ckpt_num}.*"
