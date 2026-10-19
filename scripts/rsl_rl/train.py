@@ -43,6 +43,9 @@ parser.add_argument("--max_iterations", type=int, default=None, help="RL Policy 
 parser.add_argument(
     "--distributed", action="store_true", default=False, help="Run training with multiple GPUs or nodes."
 )
+parser.add_argument(
+    "--gm_resume_url", type=str, default=None, help="GM OSS URL of checkpoint to resume from (falls back to resume_url.txt)."
+)
 # append RSL-RL cli arguments
 cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
@@ -164,6 +167,35 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     # save resume path before creating a new log_dir
     if agent_cfg.resume or agent_cfg.algorithm.class_name == "Distillation":
+        # GM 云端续训自举：--resume 且未显式指定 load_run 时，从 OSS URL（CLI 参数或
+        # scripts/rsl_rl/resume_url.txt）下载 checkpoint 到 logs 结构的 gm_resume 目录，
+        # 并设定 load_run/checkpoint。容器可直连 OSS（SDK 上传同通道），本地网络不通也能续训。
+        if agent_cfg.resume and agent_cfg.load_run is None:
+            import re as _re
+            import urllib.request
+
+            gm_run_dir = os.path.join(log_root_path, "gm_resume")
+            os.makedirs(gm_run_dir, exist_ok=True)
+            if not glob.glob(os.path.join(gm_run_dir, "model_*.pt")):
+                url = args_cli.gm_resume_url
+                if url is None:
+                    url_file = os.path.join(os.path.dirname(__file__), "resume_url.txt")
+                    if os.path.isfile(url_file):
+                        url = open(url_file, encoding="utf-8").read().strip()
+                if url:
+                    m = _re.search(r"model_(\d+)_", url)
+                    ckpt_num = m.group(1) if m else "0"
+                    dst = os.path.join(gm_run_dir, f"model_{ckpt_num}.pt")
+                    print(f"[gm_resume] downloading checkpoint {ckpt_num} from OSS ...", flush=True)
+                    urllib.request.urlretrieve(url, dst)
+                    print(f"[gm_resume] saved: {dst} ({os.path.getsize(dst)} bytes)", flush=True)
+            existing = glob.glob(os.path.join(gm_run_dir, "model_*.pt"))
+            if existing and agent_cfg.load_run is None:
+                ckpt_num = "".join(ch for ch in os.path.basename(existing[0]) if ch.isdigit())
+                agent_cfg.load_run = "gm_resume"
+                agent_cfg.load_checkpoint = f".*{ckpt_num}.*"
+                os.environ["GM_CHECKPOINT_RELAY"] = "1"
+                print(f"[gm_resume] will load: {existing[0]}", flush=True)
         resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
 
     # wrap for video recording
