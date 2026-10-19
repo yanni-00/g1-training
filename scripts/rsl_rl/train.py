@@ -89,6 +89,7 @@ if args_cli.distributed and version.parse(installed_version) < version.parse(RSL
 """Rest everything follows."""
 
 import gymnasium as gym
+import glob
 import inspect
 import os
 import shutil
@@ -246,7 +247,6 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         try:
             repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
             log_root = os.path.abspath(os.path.join("logs", "rsl_rl", agent_cfg.experiment_name))
-            import glob
 
             models = sorted(
                 glob.glob(os.path.join(log_root, "*", "model_*.pt")),
