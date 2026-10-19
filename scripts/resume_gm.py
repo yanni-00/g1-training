@@ -1,7 +1,6 @@
 """GM 云端续训引导：把平台挂载的 checkpoint 归位到 Isaac Lab 日志结构后转交 train.py。"""
 import os
 import shutil
-import subprocess
 import sys
 import pathlib
 
@@ -36,8 +35,13 @@ def main():
 
     train_args = sys.argv[1:] + ["--resume", "--load_run=gm_resume", f"--checkpoint=.*{ckpt_num}.*"]
     print(f"[resume_gm] exec: {TRAIN_PY.name} {' '.join(train_args)}", flush=True)
-    ret = subprocess.run([sys.executable, str(TRAIN_PY), *train_args])
-    sys.exit(ret.returncode)
+    # 关键：用 execv 替换进程而非 subprocess 子进程。
+    # 实证（TASK_20261014_031）：SDK 只对 gm-run 的"直接子进程"追踪 PT 上传——
+    # subprocess 包装时 15000 个新 checkpoint 全部未上传；execv 保持同一 PID，
+    # SDK 视角与直接 gm-run train.py 一致（TASK_20261013_084/088 上传正常）。
+    sys.stdout.flush()
+    sys.stderr.flush()
+    os.execv(sys.executable, [sys.executable, str(TRAIN_PY), *train_args])
 
 
 if __name__ == "__main__":
