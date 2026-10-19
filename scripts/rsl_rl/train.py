@@ -243,9 +243,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         print("[gm_relay] background checkpoint relay started (5 min cycle)", flush=True)
     runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
     if os.environ.get("GM_CHECKPOINT_RELAY") == "1":
-        # 终局兜底：把最后一个 checkpoint 也中继出去（任务自然结束时 SDK 仍会短暂上传）
+        # 终局兜底：把最后一个 checkpoint 也中继到 SDK 绑定的 PT 目录
         try:
-            repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+            relay_dir = _gm_relay_dir(agent_cfg.experiment_name)
             log_root = os.path.abspath(os.path.join("logs", "rsl_rl", agent_cfg.experiment_name))
 
             models = sorted(
@@ -253,10 +253,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 key=lambda p: os.path.getmtime(p),
             )
             if models:
-                dst = os.path.join(repo_root, os.path.basename(models[-1]))
+                dst = os.path.join(relay_dir, os.path.basename(models[-1]))
                 if not os.path.exists(dst):
                     shutil.copy2(models[-1], dst)
                     print(f"[gm_relay] final checkpoint relayed: {os.path.basename(models[-1])}", flush=True)
+            # 给 SDK 的扫描周期留时间（063 实证：终局 copy 后立即退出会错过上传窗口）
+            print("[gm_relay] waiting 120s for SDK upload window ...", flush=True)
+            time.sleep(120)
         except Exception as e:
             print(f"[gm_relay] final relay error: {e}", flush=True)
 
@@ -264,8 +267,15 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     env.close()
 
 
-def _gm_relay_pass(log_root: str, repo_root: str, only_milestones: bool):
-    """把 log 目录里的 checkpoint 复制到仓库根（g1-training/）——GM SDK 只可靠扫描该目录。"""
+def _gm_relay_dir(experiment_name: str) -> str:
+    """SDK 绑定的 PT 上传目录（063 实证）：首个出现新 .pt 的目录被 SDK 锁定为
+    唯一 PT 扫描目录——gm bootstrap 下载的 gm_resume/ 正是该目录，其余目录
+    （新 run 目录、仓库根）的 .pt 只触发通用文件检测、从不进上传队列。"""
+    return os.path.abspath(os.path.join("logs", "rsl_rl", experiment_name, "gm_resume"))
+
+
+def _gm_relay_pass(log_root: str, relay_dir: str, only_milestones: bool):
+    """把 log 目录里的 checkpoint 复制到 SDK 绑定的 PT 目录（gm_resume/）。"""
     import glob
 
     moved = []
@@ -273,25 +283,25 @@ def _gm_relay_pass(log_root: str, repo_root: str, only_milestones: bool):
         num = "".join(ch for ch in os.path.basename(f) if ch.isdigit())
         if only_milestones and num and int(num) % 500 != 0:
             continue
-        dst = os.path.join(repo_root, os.path.basename(f))
+        dst = os.path.join(relay_dir, os.path.basename(f))
         if not os.path.exists(dst):
             shutil.copy2(f, dst)
             moved.append(os.path.basename(f))
     if moved:
-        print(f"[gm_relay] copied to repo root: {moved}", flush=True)
+        print(f"[gm_relay] copied to SDK PT dir: {moved}", flush=True)
     return moved
 
 
 def _gm_checkpoint_relay(experiment_name: str):
-    """后台线程：每 5 分钟把里程碑 checkpoint 中继到仓库根，供 GM SDK 上传（防中途停止丢模型）。"""
+    """后台线程：每 5 分钟把里程碑 checkpoint 中继到 SDK 绑定目录，防中途停止丢模型。"""
     import threading
 
-    repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    relay_dir = _gm_relay_dir(experiment_name)
     log_root = os.path.abspath(os.path.join("logs", "rsl_rl", experiment_name))
     while True:
         time.sleep(300)
         try:
-            _gm_relay_pass(log_root, repo_root, only_milestones=True)
+            _gm_relay_pass(log_root, relay_dir, only_milestones=True)
         except Exception as e:
             print(f"[gm_relay] pass error: {e}", flush=True)
 
