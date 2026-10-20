@@ -261,7 +261,10 @@ class RewardsCfg:
 
     joint_deviation_arms = RewTerm(
         func=mdp.joint_deviation_l1,
-        weight=-0.1,
+        # -0.1 -> -1.0 (20261020): 5000->20000 续训中手臂偏移涨到 ~1.24 rad/步（左肩前抬
+        # ~47°，Episode_Reward/joint_deviation_arms 4999 轮 -0.001 -> 20000 轮 -0.124），
+        # 权重与腰/腿 (-1.0) 对齐以约束手臂贴默认下垂位（姿态优先于速度跟踪，用户需求）
+        weight=-1.0,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",
