@@ -261,15 +261,18 @@ class RewardsCfg:
 
     joint_deviation_arms = RewTerm(
         func=mdp.joint_deviation_l1,
-        # -0.1 -> -1.0 (20261020): 5000->20000 续训中手臂偏移涨到 ~1.24 rad/步（左肩前抬
-        # ~47°，Episode_Reward/joint_deviation_arms 4999 轮 -0.001 -> 20000 轮 -0.124），
-        # 权重与腰/腿 (-1.0) 对齐以约束手臂贴默认下垂位（姿态优先于速度跟踪，用户需求）
+        # 20261020 v2（11k→13k 摆臂增强轮）：L1 撤出肩 pitch（摆臂主自由度，改由
+        # arm_swing 轨迹奖励单独驱动——11k 实测 6.6° p2p 仅设计值 2/3，根因是 L1(-1.0)
+        # 与 arm_swing(+0.3) 在肩 pitch 上对抗）；roll/yaw/肘/腕继续 L1 约束，
+        # 防 20k 式抬臂与乱挥。肩 pitch 若漂移由 arm_swing 轨迹本身约束。
+        # 历史：-0.1（5k，真空自发摆+跛行）→ -1.0（8k/11k，钉死/微摆）→ 本版
         weight=-1.0,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",
                 joint_names=[
-                    ".*_shoulder_.*_joint",
+                    ".*_shoulder_roll_joint",
+                    ".*_shoulder_yaw_joint",
                     ".*_elbow_joint",
                     ".*_wrist_.*",
                 ],
@@ -277,31 +280,33 @@ class RewardsCfg:
         },
     )
 
-    # 手臂微摆（20261020 用户需求：双臂下垂微摆，非钉死）：肩 pitch 跟踪与步态相位反相的
-    # 余弦轨迹（±0.08 rad），行走时生效；幅值/相位与 feet_gait 周期 (1.0s) 同源。
-    # L1（上方）负责"下垂"与站立回位，本项负责"微摆"形态。
+    # 手臂摆（20261020 v2）：幅值 0.08 -> 0.15（p2p 17°，手部位移 ~15cm，肉眼明显），
+    # 权重 0.3 -> 0.5（主导信号，抗 L1 邻近关节拖拽），幅值随 cmd_vx 调制
+    # （0.6 m/s 满幅，低速缩至 20%，站立微动非死手）。
     arm_swing_left = RewTerm(
         func=mdp.arm_swing_pitch,
-        weight=0.3,
+        weight=0.5,
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=["left_shoulder_pitch_joint"]),
-            "amplitude": 0.08,
+            "amplitude": 0.15,
             "period": 1.0,
             "std": 0.15,
             "offset": 0.0,
             "command_name": "base_velocity",
+            "vel_amplitude_mod": True,
         },
     )
     arm_swing_right = RewTerm(
         func=mdp.arm_swing_pitch,
-        weight=0.3,
+        weight=0.5,
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=["right_shoulder_pitch_joint"]),
-            "amplitude": 0.08,
+            "amplitude": 0.15,
             "period": 1.0,
             "std": 0.15,
             "offset": 0.5,
             "command_name": "base_velocity",
+            "vel_amplitude_mod": True,
         },
     )
     joint_deviation_waists = RewTerm(

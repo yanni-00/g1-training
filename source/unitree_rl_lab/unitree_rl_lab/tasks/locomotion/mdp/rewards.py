@@ -208,14 +208,18 @@ def arm_swing_pitch(
     std: float,
     offset: float = 0.0,
     command_name: str | None = None,
+    vel_amplitude_mod: bool = False,
 ) -> torch.Tensor:
-    """肩 pitch 微摆轨迹跟踪：手臂绕默认位小幅钟摆摆动，与同侧腿反相。
+    """肩 pitch 摆臂轨迹跟踪：手臂绕默认位钟摆摆动，与同侧腿反相。
 
     target = amplitude * cos(2*pi*(phase + offset))，phase 与 feet_gait 的全局步态相位
     同源（episode 时间 mod period）。同侧腿 stance（phase < threshold）时手臂向后（+A），
     swing 时向前（-A）；右臂传 offset=0.5 即与左臂反相（自然交叉摆臂）。负 pitch = 前摆
     （20k 实测：左肩 pitch -0.82 rad 时手臂前抬约 47°）。行走时（cmd_norm > 0.1）生效，
     站立时无奖励、由 joint_deviation_arms L1 约束回默认下垂位。
+
+    vel_amplitude_mod=True 时幅值随前向命令速度调制：满幅在 cmd_vx=vel_full，低速按比例
+    缩到 min_ratio（站立微动，非死手）。x 分量用 yaw 系前向速度。
     """
     asset: Articulation = env.scene[asset_cfg.name]
     pitch_dev = (
@@ -223,7 +227,17 @@ def arm_swing_pitch(
         - asset.data.default_joint_pos[:, asset_cfg.joint_ids]
     )
     phase = ((env.episode_length_buf * env.step_dt) % period / period).unsqueeze(1)
-    target = amplitude * torch.cos(2 * torch.pi * (phase + offset))
+    amp = amplitude
+    if vel_amplitude_mod:
+        min_ratio = 0.2
+        vel_full = 0.6
+        cmd = env.command_manager.get_command(command_name) if command_name else torch.zeros(
+            (env.num_envs, 3), device=env.device
+        )
+        cmd_vx = cmd[:, 0]
+        ratio = torch.clamp(cmd_vx.abs() / vel_full, min_ratio, 1.0).unsqueeze(1)
+        amp = amplitude * ratio
+    target = amp * torch.cos(2 * torch.pi * (phase + offset))
     err = pitch_dev - target
     reward = torch.exp(-torch.sum(err**2, dim=-1) / std**2)
     if command_name is not None:
