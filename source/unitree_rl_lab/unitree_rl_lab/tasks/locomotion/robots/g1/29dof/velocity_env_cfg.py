@@ -328,7 +328,9 @@ class RewardsCfg:
     )
 
     # -- robot
-    flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=-5.0)
+    # 20261020 v3（13k→15k 稳定性修复）：13k 实测躯干后仰 -1°、俯仰甩动 std 1.83°（11k
+    # 1.05°）、feet_slide 惩罚 79 倍恶化——大摆臂+大步态把稳定性卖掉了。收紧两项：
+    flat_orientation_l2 = RewTerm(func=mdp.flat_orientation_l2, weight=-12.0)
     base_height = RewTerm(func=mdp.base_height_l2, weight=-10, params={"target_height": 0.78})
 
     # -- feet
@@ -350,7 +352,9 @@ class RewardsCfg:
     )
     feet_slide = RewTerm(
         func=mdp.feet_slide,
-        weight=-0.2,
+        # -0.2 -> -0.6 (20261020 v3): 13k 大步态下滑步惩罚恶化 79 倍（0.0004->0.0315），
+        # 与俯仰甩动同源（落地冲击拖步），同步收紧
+        weight=-0.6,
         params={
             "asset_cfg": SceneEntityCfg("robot", body_names=".*ankle_roll.*"),
             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_roll.*"),
