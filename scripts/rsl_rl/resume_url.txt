@@ -1,1 +1,1 @@
-https://limx-gradmotion.oss-cn-beijing.aliyuncs.com/upload%2F2026%2F10%2F19%2Fmodel_5000_20261019164638A456.pt?OSSAccessKeyId=LTAI5t91qWuGQq2ShcHcFqWv&Expires=1793066666&Signature=5UJURqqY%2ByoQrNrePNsTHNXHh%2B0%3D
+https://limx-gradmotion.oss-cn-beijing.aliyuncs.com/upload%2F2026%2F10%2F20%2Fmodel_8000_20261020112118A399.pt?OSSAccessKeyId=LTAI5t91qWuGQq2ShcHcFqWv&Expires=1793072598&Signature=88J10EzUua2g3WOsFtMHBx2pWfw%3D
