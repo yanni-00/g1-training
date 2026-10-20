@@ -200,6 +200,38 @@ def feet_gait(
     return reward
 
 
+def arm_swing_pitch(
+    env: ManagerBasedRLEnv,
+    asset_cfg: SceneEntityCfg,
+    amplitude: float,
+    period: float,
+    std: float,
+    offset: float = 0.0,
+    command_name: str | None = None,
+) -> torch.Tensor:
+    """肩 pitch 微摆轨迹跟踪：手臂绕默认位小幅钟摆摆动，与同侧腿反相。
+
+    target = amplitude * cos(2*pi*(phase + offset))，phase 与 feet_gait 的全局步态相位
+    同源（episode 时间 mod period）。同侧腿 stance（phase < threshold）时手臂向后（+A），
+    swing 时向前（-A）；右臂传 offset=0.5 即与左臂反相（自然交叉摆臂）。负 pitch = 前摆
+    （20k 实测：左肩 pitch -0.82 rad 时手臂前抬约 47°）。行走时（cmd_norm > 0.1）生效，
+    站立时无奖励、由 joint_deviation_arms L1 约束回默认下垂位。
+    """
+    asset: Articulation = env.scene[asset_cfg.name]
+    pitch_dev = (
+        asset.data.joint_pos[:, asset_cfg.joint_ids]
+        - asset.data.default_joint_pos[:, asset_cfg.joint_ids]
+    )
+    phase = ((env.episode_length_buf * env.step_dt) % period / period).unsqueeze(1)
+    target = amplitude * torch.cos(2 * torch.pi * (phase + offset))
+    err = pitch_dev - target
+    reward = torch.exp(-torch.sum(err**2, dim=-1) / std**2)
+    if command_name is not None:
+        cmd_norm = torch.norm(env.command_manager.get_command(command_name), dim=1)
+        reward *= cmd_norm > 0.1
+    return reward
+
+
 """
 Other rewards.
 """

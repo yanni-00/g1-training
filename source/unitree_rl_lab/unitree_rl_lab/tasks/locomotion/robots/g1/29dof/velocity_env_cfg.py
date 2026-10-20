@@ -276,6 +276,34 @@ class RewardsCfg:
             )
         },
     )
+
+    # 手臂微摆（20261020 用户需求：双臂下垂微摆，非钉死）：肩 pitch 跟踪与步态相位反相的
+    # 余弦轨迹（±0.08 rad），行走时生效；幅值/相位与 feet_gait 周期 (1.0s) 同源。
+    # L1（上方）负责"下垂"与站立回位，本项负责"微摆"形态。
+    arm_swing_left = RewTerm(
+        func=mdp.arm_swing_pitch,
+        weight=0.3,
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=["left_shoulder_pitch_joint"]),
+            "amplitude": 0.08,
+            "period": 1.0,
+            "std": 0.15,
+            "offset": 0.0,
+            "command_name": "base_velocity",
+        },
+    )
+    arm_swing_right = RewTerm(
+        func=mdp.arm_swing_pitch,
+        weight=0.3,
+        params={
+            "asset_cfg": SceneEntityCfg("robot", joint_names=["right_shoulder_pitch_joint"]),
+            "amplitude": 0.08,
+            "period": 1.0,
+            "std": 0.15,
+            "offset": 0.5,
+            "command_name": "base_velocity",
+        },
+    )
     joint_deviation_waists = RewTerm(
         func=mdp.joint_deviation_l1,
         weight=-1,
@@ -301,11 +329,16 @@ class RewardsCfg:
     # -- feet
     gait = RewTerm(
         func=mdp.feet_gait,
-        weight=0.5,
+        # 20261020 用户需求：低步频大步幅（出厂风格）+ 强制周期跟踪
+        # - period 0.8 -> 1.0：每脚 1Hz 步频，0.6m/s 时同脚步幅 0.6m（0.8s 时 0.48m）
+        # - weight 0.5 -> 1.0：8k 轮以 1.64Hz 高步频偏离参考周期仅损失一半 gait 奖励
+        #   （Episode_Reward/gait 0.49/1.0 max），提高权重使周期成为硬约束
+        # - threshold 0.55 -> 0.5：摆动相占比提高，大步幅需要更长摆动时间
+        weight=1.0,
         params={
-            "period": 0.8,
+            "period": 1.0,
             "offset": [0.0, 0.5],
-            "threshold": 0.55,
+            "threshold": 0.5,
             "command_name": "base_velocity",
             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_roll.*"),
         },
