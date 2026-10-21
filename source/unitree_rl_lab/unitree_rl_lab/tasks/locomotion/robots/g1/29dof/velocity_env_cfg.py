@@ -261,18 +261,17 @@ class RewardsCfg:
 
     joint_deviation_arms = RewTerm(
         func=mdp.joint_deviation_l1,
-        # 20261020 v2（11k→13k 摆臂增强轮）：L1 撤出肩 pitch（摆臂主自由度，改由
-        # arm_swing 轨迹奖励单独驱动——11k 实测 6.6° p2p 仅设计值 2/3，根因是 L1(-1.0)
-        # 与 arm_swing(+0.3) 在肩 pitch 上对抗）；roll/yaw/肘/腕继续 L1 约束，
-        # 防 20k 式抬臂与乱挥。肩 pitch 若漂移由 arm_swing 轨迹本身约束。
-        # 历史：-0.1（5k，真空自发摆+跛行）→ -1.0（8k/11k，钉死/微摆）→ 本版
+        # 20261021 v4（方案 B）：肩 pitch 加回 L1（回到 11k 的 ".*_shoulder_.*_joint" 全集）。
+        # 13k/15k 实证：L1 撤出肩 pitch + 幅值 0.15 = 步态稳定性崩（感知度量 2-3x 恶化）。
+        # 11k 平衡点（L1 全集 + swing 0.08/0.3）实测摆幅 6.6° p2p、躯干颤动 0.5°——本轮复刻。
+        # 历史线：-0.1（5k 真空）→ -1.0 全集（11k 微摆+稳）→ -1.0 除肩 pitch（13k/15k 崩）
+        # → -1.0 全集（本轮回归）
         weight=-1.0,
         params={
             "asset_cfg": SceneEntityCfg(
                 "robot",
                 joint_names=[
-                    ".*_shoulder_roll_joint",
-                    ".*_shoulder_yaw_joint",
+                    ".*_shoulder_.*_joint",
                     ".*_elbow_joint",
                     ".*_wrist_.*",
                 ],
@@ -280,33 +279,34 @@ class RewardsCfg:
         },
     )
 
-    # 手臂摆（20261020 v2）：幅值 0.08 -> 0.15（p2p 17°，手部位移 ~15cm，肉眼明显），
-    # 权重 0.3 -> 0.5（主导信号，抗 L1 邻近关节拖拽），幅值随 cmd_vx 调制
-    # （0.6 m/s 满幅，低速缩至 20%，站立微动非死手）。
+    # 手臂摆（20261021 v4，方案 B）：回归 11k 的臂配置（幅值 0.08 / 权重 0.3 / 无速度
+    # 调制）——13k/15k 的大幅值+L1 撤防被感知度量证伪（躯干颤动 2-3x、跺脚、歪行）。
+    # 本轮唯一新变量 = 在 11k 臂配置上叠加 v3 的稳定权重（flat -12 / slide -0.6），
+    # 验证假设："稳定底盘上的同幅度摆臂才被感知为摆臂"。
     arm_swing_left = RewTerm(
         func=mdp.arm_swing_pitch,
-        weight=0.5,
+        weight=0.3,
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=["left_shoulder_pitch_joint"]),
-            "amplitude": 0.15,
+            "amplitude": 0.08,
             "period": 1.0,
             "std": 0.15,
             "offset": 0.0,
             "command_name": "base_velocity",
-            "vel_amplitude_mod": True,
+            "vel_amplitude_mod": False,
         },
     )
     arm_swing_right = RewTerm(
         func=mdp.arm_swing_pitch,
-        weight=0.5,
+        weight=0.3,
         params={
             "asset_cfg": SceneEntityCfg("robot", joint_names=["right_shoulder_pitch_joint"]),
-            "amplitude": 0.15,
+            "amplitude": 0.08,
             "period": 1.0,
             "std": 0.15,
             "offset": 0.5,
             "command_name": "base_velocity",
-            "vel_amplitude_mod": True,
+            "vel_amplitude_mod": False,
         },
     )
     joint_deviation_waists = RewTerm(
