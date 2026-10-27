@@ -30,6 +30,7 @@ from isaaclab.app import AppLauncher
 
 # local imports
 import cli_args  # isort: skip
+from checkpoint_utils import verify_checkpoint_sha256
 
 # add argparse arguments
 parser = argparse.ArgumentParser(description="Train an RL agent with RSL-RL.")
@@ -46,12 +47,15 @@ parser.add_argument(
 parser.add_argument(
     "--gm_resume_url", type=str, default=None, help="GM OSS URL of checkpoint to resume from (falls back to resume_url.txt)."
 )
+parser.add_argument("--checkpoint_sha256", help="Required SHA-256 of the resume checkpoint, checked before loading.")
 # append RSL-RL cli arguments
 cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
 argcomplete.autocomplete(parser)
 args_cli, hydra_args = parser.parse_known_args()
+if args_cli.checkpoint_sha256 and not args_cli.resume:
+    parser.error("--checkpoint_sha256 requires --resume")
 
 # always enable cameras to record video
 if args_cli.video:
@@ -209,6 +213,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         resume_path = local_checkpoint or get_checkpoint_path(
             log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint
         )
+        if args_cli.checkpoint_sha256:
+            digest = verify_checkpoint_sha256(resume_path, args_cli.checkpoint_sha256)
+            print(f"[INFO]: Verified checkpoint SHA-256: {digest}", flush=True)
 
     # wrap for video recording
     if args_cli.video:

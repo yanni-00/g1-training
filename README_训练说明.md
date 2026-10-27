@@ -107,7 +107,7 @@ python scripts/rsl_rl/train.py --headless \
   --max_iterations 2000 --run_name arm_envelope
 ```
 
-`--checkpoint` 支持现有本地文件路径，优先于云端下载；文件名正则与原 `--load_run` 用法继续支持。需要比较 `Episode_Reward/shoulder_pitch_envelope`、两项 `arm_swing` 以及速度、姿态、滑步奖励，不能只看总 reward。
+`--checkpoint` 支持现有本地文件路径，优先于云端下载；文件名正则与原 `--load_run` 用法继续支持。GM 提交时可额外指定 `--checkpoint_sha256`，对下载后的模型校验 SHA-256，不匹配即停止加载。需要比较 `Episode_Reward/shoulder_pitch_envelope`、两项 `arm_swing` 以及速度、姿态、滑步奖励，不能只看总 reward。
 
 验证时保留原始 11k、同预算对照和试验模型的关节日志。以下命令先评估原始 11k；将 `--ckpt` 和输出前缀替换为对照或试验 checkpoint 后重复执行：
 
