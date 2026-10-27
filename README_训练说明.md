@@ -77,3 +77,51 @@ python scripts/rsl_rl/play.py --task Unitree-G1-29dof-Velocity
 1. 跑通：官方 config 原样训练 → 验证训练环境（本轮）
 2. 对照：结果与官方预训练 `unitree_rl_lab/deploy/.../velocity/v0/policy.onnx` 真机表现对比
 3. 注入：按 Phase 0 实测行为规格替换 reward 参数（`feet_gait` period/offset、`foot_clearance` target、`base_height` target、命令范围）
+
+## 基于 11k 的摆臂消融入口
+
+以下入口补充上面的初始安装说明。原任务 `Unitree-G1-29dof-Velocity` 仍使用当前 Option B 配置。
+
+| 任务 | 配置 |
+|------|------|
+| `Unitree-G1-29dof-Velocity-11kBaseline` | 按提交 `5421b4f` 重建 11k 对照：`flat_orientation_l2=-5.0`、`feet_slide=-0.2`，肩 pitch 保留原 L1 |
+| `Unitree-G1-29dof-Velocity-ArmEnvelope` | 同一对照配置，仅将肩 pitch 的回零惩罚改为有界容差：运动时默认位周围 `±0.08 rad` 内免罚，超出后恢复 L1 斜率；站立时容差为零 |
+
+`0.08 rad` 来自 11k 的摆臂目标幅值；摆臂奖励权重 `0.3`、周期 `1.0 s`、`std=0.15` 均沿用 11k。其他上肢关节仍受原 L1 约束。容差是软惩罚，不能保证实际关节角不越界。
+
+两个任务的观测、动作、网络与原 checkpoint 兼容。均从 `checkpoints/model_10999_factorygait.pt` 启动；下面为本轮两组各设置 `2000` 个追加训练迭代，沿用 GM 任务 `TASK_20261021_040` 的 `taskCodeInfo.startScript` 中的 `--max_iterations=2000`。这是同预算对照，不代表收敛所需轮数。
+
+在 Linux 的 Isaac Lab 训练环境、当前工程根目录执行：
+
+```bash
+# 同预算续训对照
+python scripts/rsl_rl/train.py --headless \
+  --task Unitree-G1-29dof-Velocity-11kBaseline \
+  --resume --checkpoint checkpoints/model_10999_factorygait.pt \
+  --max_iterations 2000 --run_name baseline11k_control
+
+# 肩 pitch 容差试验
+python scripts/rsl_rl/train.py --headless \
+  --task Unitree-G1-29dof-Velocity-ArmEnvelope \
+  --resume --checkpoint checkpoints/model_10999_factorygait.pt \
+  --max_iterations 2000 --run_name arm_envelope
+```
+
+`--checkpoint` 支持现有本地文件路径，优先于云端下载；文件名正则与原 `--load_run` 用法继续支持。需要比较 `Episode_Reward/shoulder_pitch_envelope`、两项 `arm_swing` 以及速度、姿态、滑步奖励，不能只看总 reward。
+
+验证时保留原始 11k、同预算对照和试验模型的关节日志。以下命令先评估原始 11k；将 `--ckpt` 和输出前缀替换为对照或试验 checkpoint 后重复执行：
+
+```bash
+mkdir -p logs/arm_eval
+python scripts/rsl_rl/sim2sim_play.py \
+  --xml resources/unitree_ros/robots/g1_description/g1_29dof_rev_1_0.xml \
+  --ckpt checkpoints/model_10999_factorygait.pt \
+  --out logs/arm_eval/baseline11k --no-video \
+  --joint-log logs/arm_eval/baseline11k_joints.csv
+
+python scripts/rsl_rl/analyze_arm_log.py \
+  logs/arm_eval/baseline11k_joints.csv \
+  --output logs/arm_eval/baseline11k_summary.json
+```
+
+去掉 `--no-video` 可同时导出视频。关节日志记录实际角度、速度、目标角、末次物理子步力矩、实际足地接触和基座状态。分析脚本默认剔除每段开始的 `1.5 s`（沿用 `sim2sim_percept.py`），分别报告稳态 P10–P90、过渡段/全段峰峰值、参考周期分量和躯干波动。验收时同时比较摆臂和步态，避免把命令切换时的单次抽动当作持续摆臂。

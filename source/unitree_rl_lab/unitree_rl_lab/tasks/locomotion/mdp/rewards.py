@@ -200,6 +200,30 @@ def feet_gait(
     return reward
 
 
+def joint_deviation_l1_envelope(
+    env: ManagerBasedRLEnv,
+    asset_cfg: SceneEntityCfg,
+    moving_tolerance: float,
+    command_name: str,
+) -> torch.Tensor:
+    """Allow shoulder motion inside a bounded envelope; retain the standing L1 penalty.
+
+    The movement gate matches arm_swing_pitch. Outside the envelope the penalty
+    retains the original L1 slope; the envelope is a soft cost, not a joint limit.
+    """
+    if moving_tolerance < 0:
+        raise ValueError("moving_tolerance must be non-negative")
+    asset: Articulation = env.scene[asset_cfg.name]
+    deviation = torch.abs(
+        asset.data.joint_pos[:, asset_cfg.joint_ids]
+        - asset.data.default_joint_pos[:, asset_cfg.joint_ids]
+    )
+    command = env.command_manager.get_command(command_name)
+    moving = torch.norm(command, dim=1) > 0.1
+    tolerance = moving.unsqueeze(1) * moving_tolerance
+    return torch.clamp(deviation - tolerance, min=0.0).sum(dim=1)
+
+
 def arm_swing_pitch(
     env: ManagerBasedRLEnv,
     asset_cfg: SceneEntityCfg,

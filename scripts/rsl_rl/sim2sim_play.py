@@ -165,6 +165,8 @@ def main():
     ap.add_argument("--xml", default="g1_description/g1_29dof_rev_1_0.xml")
     ap.add_argument("--ckpt", default="model_19998.pt")
     ap.add_argument("--out", default="play_g1_20k")
+    ap.add_argument("--no-video", action="store_true", help="Skip rendering and export only numerical logs.")
+    ap.add_argument("--joint-log", help="Optional CSV for steady-state arm and gait evaluation (angles in radians).")
     args = ap.parse_args()
 
     actor = build_actor(args.ckpt)
@@ -205,12 +207,14 @@ def main():
             break
     assert gyro_adr >= 0, "gyro sensor not found"
 
-    renderer = mujoco.Renderer(model, 720, 1280)
-    cam = mujoco.MjvCamera()
-    cam.lookat[:] = [0.0, 0.0, 0.8]
-    cam.distance = 3.2
-    cam.azimuth = 130.0
-    cam.elevation = -12.0
+    renderer = None
+    if not args.no_video:
+        renderer = mujoco.Renderer(model, 720, 1280)
+        cam = mujoco.MjvCamera()
+        cam.lookat[:] = [0.0, 0.0, 0.8]
+        cam.distance = 3.2
+        cam.azimuth = 130.0
+        cam.elevation = -12.0
 
     # initial state
     data.qpos[:] = 0.0
@@ -248,9 +252,24 @@ def main():
     h_ang.reset(ang); h_grav.reset(grav); h_cmd.reset(np.zeros(3))
     h_qpos.reset(dq); h_qvel.reset(dqd); h_la.reset(np.zeros(29))
 
-    import imageio.v2 as imageio
+    if not args.no_video:
+        import imageio.v2 as imageio
     frames = []
     rows = []
+    joint_rows = []
+    logged_joints = [
+        POLICY_JOINTS.index(f"{side}_{joint}_joint")
+        for side in ("left", "right")
+        for joint in ("shoulder_pitch", "shoulder_roll", "hip_pitch")
+    ]
+    if args.joint_log:
+        foot_ids = [
+            mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_BODY, f"{side}_ankle_roll_link")
+            for side in ("left", "right")
+        ]
+        floor_id = mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_GEOM, "floor")
+        if min(foot_ids + [floor_id]) < 0:
+            raise ValueError("Joint logging requires ankle_roll bodies and a floor geom in the MJCF model")
     seg_stats = []
 
     total_t = sum(s[0] for s in CMD_SEGMENTS)
@@ -319,6 +338,28 @@ def main():
                      f"{base_z:.4f}", f"{roll:.4f}", f"{pitch:.4f}", f"{yaw:.4f}",
                      f"{tilt_cos:.4f}", int(is_fall)])
 
+        if args.joint_log:
+            joint_row = {
+                "t": t, "cmd_vx": cmd[0], "cmd_vy": cmd[1], "cmd_wz": cmd[2],
+                "base_z": base_z, "roll": roll, "pitch": pitch, "yaw": yaw,
+                "vx_yaw": vx_yaw, "vy_yaw": vy_yaw, "wz": wz, "fall": int(is_fall),
+            }
+            contact_bodies = set()
+            for contact in data.contact:
+                if contact.dist <= 0 and floor_id in (contact.geom1, contact.geom2):
+                    other = contact.geom2 if contact.geom1 == floor_id else contact.geom1
+                    contact_bodies.add(model.geom_bodyid[other])
+            for side, body_id in zip(("left", "right"), foot_ids):
+                joint_row[f"{side}_contact"] = int(body_id in contact_bodies)
+                joint_row[f"{side}_foot_z"] = data.xpos[body_id][2]
+            for i in logged_joints:
+                name = POLICY_JOINTS[i]
+                joint_row[name] = data.qpos[qadr[i]]
+                joint_row[f"{name}_velocity"] = data.qvel[vadr[i]]
+                joint_row[f"{name}_desired"] = q_des[i]
+                joint_row[f"{name}_torque"] = tau[i]
+            joint_rows.append(joint_row)
+
         if t - seg_t0 > 0.5:
             seg_vx.append(vx_yaw)
             seg_vy.append(vy_yaw)
@@ -326,12 +367,13 @@ def main():
             seg_n += 1
 
         # ---- render (follow camera) ----
-        cam.lookat[0] = data.qpos[0]
-        cam.lookat[1] = data.qpos[1]
-        cam.lookat[2] = 0.8
-        renderer.update_scene(data, cam)
-        pix = renderer.render()
-        frames.append(pix.copy())
+        if renderer is not None:
+            cam.lookat[0] = data.qpos[0]
+            cam.lookat[1] = data.qpos[1]
+            cam.lookat[2] = 0.8
+            renderer.update_scene(data, cam)
+            pix = renderer.render()
+            frames.append(pix.copy())
 
         if step % 250 == 0:
             print(f"[play] t={t:5.1f}s  z={base_z:.3f}  vx={vx_yaw:+.2f} (cmd {cmd[0]:+.1f})  "
@@ -342,11 +384,14 @@ def main():
                           np.mean(seg_vx), np.mean(seg_vy), np.mean(seg_wz), seg_n, fallen))
 
     # ---- outputs ----
-    fps = int(round(1 / POLICY_DT))
-    mp4_path = f"{args.out}.mp4"
-    imageio.mimwrite(mp4_path, frames, fps=fps, quality=8, macro_block_size=None)
-    print(f"[play] video: {mp4_path} ({len(frames)} frames, {fps}fps, "
-          f"{os.path.getsize(mp4_path)/1e6:.1f}MB)")
+    if frames:
+        fps = int(round(1 / POLICY_DT))
+        mp4_path = f"{args.out}.mp4"
+        imageio.mimwrite(mp4_path, frames, fps=fps, quality=8, macro_block_size=None)
+        print(f"[play] video: {mp4_path} ({len(frames)} frames, {fps}fps, "
+              f"{os.path.getsize(mp4_path)/1e6:.1f}MB)")
+    if renderer is not None:
+        renderer.close()
 
     csv_path = f"{args.out}_metrics.csv"
     with open(csv_path, "w", newline="") as f:
@@ -355,6 +400,14 @@ def main():
                     "base_z", "roll", "pitch", "yaw", "tilt_cos_up", "fall"])
         w.writerows(rows)
     print(f"[play] metrics: {csv_path} ({len(rows)} rows)")
+
+    if args.joint_log:
+        os.makedirs(os.path.dirname(os.path.abspath(args.joint_log)), exist_ok=True)
+        with open(args.joint_log, "w", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=list(joint_rows[0]))
+            w.writeheader()
+            w.writerows(joint_rows)
+        print(f"[play] joint log: {args.joint_log} ({len(joint_rows)} rows)")
 
     print("\n===== segment summary (cmd -> actual, yaw-frame) =====")
     for name, c, vx, vy, wz, n, fl in seg_stats:

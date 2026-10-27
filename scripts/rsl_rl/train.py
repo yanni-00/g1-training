@@ -168,10 +168,19 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     # save resume path before creating a new log_dir
     if agent_cfg.resume or agent_cfg.algorithm.class_name == "Distillation":
+        # A local checkpoint path takes precedence over the cloud bootstrap.
+        # Filename regexes retain the existing get_checkpoint_path behavior.
+        local_checkpoint = None
+        if args_cli.checkpoint:
+            checkpoint_arg = os.path.expanduser(args_cli.checkpoint)
+            if os.path.isabs(checkpoint_arg) or "/" in checkpoint_arg or os.path.isfile(checkpoint_arg):
+                if not os.path.isfile(checkpoint_arg):
+                    raise FileNotFoundError(f"Checkpoint file does not exist: {checkpoint_arg}")
+                local_checkpoint = os.path.abspath(checkpoint_arg)
         # GM 云端续训自举：--resume 且未显式指定 load_run 时，从 OSS URL（CLI 参数或
         # scripts/rsl_rl/resume_url.txt）下载 checkpoint 到 logs 结构的 gm_resume 目录，
         # 并设定 load_run/checkpoint。容器可直连 OSS（SDK 上传同通道），本地网络不通也能续训。
-        if agent_cfg.resume and args_cli.load_run is None:
+        if agent_cfg.resume and args_cli.load_run is None and local_checkpoint is None:
             import re as _re
             import urllib.request
 
@@ -197,7 +206,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 agent_cfg.load_checkpoint = f".*{ckpt_num}.*"
                 os.environ["GM_CHECKPOINT_RELAY"] = "1"
                 print(f"[gm_resume] will load: {existing[0]}", flush=True)
-        resume_path = get_checkpoint_path(log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint)
+        resume_path = local_checkpoint or get_checkpoint_path(
+            log_root_path, agent_cfg.load_run, agent_cfg.load_checkpoint
+        )
 
     # wrap for video recording
     if args_cli.video:
