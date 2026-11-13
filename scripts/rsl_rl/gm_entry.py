@@ -21,5 +21,7 @@ if __name__ == "__main__":
     request = json.loads((ROOT / "configs/run_request.json").read_text(encoding="utf-8"))
     sys.argv = [str(ROOT / "scripts/rsl_rl/train.py"), "--task", request["task"], "--headless",
                 "--num_envs", str(request["num_envs"]), "--max_iterations", str(request["max_iterations"]),
-                "--seed", str(request["seed"]), "--run_name", request["run_name"]]
+                "--run_name", request["run_name"]]
+    if request.get("seed") is not None:
+        sys.argv += ["--seed", str(request["seed"]) ]
     runpy.run_path(str(ROOT / "scripts/rsl_rl/train.py"), run_name="__main__")
