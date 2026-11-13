@@ -1,22 +1,22 @@
 {
-  "exp_id": "exp-20261113-001",
-  "phase": "probe",
+  "exp_id": "exp-20261113-002",
+  "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 100,
-  "seed": null,
-  "run_name": "f1_fullbody_ownerpd_probe_20261113",
+  "max_iterations": 11000,
+  "seed": 42,
+  "run_name": "f1_fullbody_ownerpd_originalg1_11k_20261113",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "bounded engineering admission probe per OMA implement/train; not a convergence estimate",
-    "seed": "inherit native RSL-RL runner default and record actual seed at runtime"
+    "max_iterations": "configs/reference/g1_11k_manifest.json:checkpoint_iter+1 (finite reference-aligned first version, not a convergence/cost estimate)",
+    "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
     "account_index": 15,
     "spend_cap": 50.0,
     "unit": "GM credit",
-    "basis": "live account-15 balance=0 giftBalance=50, no active tasks; owner authorized using a funded account",
+    "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
     "estimate": false
   }
 }

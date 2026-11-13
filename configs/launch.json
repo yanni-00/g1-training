@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261113-001",
+  "oma_exp_ref": "exp-20261113-002",
   "oma_project": ".",
   "reason": "Owner 2026-11-13 authorization; only configs/run_request.json bounded probe"
 }
