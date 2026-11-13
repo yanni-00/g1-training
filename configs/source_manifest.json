@@ -1,95 +1,95 @@
 {
-  "original_root": "6_sim-train\\G1\\unitree_rl_lab",
+  "original_root": "6_sim-train/G1/unitree_rl_lab",
   "original_commit": "4960b84732b0c2ec593dccbfe963fda1bcd7b1e3",
   "sources": [
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\__init__.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/__init__.py",
       "sha256": "87174bd6f6caa5b727007a27e4d69c44892c23ea4e80b6d19e11719a16ab002b",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\__init__.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/__init__.py",
       "adapted_sha256": "87174bd6f6caa5b727007a27e4d69c44892c23ea4e80b6d19e11719a16ab002b"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\rewards.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/rewards.py",
       "sha256": "56c06ea442ee776b52e8c946d9048e37c23d8328aa440ee1dd6d081a2c9a0864",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\rewards.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/rewards.py",
       "adapted_sha256": "56c06ea442ee776b52e8c946d9048e37c23d8328aa440ee1dd6d081a2c9a0864"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\observations.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/observations.py",
       "sha256": "2493e7bbdc49dc0b8d37aa09191f12276aff2453d93dcbab36c4f203b480baba",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\observations.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/observations.py",
       "adapted_sha256": "2493e7bbdc49dc0b8d37aa09191f12276aff2453d93dcbab36c4f203b480baba"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\curriculums.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/curriculums.py",
       "sha256": "72609b10dc326a7d25ff1b1478398bd28b6b18e2bc83ed1439e48b1a71069463",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\curriculums.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/curriculums.py",
       "adapted_sha256": "72609b10dc326a7d25ff1b1478398bd28b6b18e2bc83ed1439e48b1a71069463"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\commands\\__init__.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/commands/__init__.py",
       "sha256": "9194a2e59c48f43272b9f6f152c618d22c893f8e7d9f0aba937961f35122d6f2",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\commands\\__init__.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/commands/__init__.py",
       "adapted_sha256": "9194a2e59c48f43272b9f6f152c618d22c893f8e7d9f0aba937961f35122d6f2"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\mdp\\commands\\velocity_command.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/mdp/commands/velocity_command.py",
       "sha256": "5ec1cd6da386f3e17b4d4e3729da91b967a59b5566a26181600ea57a299efde0",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\mdp\\commands\\velocity_command.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/commands/velocity_command.py",
       "adapted_sha256": "5ec1cd6da386f3e17b4d4e3729da91b967a59b5566a26181600ea57a299efde0"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\agents\\__init__.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/agents/__init__.py",
       "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\agents\\__init__.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/agents/__init__.py",
       "adapted_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\agents\\rsl_rl_ppo_cfg.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/agents/rsl_rl_ppo_cfg.py",
       "sha256": "6d4f575639880e7eb13d251fa358220c0082597d541edff14efebc4234875d34",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\agents\\rsl_rl_ppo_cfg.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/agents/rsl_rl_ppo_cfg.py",
       "adapted_sha256": "6d4f575639880e7eb13d251fa358220c0082597d541edff14efebc4234875d34"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\utils\\parser_cfg.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/utils/parser_cfg.py",
       "sha256": "6961ddb9fd16428ea643ae71b17278471d779e5132534b18224c4f2a2e692189",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\utils\\parser_cfg.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/utils/parser_cfg.py",
       "adapted_sha256": "6961ddb9fd16428ea643ae71b17278471d779e5132534b18224c4f2a2e692189"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\source\\unitree_rl_lab\\unitree_rl_lab\\tasks\\locomotion\\robots\\g1\\29dof\\velocity_env_cfg.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/source/unitree_rl_lab/unitree_rl_lab/tasks/locomotion/robots/g1/29dof/velocity_env_cfg.py",
       "sha256": "e71b92ff547768948dae3852d939f8362a2edcf4b0fec4c017b3ba5c50ab0d42",
-      "destination": "source\\f1_rl_lab\\f1_rl_lab\\tasks\\locomotion\\robots\\f1\\velocity_env_cfg.py",
+      "destination": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/robots/f1/velocity_env_cfg.py",
       "adapted_sha256": "15c631984304fb777c9c17a02d438b558cfc3b41ea6ca553be3557b58100e619"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\scripts\\rsl_rl\\cli_args.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/scripts/rsl_rl/cli_args.py",
       "sha256": "9858ae1105c1b9fb5083198bd8fde76d8cfc6ee1e4f5d027618009be95486332",
-      "destination": "scripts\\rsl_rl\\cli_args.py",
+      "destination": "scripts/rsl_rl/cli_args.py",
       "adapted_sha256": "9858ae1105c1b9fb5083198bd8fde76d8cfc6ee1e4f5d027618009be95486332"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\scripts\\rsl_rl\\train.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/scripts/rsl_rl/train.py",
       "sha256": "d37f1c299b11d6603295216b4cce28a5d16c5c36e2c472034a8d885c43468ce9",
-      "destination": "scripts\\rsl_rl\\_isaac_train.py",
+      "destination": "scripts/rsl_rl/_isaac_train.py",
       "adapted_sha256": "6fe9af5cc6cddef0a15a21b7eb9b855c3730028f333b137bb0b8b177f73c1b91"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab\\scripts\\rsl_rl\\play.py",
+      "source": "6_sim-train/G1/unitree_rl_lab/scripts/rsl_rl/play.py",
       "sha256": "63717eb50ea65803bdfd6ce4abf4e8058995308f20e01b93a5b8eab3393ad839",
-      "destination": "scripts\\rsl_rl\\_isaac_play.py",
+      "destination": "scripts/rsl_rl/_isaac_play.py",
       "adapted_sha256": "1f867f819ee2dcaaa283cbf0406c2e2d96fd32cce505ab2ddba9ffb029d97ed9"
     },
     {
-      "source": "oma-runs\\f1-walking\\tools\\model_geometry.py",
+      "source": "oma-runs/f1-walking/tools/model_geometry.py",
       "sha256": "3979f5e0eb605b22a3cec46e452a8b295d94dc1994f7258b7151a0d7a86a85b7",
       "destination": "tools/model_geometry.py",
       "adaptation": "reuse FK/STL helpers; omit route-specific builder",
       "adapted_sha256": "23ae427b80f6f2a7229cda860293b0c959fc07c7416e5bf6c456e346a86f9a7f"
     },
     {
-      "source": "6_sim-train\\G1\\unitree_rl_lab_train\\resources\\unitree_ros\\robots\\g1_description\\g1_29dof_rev_1_0.urdf",
-      "destination": "configs\\reference\\g1_reference.urdf",
+      "source": "6_sim-train/G1/unitree_rl_lab_train/resources/unitree_ros/robots/g1_description/g1_29dof_rev_1_0.urdf",
+      "destination": "configs/reference/g1_reference.urdf",
       "sha256": "c0ae739c640c3e2c00d1bdd8810b5d6e59601487bd1a3995859f9543269ee5c8",
       "use": "only original G1 foot collision spheres for clearance reference",
       "adapted_sha256": "c0ae739c640c3e2c00d1bdd8810b5d6e59601487bd1a3995859f9543269ee5c8"
@@ -97,404 +97,404 @@
   ],
   "assets": [
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\base_link.stl",
-      "destination": "resources\\f1\\meshes\\collision\\base_link.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/base_link.stl",
+      "destination": "resources/f1/meshes/collision/base_link.stl",
       "sha256": "e90bb3961c10e4d515cd1d22bab61d4f97945ac48c2784ee73b3c0864ca49079",
       "bytes": 30377898
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\fixed\\left_knee_pitch_collision.stl",
-      "destination": "resources\\f1\\meshes\\collision\\fixed\\left_knee_pitch_collision.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/fixed/left_knee_pitch_collision.stl",
+      "destination": "resources/f1/meshes/collision/fixed/left_knee_pitch_collision.stl",
       "sha256": "38eca22270435966534a9ce09107346137c327c8bd090e710a620c9211556fbb",
       "bytes": 20384
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\fixed\\right_knee_pitch_collision.stl",
-      "destination": "resources\\f1\\meshes\\collision\\fixed\\right_knee_pitch_collision.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/fixed/right_knee_pitch_collision.stl",
+      "destination": "resources/f1/meshes/collision/fixed/right_knee_pitch_collision.stl",
       "sha256": "e24ef56ad37dd6c4fe88c35b712c026882df5f1be4163415e542b7a0e7ad359a",
       "bytes": 20484
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\left_ankle_pitch.stl",
-      "destination": "resources\\f1\\meshes\\collision\\left_ankle_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/left_ankle_pitch.stl",
+      "destination": "resources/f1/meshes/collision/left_ankle_pitch.stl",
       "sha256": "9be4994e5cd9b51911f5c750a0f7a353940e63dbe8dcf19a1835461d0dd9c3f9",
       "bytes": 1207458
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\left_ankle_roll.stl",
-      "destination": "resources\\f1\\meshes\\collision\\left_ankle_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/left_ankle_roll.stl",
+      "destination": "resources/f1/meshes/collision/left_ankle_roll.stl",
       "sha256": "c5e9baa2313f7a1d8b495f49638771dbcaa5be93c095070bf50fe2038668d2cc",
       "bytes": 2202218
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\left_hip_pitch.stl",
-      "destination": "resources\\f1\\meshes\\collision\\left_hip_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/left_hip_pitch.stl",
+      "destination": "resources/f1/meshes/collision/left_hip_pitch.stl",
       "sha256": "02d00a4a053b0f0508f0ec56ef15359b252116fb84045c54b17f39063bcc8d91",
       "bytes": 10624658
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\left_hip_roll.stl",
-      "destination": "resources\\f1\\meshes\\collision\\left_hip_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/left_hip_roll.stl",
+      "destination": "resources/f1/meshes/collision/left_hip_roll.stl",
       "sha256": "f75a376cae72c02adf33070099a0905076529ee286af3f41ac37265280575180",
       "bytes": 3065938
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\left_hip_yaw.stl",
-      "destination": "resources\\f1\\meshes\\collision\\left_hip_yaw.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/left_hip_yaw.stl",
+      "destination": "resources/f1/meshes/collision/left_hip_yaw.stl",
       "sha256": "471720ee8f8e4bf01f002f4c283e1b8425294f9e9119a13e62afe5aa2658852c",
       "bytes": 18577538
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\right_ankle_pitch.stl",
-      "destination": "resources\\f1\\meshes\\collision\\right_ankle_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/right_ankle_pitch.stl",
+      "destination": "resources/f1/meshes/collision/right_ankle_pitch.stl",
       "sha256": "7d98ef112fb6f5fd003b526b376ffd24208ccb6ed265166548cb03887335ea6c",
       "bytes": 1207458
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\right_ankle_roll.stl",
-      "destination": "resources\\f1\\meshes\\collision\\right_ankle_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/right_ankle_roll.stl",
+      "destination": "resources/f1/meshes/collision/right_ankle_roll.stl",
       "sha256": "15774d22860632842e67276b57cde93f0ba6e4a10e95fb6b592f640dea287f80",
       "bytes": 2202218
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\right_hip_pitch.stl",
-      "destination": "resources\\f1\\meshes\\collision\\right_hip_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/right_hip_pitch.stl",
+      "destination": "resources/f1/meshes/collision/right_hip_pitch.stl",
       "sha256": "c03face2269e484ad903a4876715d20b76b5ee92bcae3b2a0f7f14c6e2df0bb0",
       "bytes": 10624658
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\right_hip_roll.stl",
-      "destination": "resources\\f1\\meshes\\collision\\right_hip_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/right_hip_roll.stl",
+      "destination": "resources/f1/meshes/collision/right_hip_roll.stl",
       "sha256": "1edea998b0f8b2456ad11be17532ebc56d8a55a7a3cf3b45dabb39bc46321676",
       "bytes": 3065938
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\collision\\right_hip_yaw.stl",
-      "destination": "resources\\f1\\meshes\\collision\\right_hip_yaw.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/collision/right_hip_yaw.stl",
+      "destination": "resources/f1/meshes/collision/right_hip_yaw.stl",
       "sha256": "c55c04de30b5a36b72a8fba1624c22f199191852253df590a0cbc0870ba40b09",
       "bytes": 18730938
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\base_link.stl",
-      "destination": "resources\\f1\\meshes\\visual\\base_link.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/base_link.stl",
+      "destination": "resources/f1/meshes/visual/base_link.stl",
       "sha256": "27267ef61a91456e0a2f58828e52c509f8c5a547474926355bd6b2b8eb55242c",
       "bytes": 66184578
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_ankle_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_ankle_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_ankle_pitch.stl",
+      "destination": "resources/f1/meshes/visual/left_ankle_pitch.stl",
       "sha256": "bd00192edce367f4d9bd2939b26bafc30eb30effa07bb421993f0fdfb2156554",
       "bytes": 3749218
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_ankle_roll.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_ankle_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_ankle_roll.stl",
+      "destination": "resources/f1/meshes/visual/left_ankle_roll.stl",
       "sha256": "82053215de6f044562def68f84a9a2be3bb8b37991ceb4a98c636a32d91b468c",
       "bytes": 4975898
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_hip_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_hip_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_hip_pitch.stl",
+      "destination": "resources/f1/meshes/visual/left_hip_pitch.stl",
       "sha256": "389c4147ca6cc997e7889b5cf857aef4debc82d57093718aabb8a8fe7f73eda6",
       "bytes": 23858138
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_hip_roll.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_hip_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_hip_roll.stl",
+      "destination": "resources/f1/meshes/visual/left_hip_roll.stl",
       "sha256": "aa092d4f767c10780eb68908bd08637252d3004f5e39fb225fe6f4aa61fba728",
       "bytes": 9327778
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_hip_yaw.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_hip_yaw.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_hip_yaw.stl",
+      "destination": "resources/f1/meshes/visual/left_hip_yaw.stl",
       "sha256": "8ef6f4d18c33c1d62f46ad76c488387b6416be101383d696916dcaedc4e07192",
       "bytes": 40334858
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\left_knee_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\left_knee_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/left_knee_pitch.stl",
+      "destination": "resources/f1/meshes/visual/left_knee_pitch.stl",
       "sha256": "bf14b2f4adf6ab00babc7756323d4ca2ebe5661e416c0513a96ae3db81848498",
       "bytes": 48081038
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_ankle_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_ankle_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_ankle_pitch.stl",
+      "destination": "resources/f1/meshes/visual/right_ankle_pitch.stl",
       "sha256": "8e9b0a8bc1feecb1c2188896b67106dd95e31810f86b6f7383854bd50875beee",
       "bytes": 3749218
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_ankle_roll.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_ankle_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_ankle_roll.stl",
+      "destination": "resources/f1/meshes/visual/right_ankle_roll.stl",
       "sha256": "2ed2e9f3e86d694696c5a65a289995c9cc5c79f0c70d871cd7c92eeee9c5645f",
       "bytes": 4975898
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_hip_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_hip_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_hip_pitch.stl",
+      "destination": "resources/f1/meshes/visual/right_hip_pitch.stl",
       "sha256": "28a763dd7a69fa5c7049ef8128c53a7743973b1e046dbc862802cef6ebeb1352",
       "bytes": 23858138
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_hip_roll.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_hip_roll.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_hip_roll.stl",
+      "destination": "resources/f1/meshes/visual/right_hip_roll.stl",
       "sha256": "8cb1ec4f1d6329e452bc4c9349abc54cea45d2c2472f5c945fef2d280d0d5125",
       "bytes": 9327778
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_hip_yaw.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_hip_yaw.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_hip_yaw.stl",
+      "destination": "resources/f1/meshes/visual/right_hip_yaw.stl",
       "sha256": "6564f9f3f26d339f50eef3e0bdc370a0197788d6793f543c1d501c9dbbfe8a8e",
       "bytes": 40610978
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\visual\\right_knee_pitch.stl",
-      "destination": "resources\\f1\\meshes\\visual\\right_knee_pitch.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/visual/right_knee_pitch.stl",
+      "destination": "resources/f1/meshes/visual/right_knee_pitch.stl",
       "sha256": "669ca5ac96b8b67accb7d5777107de0a17a181b1b0a4660835c9d1ed7981ca57",
       "bytes": 48532658
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_a_ball.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_a_ball.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_a_ball.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_a_ball.STL",
       "sha256": "ce5f5dd977f5bb9ad40ece026ee52bbfa836d06e6ed24d60d827b9fdaa119682",
       "bytes": 8999734
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_a_ball_right_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_a_ball_right_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_a_ball_right_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_a_ball_right_perfect_mirrored.STL",
       "sha256": "497ea8badf6acc1958c8d229e4001ed689fd3377afaa7560ee69caa8b70d2c70",
       "bytes": 8999734
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_a_loop.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_a_loop.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_a_loop.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_a_loop.STL",
       "sha256": "e3b33c1523c435cd394e812e9213e35414461e3a93935a0f8df7a56a3ade5802",
       "bytes": 106884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_a_loop_right_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_a_loop_right_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_a_loop_right_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_a_loop_right_perfect_mirrored.STL",
       "sha256": "d589b6db45dceb435fc409b1442b1985bd9635621b66d7ff59e25ab74272cea6",
       "bytes": 106884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_b_ball.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_b_ball.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_b_ball.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_b_ball.STL",
       "sha256": "4c0751e8acec2f97dcd764373bd6ebb1b884f64315c9cdd299503825466a52ed",
       "bytes": 8866534
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_b_ball_right_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_b_ball_right_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_b_ball_right_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_b_ball_right_perfect_mirrored.STL",
       "sha256": "a79732ceb80e384403b6afff460da10ac72083b71d88ae9f60a128e8cae49374",
       "bytes": 8866534
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_b_loop.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_b_loop.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_b_loop.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_b_loop.STL",
       "sha256": "d1b9d236010896f8c9a01c48f9bb4afbefd366f331d51c233dd56e9d5cf6e3c2",
       "bytes": 106884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_b_loop_right_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_b_loop_right_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_b_loop_right_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_b_loop_right_perfect_mirrored.STL",
       "sha256": "c86e819badc48d3e5aa8bfcd3e6369ab36d135fb665a6162b8538a0c2f40b0f7",
       "bytes": 106884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_motor_a_link.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_motor_a_link.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_motor_a_link.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link.STL",
       "sha256": "cf7f29028ce372ec052ec6715c8cb50cd84194f24711a775788b1c53260ec125",
       "bytes": 107584
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_motor_a_link_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_motor_a_link_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_motor_a_link_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link_perfect_mirrored.STL",
       "sha256": "6d0a27b896b4147556ee9513cf46724642b513e2d6fada65057165514d7cedcf",
       "bytes": 107584
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_motor_a_link_right_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_motor_a_link_right_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_motor_a_link_right_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link_right_perfect_mirrored.STL",
       "sha256": "bee8aa2a57b4cb0067cb33e53565257afb022e7e20ce6e727ab50555863348d7",
       "bytes": 107584
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\arm_r_wrist_motor_b_link.STL",
-      "destination": "resources\\f1\\meshes\\x1\\arm_r_wrist_motor_b_link.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/arm_r_wrist_motor_b_link.STL",
+      "destination": "resources/f1/meshes/x1/arm_r_wrist_motor_b_link.STL",
       "sha256": "23eea7a3e22974ef5a22ce19b6696247204fc15d76df465ab616573b28506be0",
       "bytes": 107584
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\Camera_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\Camera_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/Camera_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/Camera_center_symmetric.stl",
       "sha256": "614299d9ff902769d48b7157ede6c5cd196da3bb02deec8ecef491fa965de578",
       "bytes": 19084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\head_face_bracket_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\head_face_bracket_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/head_face_bracket_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/head_face_bracket_center_symmetric.stl",
       "sha256": "72754f999b98ad8f63fd15573f27afbf6ff005e709cc4c757915b3077e36e75c",
       "bytes": 310484
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_elbow_pitch.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_elbow_pitch.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_elbow_pitch.STL",
+      "destination": "resources/f1/meshes/x1/left_elbow_pitch.STL",
       "sha256": "75b053fb2d5eef0b8f448389bd65752b04d9ebd04376f3a95696b8a960e6887c",
       "bytes": 1412484
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_elbow_yaw.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_elbow_yaw.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_elbow_yaw.STL",
+      "destination": "resources/f1/meshes/x1/left_elbow_yaw.STL",
       "sha256": "f3d7bc340e1860c34e13101aca8fa98a626db5410453c6252dce1b0617a8f2c9",
       "bytes": 283734
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_shoulder_pitch.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_shoulder_pitch.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_shoulder_pitch.STL",
+      "destination": "resources/f1/meshes/x1/left_shoulder_pitch.STL",
       "sha256": "177ddf0c042909782bb0572a967b54f9c74258a353d70ff5249c3af193a9f78f",
       "bytes": 1464634
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_shoulder_roll.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_shoulder_roll.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_shoulder_roll.STL",
+      "destination": "resources/f1/meshes/x1/left_shoulder_roll.STL",
       "sha256": "3824d25ea0cf627d246dbb603956512a4c3b249f31a72e48ddeba4591014c480",
       "bytes": 1408684
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_shoulder_yaw.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_shoulder_yaw.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_shoulder_yaw.STL",
+      "destination": "resources/f1/meshes/x1/left_shoulder_yaw.STL",
       "sha256": "7e5efda35021d872b1c089cabc671013cc957bbebe9b15b89b1e5c056b589377",
       "bytes": 286084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_wrist_pitch.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_wrist_pitch.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_wrist_pitch.STL",
+      "destination": "resources/f1/meshes/x1/left_wrist_pitch.STL",
       "sha256": "85a59d07eeff3edbdf61351feff1f23eb6fab05579ebe5b16833d79cbca977ca",
       "bytes": 250084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\left_wrist_roll.STL",
-      "destination": "resources\\f1\\meshes\\x1\\left_wrist_roll.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/left_wrist_roll.STL",
+      "destination": "resources/f1/meshes/x1/left_wrist_roll.STL",
       "sha256": "dcff6c1a91a8a4033995ed617f44f42e2fb620e7932712eaca902d602b2b6396",
       "bytes": 1557634
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\lumbar_pitch_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\lumbar_pitch_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/lumbar_pitch_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/lumbar_pitch_center_symmetric.stl",
       "sha256": "abb6209c8b55de92f703cf886651424e87208a1e752042abc442514a73e470fc",
       "bytes": 1538484
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\lumbar_roll_center_symmetric.STL",
-      "destination": "resources\\f1\\meshes\\x1\\lumbar_roll_center_symmetric.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/lumbar_roll_center_symmetric.STL",
+      "destination": "resources/f1/meshes/x1/lumbar_roll_center_symmetric.STL",
       "sha256": "9871222151fa0496ec28c313dd7c8759efb55ed1cab811ed8225a2bafd42af93",
       "bytes": 409884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\lumbar_yaw_center_symmetric.STL",
-      "destination": "resources\\f1\\meshes\\x1\\lumbar_yaw_center_symmetric.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/lumbar_yaw_center_symmetric.STL",
+      "destination": "resources/f1/meshes/x1/lumbar_yaw_center_symmetric.STL",
       "sha256": "4d977e19b81c4fd5b241d8e7501b212f85288d7c507d39b46016e4629a4f226e",
       "bytes": 4002684
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\neck_motor_base_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\neck_motor_base_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/neck_motor_base_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/neck_motor_base_center_symmetric.stl",
       "sha256": "f061e75884147ab6fe7e3bfabc680a0af13af7a056d9fe9d92e97eec04b80c6a",
       "bytes": 182884
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\neck_motor_bracket_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\neck_motor_bracket_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/neck_motor_bracket_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/neck_motor_bracket_center_symmetric.stl",
       "sha256": "b6ce1170308feac17d5a06ce8b25250bb2fbaadf75404e8b91736f75ade5ea25",
       "bytes": 51084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\radar_center_symmetric.stl",
-      "destination": "resources\\f1\\meshes\\x1\\radar_center_symmetric.stl",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/radar_center_symmetric.stl",
+      "destination": "resources/f1/meshes/x1/radar_center_symmetric.stl",
       "sha256": "360dcaa47427fa8cc7082f26ec693d2f800e19315c383adcaf54dc79236e08be",
       "bytes": 29984
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_elbow_pitch_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_elbow_pitch_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_elbow_pitch_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_elbow_pitch_perfect_mirrored.STL",
       "sha256": "57eb5998d8683426d3d0d5ecaccb105536e3bb0d5c8c0c6a3c8227f3fc66634a",
       "bytes": 1412484
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_elbow_yaw_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_elbow_yaw_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_elbow_yaw_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_elbow_yaw_perfect_mirrored.STL",
       "sha256": "cb3fb2bd9c606374c1621056c48798da86b94b83e726a7f0968efb5b8f48f476",
       "bytes": 283734
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_shoulder_pitch_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_shoulder_pitch_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_shoulder_pitch_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_shoulder_pitch_perfect_mirrored.STL",
       "sha256": "837de1c8e6a222406f1f3d22f9e98169f8ea5ab2dd60715598dea0df3936343a",
       "bytes": 1464634
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_shoulder_roll_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_shoulder_roll_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_shoulder_roll_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_shoulder_roll_perfect_mirrored.STL",
       "sha256": "d3f4618b04228e3753b6946445dc17f649cd9bfdca64f78dbc79b6b5231f62ae",
       "bytes": 1408684
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_shoulder_yaw_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_shoulder_yaw_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_shoulder_yaw_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_shoulder_yaw_perfect_mirrored.STL",
       "sha256": "96a0c77266a0d6d51104f0c10a559bf4719e365ecf4aaf700d247811feda9ddf",
       "bytes": 286084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_wrist_pitch_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_wrist_pitch_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_wrist_pitch_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_wrist_pitch_perfect_mirrored.STL",
       "sha256": "dde433fe909cd18402790941ec40492e748e14d82518e35abb7a87f57799836b",
       "bytes": 250084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\right_wrist_roll_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\right_wrist_roll_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/right_wrist_roll_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/right_wrist_roll_perfect_mirrored.STL",
       "sha256": "084fd742263a201d671f267e5c52bbeb65bc9072dada752b8017eec4c85f4f90",
       "bytes": 1557634
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_a_ball_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_a_ball_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_a_ball_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_a_ball_perfect_mirrored.STL",
       "sha256": "6429fefc8c390a49b2c96ef48cd3f5eb7b53576d49c45cffa06915e37711db30",
       "bytes": 416784
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_a_link_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_a_link_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_a_link_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_a_link_perfect_mirrored.STL",
       "sha256": "8fc55e0e2ac2410c2b0d678c47fa3a1d91d00e51d885a1a7099fda6e9ac9cc55",
       "bytes": 371084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_a_loop_perfect_mirrored.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_a_loop_perfect_mirrored.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_a_loop_perfect_mirrored.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_a_loop_perfect_mirrored.STL",
       "sha256": "b08509d84b976a0dbec436164ceb0daa7b723fe1753e46a779ddaa050d37d472",
       "bytes": 129684
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_b_ball.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_b_ball.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_b_ball.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_b_ball.STL",
       "sha256": "90a26619d146a6e85aa8a17a2ea72c7149b45f7867eed3a12df57c3c2d9fe255",
       "bytes": 416784
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_b_link.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_b_link.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_b_link.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_b_link.STL",
       "sha256": "0320a2f93c138659299daaf207b4fa237fdd029912213e2d642279e3e63ee33e",
       "bytes": 371084
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\meshes\\x1\\waist_motor_b_loop.STL",
-      "destination": "resources\\f1\\meshes\\x1\\waist_motor_b_loop.STL",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/meshes/x1/waist_motor_b_loop.STL",
+      "destination": "resources/f1/meshes/x1/waist_motor_b_loop.STL",
       "sha256": "d58bf5cc76ee47fc697a1885c263ec88efb946208d31551185689344f166311c",
       "bytes": 129684
     },
     {
-      "source": "f1_simulation_ssot\\01_SPEC_规范与接口\\SYS-SPEC-0002-V1.1-F1整机模型29DOF\\urdf\\SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
-      "destination": "resources\\f1\\urdf\\SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+      "source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+      "destination": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
       "sha256": "e24c87efdc047976a0c1e96efb4e6f9699fbfb0e1ff932b2fad6c65391c3f0e7",
       "bytes": 49475,
       "training_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
