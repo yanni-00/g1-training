@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "f1-rl-lab"
+version = "0.1.0"
+description = "F1 full-body velocity adaptation of the project G1 Isaac Lab route"
+requires-python = ">=3.10"
+dependencies = ["numpy", "PyYAML", "psutil", "argcomplete"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["f1_rl_lab*"]

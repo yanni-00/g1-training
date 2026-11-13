@@ -1,0 +1,70 @@
+{
+  "_comment": "Fill from actual evidence using train/review.md. Unknown numbers stay null. artifacts indexes lasting files or directory groups with an existing manifest; keep one-off inputs in this round's work/. Check via oma doctor --artifacts before closing. Preserve task-specific metrics; results grant no execution permission.",
+  "_schema_version": "1.1",
+  "exp_id": null,
+  "gmTaskId": null,
+  "phase": null,
+  "status": "unknown",
+  "completed_at": null,
+  "checkpointInspection": null,
+  "goal_revision": null,
+  "protocol_ref": null,
+  "baseline_ref": null,
+  "training_seed_ids": [],
+  "evaluation_seed_ids": [],
+  "seeds_completed": null,
+  "seeds_failed": null,
+  "per_seed": [],
+  "summary": {
+    "metric_name": null,
+    "higher_is_better": null,
+    "mean": null,
+    "std": null,
+    "min": null,
+    "max": null,
+    "median": null,
+    "all_converged": null,
+    "total_wall_time_minutes": null
+  },
+  "assessment": {
+    "readiness": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": [],
+      "deployment": null,
+      "runtime": null
+    },
+    "training": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": []
+    },
+    "behavior": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": []
+    },
+    "owner_acceptance": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": []
+    },
+    "overall": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": []
+    },
+    "deployment": {
+      "status": "unknown",
+      "scope": null,
+      "evidence": []
+    }
+  },
+  "claims": [],
+  "artifacts": [],
+  "secondary_metrics": {},
+  "failure_log": {
+    "failed_seeds": [],
+    "failure_reasons": []
+  }
+}

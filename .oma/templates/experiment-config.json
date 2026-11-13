@@ -1,0 +1,75 @@
+{
+  "_comment": "Canonical experiment config schema. All fields required unless marked [optional].",
+  "_schema_version": "1.0",
+  "exp_id": "exp-YYYYMMDD-001",
+  "round": "[explicit human round, e.g. r1; not inferred from lap or date suffix]",
+  "phase": "train",
+  "gmTaskId": null,
+  "deployment": {
+    "_comment": "Required before new registration. See train/execution.md: explicit target/basis, bounded probe or same-contract closed-loop proof before formal deployment training. Unknown blocks; no default simulation exemption.",
+    "target": null,
+    "basis": null,
+    "scope": null,
+    "stage": null,
+    "contract": null,
+    "probe": null,
+    "proof_ref": null
+  },
+  "checkpoint": {
+    "_comment": "Register exact final saved iteration from the framework before launch. For a continuation, parent must include the actual SHA256 and iteration; include optimizerStep/normalizerCount when the framework restores them. execution.terminal/delivery are written here by oma run, not in extra state files.",
+    "expectedIteration": null,
+    "parent": null
+  },
+  "design_ref": "design-YYYYMMDD-001",
+  "tune_ref": "[optional] tune-YYYYMMDD-001",
+  "started_at": "[ISO 8601 timestamp — written before training begins]",
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "hyperparameters": {
+    "learning_rate": 0.0003,
+    "batch_size": 128,
+    "epochs": 50,
+    "optimizer": "AdamW",
+    "weight_decay": 0.01,
+    "lr_schedule": "cosine_warmup",
+    "warmup_steps": 500,
+    "warmup_ratio": "[optional — use either warmup_steps or warmup_ratio]",
+    "gradient_clip_norm": 1.0,
+    "dropout": 0.1,
+    "label_smoothing": "[optional] 0.0"
+  },
+  "model": {
+    "architecture": "[e.g. transformer-encoder, resnet50, xgboost]",
+    "num_parameters": "[filled in by $implement after model init]",
+    "checkpoint_save_every_n_steps": 500,
+    "save_best_by": "[metric name from requirements.md]"
+  },
+  "data": {
+    "version": "[hash or description]",
+    "split": "80/10/10",
+    "train_path": "[path or description]",
+    "val_path": "[path or description]",
+    "test_path": "[path — NOT loaded during train or tune]",
+    "num_workers": 4,
+    "worker_seed_base": 0
+  },
+  "environment": {
+    "framework": "[pytorch / jax / tensorflow] [version]",
+    "cuda": "[version or cpu]",
+    "mixed_precision": false,
+    "deterministic_mode": true
+  },
+  "execution": {
+    "_comment": "Launch admission: pipeline is stable and reusable by single-level ref; plan is the actual secret-free platform request/command. resource binds its quote to preflight resourcePlanSha256. account stores public identity/profile/keyEnv/baseUrl only. Deployment stage/probe use deployment fields; simulation-only execution declares stage/probe here. Terminal/delivery are maintained by oma run.",
+    "pipeline": null,
+    "plan": null,
+    "resource": null,
+    "account": null,
+    "stage": null,
+    "probe": null,
+    "readiness_ref": null
+  }
+}

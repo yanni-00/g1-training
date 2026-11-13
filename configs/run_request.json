@@ -1,0 +1,22 @@
+{
+  "exp_id": "exp-20261113-001",
+  "phase": "probe",
+  "task": "F1-29dof-Velocity",
+  "num_envs": 4096,
+  "max_iterations": 100,
+  "seed": null,
+  "run_name": "f1_fullbody_ownerpd_probe_20261113",
+  "readiness_steps": 100,
+  "limits_source": {
+    "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
+    "max_iterations": "bounded engineering admission probe per OMA implement/train; not a convergence estimate",
+    "seed": "inherit native RSL-RL runner default and record actual seed at runtime"
+  },
+  "budget": {
+    "account_index": 15,
+    "spend_cap": 50.0,
+    "unit": "GM credit",
+    "basis": "live account-15 balance=0 giftBalance=50, no active tasks; owner authorized using a funded account",
+    "estimate": false
+  }
+}

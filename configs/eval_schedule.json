@@ -1,0 +1,72 @@
+{
+  "source": "6_sim-train\\G1\\unitree_rl_lab_train\\play_20k\\play_g1_baseline11k_20261027_joints.csv",
+  "source_fields": [
+    "t",
+    "cmd_vx",
+    "cmd_vy",
+    "cmd_wz"
+  ],
+  "purpose": "same command schedule as frozen G1 11k evaluation; no F1 acceptance threshold",
+  "segments": [
+    {
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "duration_s": 4.000000000000003
+    },
+    {
+      "command": [
+        0.4,
+        0.0,
+        0.0
+      ],
+      "duration_s": 7.99999999999983
+    },
+    {
+      "command": [
+        0.6,
+        0.0,
+        0.0
+      ],
+      "duration_s": 7.9999999999998295
+    },
+    {
+      "command": [
+        0.8,
+        0.0,
+        0.0
+      ],
+      "duration_s": 5.999999999999872
+    },
+    {
+      "command": [
+        0.0,
+        0.3,
+        0.0
+      ],
+      "duration_s": 5.999999999999872
+    },
+    {
+      "command": [
+        0.4,
+        0.0,
+        0.2
+      ],
+      "duration_s": 6.000000000000938
+    },
+    {
+      "command": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "duration_s": 4.000000000000625
+    }
+  ],
+  "termination": {
+    "minimum_height": 0.2,
+    "limit_angle": 0.8
+  }
+}

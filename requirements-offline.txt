@@ -1,0 +1,8 @@
+# Isaac Sim/Lab and RSL-RL must be installed in the dedicated G1-family environment.
+# These are only the dependencies for CPU contract checks and offline export.
+numpy
+torch
+onnx
+onnxruntime
+PyYAML
+# Optional for tools/sim2sim.py (not installed or executed by scaffold setup): mujoco
