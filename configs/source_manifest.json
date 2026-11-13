@@ -72,7 +72,7 @@
       "source": "6_sim-train/G1/unitree_rl_lab/scripts/rsl_rl/train.py",
       "sha256": "d37f1c299b11d6603295216b4cce28a5d16c5c36e2c472034a8d885c43468ce9",
       "destination": "scripts/rsl_rl/_isaac_train.py",
-      "adapted_sha256": "3310ab531ea2b66ed6a883ed5239a49d7ae134f956efcf97b23f90e60d761611"
+      "adapted_sha256": "67b11a4b13d71eee5d21776f71ecfaf4ac07c304294d75e5c37919717e8363a3"
     },
     {
       "source": "6_sim-train/G1/unitree_rl_lab/scripts/rsl_rl/play.py",
@@ -612,7 +612,7 @@
     },
     {
       "path": "scripts/rsl_rl/_isaac_train.py",
-      "sha256": "3310ab531ea2b66ed6a883ed5239a49d7ae134f956efcf97b23f90e60d761611"
+      "sha256": "67b11a4b13d71eee5d21776f71ecfaf4ac07c304294d75e5c37919717e8363a3"
     },
     {
       "path": "scripts/rsl_rl/cli_args.py",

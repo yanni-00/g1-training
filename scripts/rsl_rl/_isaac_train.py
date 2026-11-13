@@ -242,8 +242,10 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             final = Path(log_dir) / f"model_{runner.current_learning_iteration}.pt"
             identity = verify_checkpoint(final)
             fresh = load_actor(final, identity["runtime"]).to(env.unwrapped.device)
-            reset_result = env.reset()
-            observations = env.get_observations()
+            # RSL-RL creates simulator caches in inference_mode; reset mutates them.
+            with torch.inference_mode():
+                env.reset()
+                observations = env.get_observations()
             observations = observations[0] if isinstance(observations, tuple) else observations
             samples = []
             for feedback_step in range(request["readiness_steps"]):
