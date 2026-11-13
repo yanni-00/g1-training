@@ -19,8 +19,8 @@ _f1_gate("training")
 tasks = ["F1-29dof-Velocity"]
 
 import argparse
+import sys
 
-import argcomplete
 
 from isaaclab.app import AppLauncher
 
@@ -43,7 +43,6 @@ parser.add_argument(
 cli_args.add_rsl_rl_args(parser)
 # append AppLauncher cli args
 AppLauncher.add_app_launcher_args(parser)
-argcomplete.autocomplete(parser)
 args_cli, hydra_args = parser.parse_known_args()
 
 # always enable cameras to record video
