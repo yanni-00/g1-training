@@ -41,3 +41,14 @@ def load_actor(checkpoint, runtime, root=ROOT):
     if not all(torch.isfinite(p).all() for p in actor.parameters()):
         raise ValueError("Checkpoint contains non-finite actor parameters")
     return actor.eval()
+
+
+def select_actor_observation(observations, observation_dim):
+    """Extract only the explicit actor group from native RSL tensor/dict APIs."""
+    if isinstance(observations, tuple):
+        observations = observations[0]
+    if not isinstance(observations, torch.Tensor):
+        observations = observations["policy"]
+    if not isinstance(observations, torch.Tensor) or observations.ndim != 2 or observations.shape[-1] != observation_dim:
+        raise ValueError("Native policy observation shape differs from the frozen F1 actor contract")
+    return observations

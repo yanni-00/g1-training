@@ -235,7 +235,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         request = load_json(request_file)
         if request.get("phase") == "probe":
             from f1_rl_lab.checkpoint import verify_checkpoint
-            from f1_rl_lab.policy import load_actor
+            from f1_rl_lab.policy import load_actor, select_actor_observation
             from f1_rl_lab.contract import sha256
             from pathlib import Path
             import json
@@ -246,16 +246,17 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             with torch.inference_mode():
                 env.reset()
                 observations = env.get_observations()
-            observations = observations[0] if isinstance(observations, tuple) else observations
             samples = []
             for feedback_step in range(request["readiness_steps"]):
                 with torch.inference_mode():
-                    actions = fresh(observations)
-                    if not torch.isfinite(observations).all() or not torch.isfinite(actions).all():
+                    actor_observation = select_actor_observation(observations, identity["runtime"]["observation_dim"])
+                    actions = fresh(actor_observation)
+                    if not torch.isfinite(actor_observation).all() or not torch.isfinite(actions).all():
                         raise ValueError("Non-finite fresh-checkpoint feedback")
+                    observation_sample = actor_observation[0].detach().cpu().tolist()
                     observations, _, _, _ = env.step(actions)
                     asset = env.unwrapped.scene["robot"]
-                    samples.append({"step": feedback_step,
+                    samples.append({"step": feedback_step, "policy_observation": observation_sample,
                         "command": env.unwrapped.command_manager.get_command("base_velocity")[0].detach().cpu().tolist(),
                         "velocity": asset.data.root_lin_vel_b[0].detach().cpu().tolist(),
                         "root_position": asset.data.root_pos_w[0].detach().cpu().tolist(),
