@@ -1,15 +1,15 @@
 {
   "exp_id": "exp-20261114-005",
-  "phase": "probe",
+  "phase": "train",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 100,
+  "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_gaitcontact_resume10000_admission_20261114",
+  "run_name": "f1_gaitcontact_resume10000_formal1000_20261114",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Explicit bounded100-update new-resume-path admission, not a convergence or cost prediction; intended total adaptation envelope1000 updates (remaining900 only after actual readiness)",
+    "max_iterations": "Formal 1000-update continuation from exact registered parent model_10000 (sha 73010809...); 100-update admission probe (TASK_20261114_125) passed; not a convergence prediction",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {

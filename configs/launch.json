@@ -1,10 +1,10 @@
 {
-  "status": "registered_resumed_gait_weight_probe",
+  "status": "registered_resumed_gait_weight_formal1000",
   "authorization": {
     "training": true,
     "evaluation": false
   },
   "oma_exp_ref": "exp-20261114-005",
   "oma_project": ".",
-  "reason": "Owner continued Loop for stability/velocity; finite new resume path must close actual readiness before formal adaptation. No GM playback."
+  "reason": "Owner continued Loop: 100-update admission probe passed (TASK_20261114_125, model_10099 new-child feedback complete); now formal 1000-update continuation from exact model_10000. Same training delta only (gait contact 0.5->1.0). No GM playback."
 }
