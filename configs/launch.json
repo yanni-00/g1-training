@@ -1,10 +1,10 @@
 {
-  "status": "registered_bounded_evaluation",
+  "status": "server_mujoco_playback_required",
   "authorization": {
     "training": false,
-    "evaluation": true
+    "evaluation": false
   },
-  "oma_exp_ref": "exp-20261114-001",
+  "oma_exp_ref": null,
   "oma_project": ".",
-  "reason": "Owner continued autonomous Loop; exact checkpoint10000 simulated evaluation only"
+  "reason": "Owner requires server MuJoCo playback; future GM training needs its own current registration/preflight. GM playback disabled."
 }

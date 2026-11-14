@@ -10,6 +10,8 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import shutil
+import struct
 import sys
 import xml.etree.ElementTree as ET
 
@@ -31,13 +33,78 @@ def rotation(rpy):
                      [sy*cp, sy*sp*sr+cy*cr, sy*sp*cr-cy*sr], [-sp, cp*sr, cp*cr]])
 
 
-def build_model(contract, controls, output, gravity):
+def build_model(contract, controls, output, gravity, physics_dt):
     import mujoco
     import numpy as np
     urdf = ROOT / contract["urdf"]
     assert sha(urdf) == contract["urdf_sha256"]
     source = ET.parse(urdf).getroot()
-    fixed = mujoco.MjModel.from_xml_path(str(urdf))
+    # Source STLs may be ASCII, which MuJoCo cannot decode. Convert only the
+    # serialization in this run's output tree, preserving every triangle/scale.
+    converted = ET.fromstring(ET.tostring(source))
+    mesh_dir = output / "meshes"
+    mesh_dir.mkdir(exist_ok=True)
+    mesh_audit = []
+    for role in ("visual", "collision"):
+        for link in converted.findall("link"):
+            for mesh in link.findall(f"{role}/geometry/mesh"):
+                src = (urdf.parent / mesh.get("filename")).resolve()
+                dst = mesh_dir / (role+"__"+link.get("name")+src.suffix)
+                payload = src.read_bytes()
+                is_binary = len(payload) >= 84 and len(payload) == 84+50*struct.unpack_from("<I",payload,80)[0]
+                if is_binary:
+                    shutil.copyfile(src,dst)
+                    count = struct.unpack_from("<I",payload,80)[0]
+                else:
+                    triangles = []
+                    vertices = []
+                    normal = [0.,0.,0.]
+                    for line in payload.decode("utf-8-sig").splitlines():
+                        fields = line.split()
+                        if fields[:2] == ["facet","normal"]:
+                            normal = [float(x) for x in fields[2:]]
+                        elif fields[:1] == ["vertex"]:
+                            vertices.extend(float(x) for x in fields[1:])
+                            if len(vertices) == 9:
+                                triangles.append(struct.pack("<12fH",*(normal+vertices),0))
+                                vertices=[]
+                    assert triangles and not vertices, "Invalid source ASCII STL"
+                    count = len(triangles)
+                    dst.write_bytes(b"F1 source triangle-preserving ASCII-to-binary STL".ljust(80,b"\0")
+                                    +struct.pack("<I",count)+b"".join(triangles))
+                converted_format = "binary_stl"
+                if count > 200000:
+                    # MuJoCo's STL decoder has a face-count cap. OBJ preserves
+                    # the full triangle set; do not decimate the F1 visual mesh.
+                    binary = dst.read_bytes()
+                    obj = dst.with_suffix(".obj")
+                    vertices_by_value = {}
+                    faces = []
+                    for i in range(count):
+                        values = struct.unpack_from("<12fH",binary,84+50*i)
+                        face = []
+                        for start in (3,6,9):
+                            vertex = tuple(values[start:start+3])
+                            if vertex not in vertices_by_value:
+                                vertices_by_value[vertex] = len(vertices_by_value)+1
+                            face.append(vertices_by_value[vertex])
+                        faces.append(face)
+                    with obj.open("w") as stream:
+                        for vertex in vertices_by_value:
+                            stream.write("v "+" ".join(format(v,".17g") for v in vertex)+"\n")
+                        for face in faces:
+                            stream.write("f "+" ".join(map(str,face))+"\n")
+                    dst = obj
+                    converted_format = "obj_full_triangle_set_from_stl_float32"
+                mesh.set("filename",str(dst.resolve()))
+                mesh_audit.append({"source":str(src),"source_sha256":sha(src),"runtime":str(dst),
+                                   "runtime_sha256":sha(dst),"triangles":count,"converted_ascii":not is_binary,
+                                   "runtime_format":converted_format})
+    converted.find("mujoco/compiler").set("meshdir",str(mesh_dir.resolve()))
+    import_urdf = output / "mujoco_import.urdf"
+    ET.ElementTree(converted).write(import_urdf,encoding="utf-8",xml_declaration=True)
+    (output/"mesh_conversion.json").write_text(json.dumps(mesh_audit,indent=2),encoding="utf-8")
+    fixed = mujoco.MjModel.from_xml_path(str(import_urdf))
     intermediate = output / "urdf_import.xml"
     mujoco.mj_saveLastXML(str(intermediate), fixed)
     tree = ET.parse(intermediate)
@@ -45,7 +112,7 @@ def build_model(contract, controls, output, gravity):
     compiler = root.find("compiler")
     if compiler is None:
         compiler = ET.SubElement(root, "compiler")
-    compiler.set("meshdir", str(urdf.parent))
+    compiler.set("meshdir", str(mesh_dir.resolve()))
     compiler.set("balanceinertia", "true")  # Existing source URDF compiler option.
     compiler.set("fusestatic", "false")
     root.set("model", "F1_29dof_ownerpd_sim2sim")
@@ -78,7 +145,7 @@ def build_model(contract, controls, output, gravity):
     option = root.find("option")
     if option is None:
         option = ET.SubElement(root, "option")
-    option.set("timestep", str(contract["sim_dt"]))
+    option.set("timestep", str(physics_dt))
     option.set("gravity", " ".join(str(v) for v in gravity))
     option.set("integrator", "implicitfast")  # Explicit MuJoCo execution choice, not identification.
     ET.SubElement(world, "light", pos="0 0 4", dir="0 0 -1", diffuse="0.8 0.8 0.8")
@@ -138,6 +205,8 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--max-steps", required=True, type=int)
     parser.add_argument("--prepare-only", action="store_true")
+    parser.add_argument("--physics-refinement", type=int, choices=[1, 2], default=1,
+                        help="Controlled numerical diagnostic; 2 halves physics dt, preserving control dt/PD")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     ensure_assets()
@@ -152,7 +221,9 @@ def main():
     assert len(commands) == args.max_steps
     torch.set_num_threads(1)
     actor = load_actor(args.checkpoint, runtime)
-    model, xml = build_model(contract, controls, args.output, runtime["gravity"])
+    physics_dt = contract["sim_dt"] / args.physics_refinement
+    physics_steps = contract["decimation"] * args.physics_refinement
+    model, xml = build_model(contract, controls, args.output, runtime["gravity"], physics_dt)
     data = mujoco.MjData(model)
     names = contract["model_joint_names"]
     jids = np.array([mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, n) for n in names])
@@ -171,6 +242,8 @@ def main():
              "mujoco_version": mujoco.__version__, "torch_version": str(torch.__version__),
              "policy_joint_names": names, "model_nq": model.nq, "model_nv": model.nv,
              "model_nu": model.nu, "sim_dt": model.opt.timestep, "control_dt": contract["step_dt"],
+             "reference_training_sim_dt": contract["sim_dt"], "physics_refinement": args.physics_refinement,
+             "physics_substeps_per_action": physics_steps,
              "kp": model.actuator_gainprm[aids, 0].tolist(),
              "pd_kd": (-model.actuator_biasprm[aids, 2]).tolist(),
              "passive_damping": model.dof_damping[vadr].tolist(),
@@ -221,7 +294,7 @@ def main():
                 action = actor(torch.from_numpy(observation[None])).numpy()[0]
             target = joint_targets(action, contract)
             data.ctrl[aids] = target
-            for _ in range(contract["decimation"]):
+            for _ in range(physics_steps):
                 mujoco.mj_step(model, data)
             # Refresh cached poses for the just-integrated state before metrics/render.
             mujoco.mj_forward(model, data)
