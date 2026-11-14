@@ -205,8 +205,8 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--max-steps", required=True, type=int)
     parser.add_argument("--prepare-only", action="store_true")
-    parser.add_argument("--physics-refinement", type=int, choices=[1, 2], default=1,
-                        help="Controlled numerical diagnostic; 2 halves physics dt, preserving control dt/PD")
+    parser.add_argument("--physics-refinement", type=int, choices=[1, 2, 4], default=1,
+                        help="Controlled numerical diagnostic; divide physics dt, preserve control dt/PD")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
     ensure_assets()
@@ -253,6 +253,8 @@ def main():
              "body_inertia": {model.body(i).name: model.body_inertia[i].tolist() for i in range(1, model.nbody)},
              "initial_feet_positions": {s: data.xpos[i].tolist() for s,i in feet.items()},
              "gravity": model.opt.gravity.tolist(), "integrator": "implicitfast",
+             "angular_velocity_frame": "mjOBJ_XBODY local: base_link regular frame, matching Isaac root_ang_vel_b",
+             "base_inertial_quaternion": model.body_iquat[base_id].tolist(),
              "protocol": protocol,
              "limitations": ["MuJoCo contact/solver and implicit servo differ from PhysX",
                  "No extra joint velocity clamp: source limits are recorded, not imitated by an unverified limiter",
@@ -283,7 +285,9 @@ def main():
     try:
         for step, command in enumerate(commands):
             spatial = np.empty(6)
-            mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_BODY, base_id, spatial, 1)
+            # mjOBJ_BODY returns the principal-inertia frame. XBODY is the URDF
+            # body frame used by the policy; see MuJoCo engine_core_util.c.
+            mujoco.mj_objectVelocity(model, data, mujoco.mjtObj.mjOBJ_XBODY, base_id, spatial, 1)
             orientation = data.xmat[base_id].reshape(3,3)
             observation = history.push({"base_ang_vel": spatial[:3],
                 "projected_gravity": orientation.T @ np.array([0.,0.,-1.]),

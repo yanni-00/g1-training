@@ -1,0 +1,54 @@
+import importlib.util
+from pathlib import Path
+from types import SimpleNamespace as NS
+import unittest
+
+ROOT=Path(__file__).resolve().parents[1]
+spec=importlib.util.spec_from_file_location("f1_continuation",ROOT/"source/f1_rl_lab/f1_rl_lab/continuation.py")
+module=importlib.util.module_from_spec(spec)
+spec.loader.exec_module(module)
+
+
+class ContinuationTests(unittest.TestCase):
+    def test_only_registered_reward_changes_and_commands_restore(self):
+        env=NS(rewards=NS(gait=NS(weight=.5),alive=NS(weight=.15)),
+               commands=NS(base_velocity=NS(ranges=NS(lin_vel_x=(-.1,.1)))))
+        delta={"reward_override":{"gait":{"from":.5,"to":1.}},
+               "resume_command_ranges":{"lin_vel_x":[-.5,1.]}}
+        result=module.apply_delta(env,delta)
+        self.assertEqual(env.rewards.alive.weight,.15)
+        self.assertEqual(env.rewards.gait.weight,1.)
+        self.assertEqual(env.commands.base_velocity.ranges.lin_vel_x,(-.5,1.))
+        self.assertFalse(result["episode_state_restored"])
+        delta["reward_override"]["alive"]={"from":.15,"to":0}
+        with self.assertRaises(ValueError):module.apply_delta(env,delta)
+
+    def test_loaded_optimizer_rate_restores_adaptive_controller(self):
+        state={"state":{0:{"step":200020}}}
+        optimizer=NS(param_groups=[{"lr":2.2500000000000008e-5}],state_dict=lambda:state)
+        runner=NS(alg=NS(optimizer=optimizer,learning_rate=.001),current_learning_iteration=10000)
+        parent={"iteration":10000,"optimizerStep":200020,"optimizer_learning_rate":2.2500000000000008e-5}
+        module.restore_adaptive_lr(runner,parent)
+        self.assertEqual(runner.alg.learning_rate,optimizer.param_groups[0]["lr"])
+        parent["optimizerStep"]+=1
+        with self.assertRaises(ValueError):module.restore_adaptive_lr(runner,parent)
+
+    def test_numerical_guard_stops_invalid_noise(self):
+        import tempfile
+        import torch
+        class Policy(torch.nn.Module):
+            def __init__(self):
+                super().__init__()
+                self.std=torch.nn.Parameter(torch.ones(2))
+        policy=Policy()
+        def invalid_update():
+            with torch.no_grad():policy.std[0]=-1
+            return {"loss":1.}
+        runner=NS(alg=NS(policy=policy,update=invalid_update),current_learning_iteration=10000)
+        with tempfile.TemporaryDirectory() as directory:
+            module.install_finite_guard(runner,directory)
+            with self.assertRaises(FloatingPointError):runner.alg.update()
+            self.assertTrue((Path(directory)/"params/numerical_failure.json").is_file())
+
+
+if __name__ == "__main__":unittest.main()

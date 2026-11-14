@@ -4,7 +4,7 @@ from pathlib import Path
 
 import numpy as np
 
-from f1_rl_lab.contract import binding, effective_control, load_contract
+from f1_rl_lab.contract import ROOT, binding, effective_control, load_contract
 from f1_rl_lab.interface import joint_permutation
 
 
@@ -80,6 +80,14 @@ def export_deploy_cfg(env, log_dir):
                "velocity_limit_policy": [control[n]["velocity_limit"] for n in action_names],
                "empirical_normalization": False,
                "deployment_status": "offline interface only; actual F1 hardware chain not verified"}
+    delta_path = ROOT / "configs/training_delta.json"
+    if delta_path.is_file():
+        from f1_rl_lab.contract import sha256
+        runtime["training_objective"] = {
+            "delta_sha256": sha256(delta_path),
+            "reward_weights": {n: float(env.reward_manager.get_term_cfg(n).weight)
+                               for n in env.reward_manager.active_terms},
+            "scope": "Actual runtime reward inventory; observation/control binding unchanged"}
     target = Path(log_dir) / "params/f1_runtime.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(runtime, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

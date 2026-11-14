@@ -152,6 +152,14 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         log_dir += f"_{agent_cfg.run_name}"
     log_dir = os.path.join(log_root_path, log_dir)
 
+    from f1_rl_lab.contract import ROOT as f1_root, load_json
+    request = load_json(f1_root / "configs/run_request.json")
+    continuation = None
+    if request.get("resume"):
+        from f1_rl_lab.continuation import apply_delta
+        delta = load_json(f1_root / "configs/training_delta.json")
+        continuation = apply_delta(env_cfg, delta)
+
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
 
@@ -194,6 +202,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         print(f"[INFO]: Loading model checkpoint from: {resume_path}")
         # load previously trained model
         runner.load(resume_path)
+        from f1_rl_lab.continuation import restore_adaptive_lr
+        continuation.update(restore_adaptive_lr(runner, request["resume"]))
+        print("[F1_RESUME]", continuation, flush=True)
 
     # dump the configuration into log-directory
     dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
@@ -204,6 +215,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         inspect.getfile(env_cfg.__class__),
         os.path.join(log_dir, "params", os.path.basename(inspect.getfile(env_cfg.__class__))),
     )
+
+    from f1_rl_lab.continuation import install_finite_guard
+    install_finite_guard(runner, log_dir)
 
     # Bind every actual save, including intermediate checkpoints.
     from f1_rl_lab.checkpoint import write_sidecar
@@ -219,6 +233,13 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         payload = torch.load(staged, map_location="cpu", weights_only=True)
         payload["f1_contract"] = {"format": "f1_fullbody_checkpoint_v1", "robot": load_contract()["robot"],
                                   "binding": binding(), "runtime": runtime}
+        if continuation is not None:
+            from f1_rl_lab.continuation import optimizer_steps
+            payload["f1_training"] = {**continuation,
+                "optimizer_steps": optimizer_steps(payload["optimizer_state_dict"]),
+                "adaptive_learning_rate": float(runner.alg.learning_rate),
+                "optimizer_learning_rates": [float(g["lr"]) for g in runner.alg.optimizer.param_groups],
+                "objective": runtime.get("training_objective")}
         torch.save(payload, staged)
         os.replace(staged, final)
         write_sidecar(final, runtime)

@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261113-002",
-  "phase": "formal",
+  "exp_id": "exp-20261114-005",
+  "phase": "probe",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 11000,
+  "max_iterations": 100,
   "seed": 42,
-  "run_name": "f1_fullbody_ownerpd_originalg1_11k_20261113",
+  "run_name": "f1_gaitcontact_resume10000_admission_20261114",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "configs/reference/g1_11k_manifest.json:checkpoint_iter+1 (finite reference-aligned first version, not a convergence/cost estimate)",
+    "max_iterations": "Explicit bounded100-update new-resume-path admission, not a convergence or cost prediction; intended total adaptation envelope1000 updates (remaining900 only after actual readiness)",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
@@ -18,5 +18,12 @@
     "unit": "GM credit",
     "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
     "estimate": false
-  }
+  },
+  "resume": {
+    "sha256": "73010809f889897c2becbaf1b4f4bcf4efc0683012195f2b229be6b0e270e040",
+    "iteration": 10000,
+    "optimizerStep": 200020,
+    "optimizer_learning_rate": 2.2500000000000008e-05
+  },
+  "training_delta": "configs/training_delta.json"
 }

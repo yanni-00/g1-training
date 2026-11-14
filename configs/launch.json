@@ -1,10 +1,10 @@
 {
-  "status": "server_mujoco_playback_required",
+  "status": "registered_resumed_gait_weight_probe",
   "authorization": {
-    "training": false,
+    "training": true,
     "evaluation": false
   },
-  "oma_exp_ref": null,
+  "oma_exp_ref": "exp-20261114-005",
   "oma_project": ".",
-  "reason": "Owner requires server MuJoCo playback; future GM training needs its own current registration/preflight. GM playback disabled."
+  "reason": "Owner continued Loop for stability/velocity; finite new resume path must close actual readiness before formal adaptation. No GM playback."
 }

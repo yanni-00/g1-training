@@ -1,0 +1,27 @@
+{
+  "format": "f1_gait_weight_continuation_v1",
+  "reward_override": {
+    "gait": {
+      "from": 0.5,
+      "to": 1.0,
+      "source": "Original velocity_env_cfg.py RewardsCfg.gait.weight0.5; target1.0 is a registered engineering test equal to original track_lin_vel_xy weight, not a measured optimum"
+    }
+  },
+  "resume_command_ranges": {
+    "lin_vel_x": [
+      -0.5,
+      1.0
+    ],
+    "lin_vel_y": [
+      -0.3,
+      0.3
+    ],
+    "ang_vel_z": [
+      -0.1,
+      0.1
+    ]
+  },
+  "command_provenance": "Parent log iteration10000 Curriculum/lin_vel_cmd_levels=1.0; original curriculums.py saturates x/y at their limit_ranges; yaw curriculum is absent and retains original ranges. Simulator episode/RNG/terrain state is not saved in parent.",
+  "hypothesis": "Stronger original alternating-contact gait incentive reduces low-speed contact fragments and step discontinuity; speed/heading/standing protected by frozen raw-data gates",
+  "side_effects": "May prioritize phase over speed, increase stepping force or in-place stepping; retain all original penalties and terminations, evaluate speed/attitude/contacts and owner video together"
+}
