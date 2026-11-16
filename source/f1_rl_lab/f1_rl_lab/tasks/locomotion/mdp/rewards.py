@@ -91,24 +91,6 @@ def feet_stumble(env: ManagerBasedRLEnv, sensor_cfg: SceneEntityCfg) -> torch.Te
     return reward
 
 
-def feet_contact_lateral_tilt(
-    env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg, sensor_cfg: SceneEntityCfg
-) -> torch.Tensor:
-    """[OMA] r11: symmetric sole-side tilt cost only on feet touching ground."""
-    from f1_rl_lab.foot_posture import contact_lateral_tilt_l2
-
-    asset: Articulation = env.scene[asset_cfg.name]
-    sensor: ContactSensor = env.scene.sensors[sensor_cfg.name]
-    expected = ["left_ankle_roll", "right_ankle_roll"]
-    asset_names = [asset.body_names[i] for i in asset_cfg.body_ids]
-    sensor_names = [sensor.body_names[i] for i in sensor_cfg.body_ids]
-    if asset_names != expected or sensor_names != expected:
-        raise ValueError("Foot tilt reward requires the explicitly resolved left/right foot names")
-    contact = sensor.data.current_contact_time[:, sensor_cfg.body_ids] > 0
-    quat = asset.data.body_quat_w[:, asset_cfg.body_ids, :]
-    return contact_lateral_tilt_l2(quat, contact)
-
-
 def feet_height_body(
     env: ManagerBasedRLEnv,
     command_name: str,

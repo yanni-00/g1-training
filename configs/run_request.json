@@ -1,11 +1,11 @@
 {
-  "exp_id": "exp-20261116-004",
+  "exp_id": "exp-20261116-005",
   "phase": "probe",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 100,
   "seed": 42,
-  "run_name": "f1_contacttilt_resume11999_admission100_20261116",
+  "run_name": "f1_contacttilt_bindingfix_resume11999_admission100_20261116",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",

@@ -12,8 +12,7 @@ spec.loader.exec_module(module)
 class ContinuationTests(unittest.TestCase):
     def test_contact_tilt_addition_preserves_actual_parent_objective(self):
         import copy
-        env=NS(rewards=NS(gait=NS(weight=.5),track_ang_vel_z=NS(weight=.5,params={"std":.5}),
-                         contact_lateral_tilt=NS(weight=0.)),
+        env=NS(rewards=NS(gait=NS(weight=.5),track_ang_vel_z=NS(weight=.5,params={"std":.5})),
                commands=NS(base_velocity=NS(ranges=NS())))
         delta={"reward_override":{"gait":{"from":.5,"to":1.}},
                "parent_reward_weights":{"gait":1.,"track_ang_vel_z":.5},
@@ -21,7 +20,9 @@ class ContinuationTests(unittest.TestCase):
                "reward_addition":{"contact_lateral_tilt":{"from":0.,"to":-5.}},
                "resume_command_ranges":{"ang_vel_z":[-.1,.1]}}
         original=copy.deepcopy(env)
-        result=module.apply_delta(env,delta)
+        from unittest.mock import patch
+        with patch.object(module, "contact_tilt_term", side_effect=lambda weight: NS(weight=weight)):
+            result=module.apply_delta(env,delta)
         self.assertEqual(result["reward_weights_after"],{**delta["parent_reward_weights"],"contact_lateral_tilt":-5.})
         self.assertEqual(env.rewards.track_ang_vel_z.params["std"],.1)
         for value in (0.,1.,float("nan")):

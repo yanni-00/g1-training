@@ -4,6 +4,18 @@ import math
 from pathlib import Path
 
 
+def contact_tilt_term(weight):
+    """Register optional reward outside the strictly bound original base files."""
+    from isaaclab.managers import RewardTermCfg, SceneEntityCfg
+    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt
+    feet = ["left_ankle_roll", "right_ankle_roll"]
+    return RewardTermCfg(
+        func=feet_contact_lateral_tilt, weight=weight,
+        params={"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
+                "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)},
+    )
+
+
 def apply_delta(env_cfg, delta):
     if set(delta["reward_override"]) != {"gait"}:
         raise ValueError("This experiment permits only the gait reward weight delta")
@@ -45,16 +57,16 @@ def apply_delta(env_cfg, delta):
         if set(additions) != {"contact_lateral_tilt"}:
             raise ValueError("Only the registered symmetric contact tilt term can be added")
         spec = additions["contact_lateral_tilt"]
-        if (float(env_cfg.rewards.contact_lateral_tilt.weight) != spec["from"]
+        if (hasattr(env_cfg.rewards, "contact_lateral_tilt")
                 or spec["from"] != 0.0 or "contact_lateral_tilt" in after):
-            raise ValueError("Contact tilt must start disabled in the original base")
+            raise ValueError("Contact tilt must not exist in the original base")
         target = float(spec["to"])
         if not math.isfinite(target) or target >= 0:
             raise ValueError("Contact tilt cost must have a finite negative weight")
         actual_parent = {n: w for n, w in after.items() if n != "contact_lateral_tilt"}
         if actual_parent != delta["parent_reward_weights"]:
             raise ValueError("Existing parent reward inventory changed while adding contact tilt")
-        env_cfg.rewards.contact_lateral_tilt.weight = target
+        env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
     return {"reward_weights_before":before,"reward_weights_after":after,
