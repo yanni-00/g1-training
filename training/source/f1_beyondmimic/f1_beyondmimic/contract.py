@@ -206,10 +206,17 @@ def binding(root=ROOT):
 def verify_assets(root=ROOT):
     root = Path(root)
     manifest = load_json(root.parent / ".oma/impl/source_manifest.json")
-    for asset in manifest["assets"]:
+    for index, asset in enumerate(manifest["assets"]):
         path = resolve(asset["path"], root)
+        try:
+            size = path.stat().st_size
+        except OSError as error:
+            _stage(f"a2-{index}-stat-failed {asset['path']} {type(error).__name__}")
+            raise
+        _stage(f"a2-{index}/{len(manifest['assets'])} {path.name} {size}")
         if not path.resolve().is_relative_to(root.resolve()) or sha256(path) != asset["sha256"]:
             raise ValueError("Packaged F1 asset identity changed: " + asset["path"])
+    _stage("a2-assets-verified")
 
 
 def _stage(name):
