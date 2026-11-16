@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "bde1b08161636b3f57659e3cf1c92a9cedf8083e891ea4210badb8fa2c52e690"
+      "sha256": "8870444e75436a81102af0a97b2e7c27e8ec486b20df7cacec639edfcc17ea42"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -523,11 +523,11 @@
     },
     {
       "path": "training/scripts/gm_entry.py",
-      "sha256": "a3c384d4e5fb475bc449ee1a82bb8258460e969351aea2c526ef14ef00246b13"
+      "sha256": "859b046a03787d0c590d98d84a5cb9b62343ede10756ec1511f2e9c10b802a08"
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "c56fbe8da90a2fc271b89f95a9a45f56c8c37ea2b13a4137aeb2535771f03a9f"
+      "sha256": "83dba92384d7911b1f933f642d3fb2e9eb37c0ed42846d1ea567a2353f43b414"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",
@@ -671,7 +671,7 @@
     },
     {
       "path": "training/tools/check_scaffold.py",
-      "sha256": "525631043d7964b33f7a11993e5bcb8473702fd87aa30b7b951a0d0e55c6c694"
+      "sha256": "3b5d5cc97127e49cf0e6f107290e895dd7fa70a5615c508911c5dc406aafd173"
     },
     {
       "path": "training/tools/export_ssot_motion.py",

@@ -13,7 +13,7 @@
   "source_static_checks_passed": true,
   "validation": {
     "path": "../../work/training-start-20261116/validation.json",
-    "sha256": "31402a3af520e05c1e4b9c1ddcebd83445ee8f1095f8bbcb077306bb92ea191d"
+    "sha256": "5e0321cf5330aef1acf38521791675d2a60203339b1dc676454e03dedb058f91"
   },
   "owner_direct_formal_policy_sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e",
   "owner_direct_formal_policy_scope": "Only the separate prior probe/minimal-closure workflow is deferred by the owner; source, limits, asset, motion, control and budget/account checks are not waived.",
@@ -140,11 +140,11 @@
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "c56fbe8da90a2fc271b89f95a9a45f56c8c37ea2b13a4137aeb2535771f03a9f"
+      "sha256": "83dba92384d7911b1f933f642d3fb2e9eb37c0ed42846d1ea567a2353f43b414"
     },
     {
       "path": "training/scripts/gm_entry.py",
-      "sha256": "a3c384d4e5fb475bc449ee1a82bb8258460e969351aea2c526ef14ef00246b13"
+      "sha256": "859b046a03787d0c590d98d84a5cb9b62343ede10756ec1511f2e9c10b802a08"
     },
     {
       "path": "training/configs/robot_contract.json",
