@@ -415,7 +415,7 @@
     },
     {
       "path": "training/configs/assets_archive.json",
-      "sha256": "62d9c1305194c2f0145071fc85e4731689a586dc86be67670fca4eee5618a3b7"
+      "sha256": "e6b413cfab90b5173e48966ca005a4d542c7525ca713894ffcf6a961403667cc"
     },
     {
       "path": "training/configs/control_profile.json",
@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "3b23df99aa350e30d3b78b58c4b236cc279242b80a89b33c97d2e881f4a12536"
+      "sha256": "bde1b08161636b3f57659e3cf1c92a9cedf8083e891ea4210badb8fa2c52e690"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -491,7 +491,7 @@
     },
     {
       "path": "training/configs/training_admission_policy.json",
-      "sha256": "31bc9675c6518b8bfb66c7dc78b88b7570263d812a13090203b3eda6fe88d2b1"
+      "sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e"
     },
     {
       "path": "training/data/README.md",

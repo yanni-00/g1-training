@@ -2,6 +2,8 @@
 
 来源：2026-11-16 用户要求同步 f1-29dof-walking 配置并开始 Loop 训练，指定独立 Git 分支、GM 与实时足额账号选择规则，确认每任务 50 credit 上限。随后明确不要单独试跑 100 轮，直接正式运行。真机未授权。
 
+同日用户在获知上传目标与范围后明确回复“授权”：允许将本次训练代码、PD 配置、机器人资产压缩包和训练动作 NPZ 推送至 https://github.com/yanni-00/g1-training 的 codex/beyondmimic-f1 独立分支，用于本次 GM 正式训练。
+
 保留 BeyondMimic 方法、参考、观测和奖励；指定 PD、附加 armature=0 以及训练 URDF 可动关节 friction=0/damping=0.05 为有来源的仿真基线。辨识保持 pending/null，后续真实测量可覆盖，不能把工程基线写成已辨识。
 
 先证明 URDF 仅 joint/dynamics 有差异。原 SSOT 和已交付动作不覆盖；训练输入另存，绑定新 URDF 哈希，并复算实际参考全部刚体的当前 URDF FK。运动学等价不等于新动力学或自然度通过。

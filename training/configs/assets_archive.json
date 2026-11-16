@@ -1,6 +1,6 @@
 {
   "path": "resources/f1_assets.tar.gz",
-  "sha256": "79a61a6a864259d1607d45032060031f7478fce075413625a3acd61ed57099d6",
-  "bytes": 54293147,
-  "scope": "lossless archive of registered F1 training-variant assets; meshes unchanged"
+  "sha256": "6e73bd9812d6f361e0b02990a4ffe38953da2d47397b09c35e3ea974a18ff9de",
+  "bytes": 55949336,
+  "scope": "Lossless archive of all assets registered in this Loop source_manifest; includes original and fixed collision meshes"
 }
