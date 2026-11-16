@@ -1,22 +1,22 @@
 {
-  "exp_id": "exp-20261116-001",
-  "phase": "probe",
+  "exp_id": "exp-20261116-002",
+  "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 100,
+  "max_iterations": 1001,
   "seed": 42,
-  "run_name": "f1_yawstd01_resume10999_admission_20261116",
+  "run_name": "f1_yawstd01_resume10999_formal1001_20261116",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Explicit100 native-update same-runtime admission for new scalar-param override; formal1000 from the same parent requires independent registration after actual readiness, not a convergence estimate",
+    "max_iterations": "Owner 2026-11-16 explicit formal continuation: 1001 native updates from exact model_10999 to native terminal iteration 12000, same single yaw-kernel std0.1 delta as verified probe TASK_20261116_162. Execution bound, not a convergence or cost estimate",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
     "account_index": 15,
     "spend_cap": 50.0,
     "unit": "GM credit",
-    "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
+    "basis": "Selected-account existing-credit cap for this formal round; live remaining amount and zero-active-task observation revalidated in OMA resource admission before create/run",
     "estimate": false
   },
   "resume": {
