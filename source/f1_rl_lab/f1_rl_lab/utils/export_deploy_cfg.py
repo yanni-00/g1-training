@@ -84,6 +84,7 @@ def export_deploy_cfg(env, log_dir):
     if delta_path.is_file():
         from f1_rl_lab.contract import sha256
         runtime["training_objective"] = {
+            "yaw_tracking_std": float(env.reward_manager.get_term_cfg("track_ang_vel_z").params["std"]),
             "delta_sha256": sha256(delta_path),
             "reward_weights": {n: float(env.reward_manager.get_term_cfg(n).weight)
                                for n in env.reward_manager.active_terms},

@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261114-005",
-  "phase": "train",
+  "exp_id": "exp-20261116-001",
+  "phase": "probe",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 1000,
+  "max_iterations": 100,
   "seed": 42,
-  "run_name": "f1_gaitcontact_resume10000_formal1000_20261114",
+  "run_name": "f1_yawstd01_resume10999_admission_20261116",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Formal 1000-update continuation from exact registered parent model_10000 (sha 73010809...); 100-update admission probe (TASK_20261114_125) passed; not a convergence prediction",
+    "max_iterations": "Explicit100 native-update same-runtime admission for new scalar-param override; formal1000 from the same parent requires independent registration after actual readiness, not a convergence estimate",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
@@ -20,10 +20,10 @@
     "estimate": false
   },
   "resume": {
-    "sha256": "73010809f889897c2becbaf1b4f4bcf4efc0683012195f2b229be6b0e270e040",
-    "iteration": 10000,
-    "optimizerStep": 200020,
-    "optimizer_learning_rate": 2.2500000000000008e-05
+    "sha256": "c7a30701171d82343ab5053f67cf377f5c55a330067f9e9546c5c49531565221",
+    "iteration": 10999,
+    "optimizerStep": 220020,
+    "optimizer_learning_rate": 0.0002562890625000001
   },
   "training_delta": "configs/training_delta.json"
 }

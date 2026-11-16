@@ -1,4 +1,4 @@
-"""Narrow registered gait-weight continuation and auditable resume state."""
+"""Narrow registered objective continuation and auditable resume state."""
 import json
 import math
 from pathlib import Path
@@ -15,6 +15,22 @@ def apply_delta(env_cfg, delta):
     after = {n: float(v.weight) for n,v in vars(env_cfg.rewards).items() if hasattr(v,"weight")}
     if any(before[n] != after[n] for n in before if n != "gait"):
         raise ValueError("Unregistered reward change")
+    # [OMA] r8: keep the parent's complete weight inventory while testing only
+    # the existing yaw tracking kernel width. Do not change the physical binding.
+    parameter_changes = {}
+    overrides = delta.get("reward_param_override", {})
+    if overrides:
+        if set(overrides) != {"track_ang_vel_z"} or set(overrides["track_ang_vel_z"]) != {"std"}:
+            raise ValueError("Only the registered yaw tracking std parameter is allowed")
+        if after != delta["parent_reward_weights"]:
+            raise ValueError("Continuation weights differ from the registered actual parent")
+        term = env_cfg.rewards.track_ang_vel_z
+        change = overrides["track_ang_vel_z"]["std"]
+        old, target = float(term.params["std"]), float(change["to"])
+        if old != change["from"] or not math.isfinite(target) or target <= 0:
+            raise ValueError("Unexpected source yaw std or invalid registered target")
+        term.params["std"] = target
+        parameter_changes = {"track_ang_vel_z": {"std": {"from": old, "to": target}}}
     # The parent does not contain per-environment episode state. Restore the
     # observed curriculum command limits explicitly, never claim a bitwise resume.
     for name,values in delta["resume_command_ranges"].items():
@@ -22,6 +38,7 @@ def apply_delta(env_cfg, delta):
             raise ValueError("Unregistered command range field")
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
     return {"reward_weights_before":before,"reward_weights_after":after,
+            "reward_parameter_changes":parameter_changes,
             "command_ranges":delta["resume_command_ranges"],
             "episode_state_restored":False,"rng_state_restored":False,
             "scope":"Same actor/optimizer, observed command curriculum; simulator episodes/terrain assignments reset"}

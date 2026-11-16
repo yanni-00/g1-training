@@ -10,6 +10,28 @@ spec.loader.exec_module(module)
 
 
 class ContinuationTests(unittest.TestCase):
+    def test_yaw_width_preserves_actual_parent_weights_and_other_parameters(self):
+        import copy
+        env=NS(rewards=NS(gait=NS(weight=.5,params={"period":.8}),
+                         track_ang_vel_z=NS(weight=.5,params={"std":.5,"command_name":"base_velocity"}),
+                         track_lin_vel_xy=NS(weight=1.,params={"std":.5})),
+               commands=NS(base_velocity=NS(ranges=NS())))
+        delta={"reward_override":{"gait":{"from":.5,"to":1.}},
+               "parent_reward_weights":{"gait":1.,"track_ang_vel_z":.5,"track_lin_vel_xy":1.},
+               "reward_param_override":{"track_ang_vel_z":{"std":{"from":.5,"to":.1}}},
+               "resume_command_ranges":{"ang_vel_z":[-.1,.1]}}
+        original=copy.deepcopy(env)
+        result=module.apply_delta(env,delta)
+        self.assertEqual(env.rewards.track_ang_vel_z.params,{"std":.1,"command_name":"base_velocity"})
+        self.assertEqual(env.rewards.track_lin_vel_xy.params,original.rewards.track_lin_vel_xy.params)
+        self.assertEqual(env.rewards.gait.params,original.rewards.gait.params)
+        self.assertEqual(result["reward_weights_after"],delta["parent_reward_weights"])
+        for invalid in (0.,float("nan"),float("inf")):
+            bad=copy.deepcopy(delta);bad["reward_param_override"]["track_ang_vel_z"]["std"]["to"]=invalid
+            with self.assertRaises(ValueError):module.apply_delta(copy.deepcopy(original),bad)
+        bad=copy.deepcopy(delta);bad["parent_reward_weights"]["gait"]=.5
+        with self.assertRaises(ValueError):module.apply_delta(copy.deepcopy(original),bad)
+
     def test_only_registered_reward_changes_and_commands_restore(self):
         env=NS(rewards=NS(gait=NS(weight=.5),alive=NS(weight=.15)),
                commands=NS(base_velocity=NS(ranges=NS(lin_vel_x=(-.1,.1)))))

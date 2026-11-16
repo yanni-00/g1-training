@@ -1,10 +1,10 @@
 {
-  "format": "f1_gait_weight_continuation_v1",
+  "format": "f1_yaw_width_continuation_v2",
   "reward_override": {
     "gait": {
       "from": 0.5,
       "to": 1.0,
-      "source": "Original velocity_env_cfg.py RewardsCfg.gait.weight0.5; target1.0 is a registered engineering test equal to original track_lin_vel_xy weight, not a measured optimum"
+      "source": "Retain actual parent gait1.0 using original source default0.5 override; this is not a change relative to parent10999."
     }
   },
   "resume_command_ranges": {
@@ -21,7 +21,37 @@
       0.1
     ]
   },
-  "command_provenance": "Parent log iteration10000 Curriculum/lin_vel_cmd_levels=1.0; original curriculums.py saturates x/y at their limit_ranges; yaw curriculum is absent and retains original ranges. Simulator episode/RNG/terrain state is not saved in parent.",
-  "hypothesis": "Stronger original alternating-contact gait incentive reduces low-speed contact fragments and step discontinuity; speed/heading/standing protected by frozen raw-data gates",
-  "side_effects": "May prioritize phase over speed, increase stepping force or in-place stepping; retain all original penalties and terminations, evaluate speed/attitude/contacts and owner video together"
+  "command_provenance": "Actual parent model10999 f1_training.command_ranges; same bounds retained. Evaluation yaw0.2 is outside training bounds and remains separately labeled.",
+  "hypothesis": "Narrower existing yaw kernel improves zero-command heading and angular-rate tracking; keep actual parent gait1 and all reward weights/PD/commands unchanged",
+  "side_effects": "May suppress leg motion/turning or sacrifice vx/attitude; preserve all original guards and compare both numerical settings. Does not claim to fix lateral coverage or arm swing.",
+  "parent_reward_weights": {
+    "track_lin_vel_xy": 1.0,
+    "track_ang_vel_z": 0.5,
+    "alive": 0.15,
+    "base_linear_velocity": -2.0,
+    "base_angular_velocity": -0.05,
+    "joint_vel": -0.001,
+    "joint_acc": -2.5e-07,
+    "action_rate": -0.05,
+    "dof_pos_limits": -5.0,
+    "energy": -2e-05,
+    "joint_deviation_arms": -0.1,
+    "joint_deviation_waists": -1.0,
+    "joint_deviation_legs": -1.0,
+    "flat_orientation_l2": -5.0,
+    "base_height": -10.0,
+    "gait": 1.0,
+    "feet_slide": -0.2,
+    "feet_clearance": 1.0,
+    "undesired_contacts": -1.0
+  },
+  "reward_param_override": {
+    "track_ang_vel_z": {
+      "std": {
+        "from": 0.5,
+        "to": 0.1,
+        "source": "Parent frozen formal source RewardsCfg.track_ang_vel_z std=sqrt0.25; candidate width=absolute upper bound of actual parent f1_training.command_ranges.ang_vel_z; engineering test, not measured optimum"
+      }
+    }
+  }
 }
