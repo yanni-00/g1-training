@@ -23,5 +23,6 @@ def mark(name):
 
 def fail(error):
     mark('error-'+type(error).__name__)
-    traceback.print_exc()
+    # The GM SDK captures stdout only; never rely on sys.stderr here.
+    traceback.print_exc(file=sys.stdout)
     sys.stdout.flush()

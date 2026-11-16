@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "facecc63e8aea7ea7757b9f33471438191d9aec8e1ca07cbfcb4e17faad4c266"
+      "sha256": "ae1e0c51d29245f8416a04c16876cbc2fef912507b5f450db8839f4e4fd66265"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -539,7 +539,7 @@
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
-      "sha256": "814e4fc508325b4973b8e7f53e144f9ac573da9c68d87d8164d4924e0ba22335"
+      "sha256": "eef8124b513f827edf34fa1309b92591a42916a07eed16f964653685ecf4a79f"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",

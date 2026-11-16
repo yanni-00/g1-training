@@ -13,7 +13,7 @@
   "source_static_checks_passed": true,
   "validation": {
     "path": "../../work/training-start-20261116/validation.json",
-    "sha256": "fe3ec0df9122a824963b06fb1c384591cba63a6245d19dfd63b52e93eb388d27"
+    "sha256": "03bec338c9a5f71362da8e3c5ce81107c0714bd1ac932822c22139776c613d15"
   },
   "owner_direct_formal_policy_sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e",
   "owner_direct_formal_policy_scope": "Only the separate prior probe/minimal-closure workflow is deferred by the owner; source, limits, asset, motion, control and budget/account checks are not waived.",
@@ -28,7 +28,7 @@
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
-      "sha256": "814e4fc508325b4973b8e7f53e144f9ac573da9c68d87d8164d4924e0ba22335"
+      "sha256": "eef8124b513f827edf34fa1309b92591a42916a07eed16f964653685ecf4a79f"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",

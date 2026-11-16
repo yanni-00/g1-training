@@ -212,10 +212,16 @@ def verify_assets(root=ROOT):
             raise ValueError("Packaged F1 asset identity changed: " + asset["path"])
 
 
+def _stage(name):
+    # Stage prints go to stdout because the execution host may capture only stdout.
+    print("[F1-BM] check "+name, flush=True)
+
+
 def assert_can_run(scope="training", root=ROOT):
     if scope not in {"training", "evaluation"}:
         raise ValueError("Execution scope must be training or evaluation")
     root = Path(root)
+    _stage("a0-start")
     launch = load_json(root / "configs/launch.json")
     config = load_json(root.parent / ".oma/config.json")
     loop = load_json(root.parent / ".oma/loop.json")
@@ -226,13 +232,18 @@ def assert_can_run(scope="training", root=ROOT):
             or config.get("authorization", {}).get(permission) is not True
             or paused in loop.get("pausedScopes", [])):
         raise ValueError(f"{permission} is disabled: current authorization is local scaffolding only")
+    _stage("a1-authorization")
     verify_assets(root)
+    _stage("a2-assets")
     effective_control(root)
+    _stage("a3-control")
     prepared_motion(root)
+    _stage("a4-motion")
     evidence = launch.get("preflight_evidence")
     if not evidence or sha256(resolve(evidence["path"], root)) != evidence.get("sha256"):
         raise ValueError("Bind actual per-experiment OMA preflight evidence before execution")
     report = load_json(resolve(evidence["path"], root))
+    _stage("a5-permit")
     if report.get("canTrain") is not True or report.get("exp_id") != config.get("activeExpId") or not report.get("exp_id"):
         raise ValueError("OMA preflight did not pass")
     if scope == 'training' and launch.get('admission_mode') == 'owner_direct_formal':
@@ -241,6 +252,7 @@ def assert_can_run(scope="training", root=ROOT):
         # runtime/deployment success. Actual input/control audits run in the job.
         policy = load_json(root/'configs/training_admission_policy.json')
         verify_sources(policy.get('sources'), root)
+        _stage("a6-policy")
         if (report.get('format') != 'f1_beyondmimic_owner_formal_preflight_v1'
                 or policy.get('mode') != 'owner_direct_formal'
                 or policy.get('prior_runtime_closure_claimed') is not False
@@ -249,6 +261,7 @@ def assert_can_run(scope="training", root=ROOT):
                 or report.get('registered_limits') != {key: launch[key] for key in ('num_envs', 'max_iterations', 'seed')}
                 or report.get('spend_cap_milli_credit') != 50000):
             raise ValueError('Direct-formal scope, authorization or registered limits mismatch')
+        _stage("a7-admitted")
         return launch
     deployment = load_json(root / "configs/deployment_contract.json")
     if deployment.get("status") != "validated":
