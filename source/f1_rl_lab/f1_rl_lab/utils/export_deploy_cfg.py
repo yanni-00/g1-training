@@ -89,6 +89,19 @@ def export_deploy_cfg(env, log_dir):
             "reward_weights": {n: float(env.reward_manager.get_term_cfg(n).weight)
                                for n in env.reward_manager.active_terms},
             "scope": "Actual runtime reward inventory; observation/control binding unchanged"}
+        if "contact_lateral_tilt" in env.reward_manager.active_terms:
+            term = env.reward_manager.get_term_cfg("contact_lateral_tilt")
+            ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
+            sensor = env.scene.sensors[sc.name]
+            runtime["training_objective"]["contact_lateral_tilt"] = {
+                "weight": float(term.weight), "function": term.func.__name__,
+                "asset_body_names": [asset.body_names[i] for i in ac.body_ids],
+                "sensor_body_names": [sensor.body_names[i] for i in sc.body_ids],
+                "asset_body_ids": list(ac.body_ids), "sensor_body_ids": list(sc.body_ids),
+                "quaternion_order": "wxyz", "contact": "current_contact_time>0",
+                "formula": "mean over contacting feet of (2*(w*x+y*z))^2; zero if no contact",
+                "scope": "Reward only; no actor inputs or action processing changed",
+            }
     target = Path(log_dir) / "params/f1_runtime.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(runtime, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

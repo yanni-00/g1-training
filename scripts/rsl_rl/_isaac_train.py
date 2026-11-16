@@ -173,7 +173,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         if not args_cli.checkpoint:
             raise ValueError("Explicit F1 checkpoint path required; latest/run regex is disabled")
         resume_path = os.path.abspath(args_cli.checkpoint)
-        verify_checkpoint(resume_path)
+        parent_identity = verify_checkpoint(resume_path)
+        if delta.get("reward_addition"):
+            previous = parent_identity["runtime"]["training_objective"]
+            if (previous["reward_weights"] != delta["parent_reward_weights"]
+                    or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
+                raise ValueError("Actual parent objective differs from registered continuation")
 
     from f1_rl_lab.utils.export_deploy_cfg import export_deploy_cfg
     export_deploy_cfg(env.unwrapped, log_dir)
@@ -277,12 +282,23 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     observation_sample = actor_observation[0].detach().cpu().tolist()
                     observations, _, _, _ = env.step(actions)
                     asset = env.unwrapped.scene["robot"]
-                    samples.append({"step": feedback_step, "policy_observation": observation_sample,
+                    sample = {"step": feedback_step, "policy_observation": observation_sample,
                         "command": env.unwrapped.command_manager.get_command("base_velocity")[0].detach().cpu().tolist(),
                         "velocity": asset.data.root_lin_vel_b[0].detach().cpu().tolist(),
                         "root_position": asset.data.root_pos_w[0].detach().cpu().tolist(),
                         "q": asset.data.joint_pos[0].detach().cpu().tolist(),
-                        "action": actions[0].detach().cpu().tolist()})
+                        "action": actions[0].detach().cpu().tolist()}
+                    if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
+                        term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
+                        ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
+                        sensor = env.unwrapped.scene.sensors[sc.name]
+                        sample["foot_quat_w"] = asset.data.body_quat_w[0, ac.body_ids].detach().cpu().tolist()
+                        sample["foot_contact_time"] = sensor.data.current_contact_time[0, sc.body_ids].detach().cpu().tolist()
+                        sample["foot_net_forces_w"] = sensor.data.net_forces_w[0, sc.body_ids].detach().cpu().tolist()
+                        sample["contact_lateral_tilt_unweighted"] = float(term.func(env.unwrapped, **term.params)[0].detach().cpu())
+                        sample["root_quat_w"] = asset.data.root_quat_w[0].detach().cpu().tolist()
+                        sample["root_ang_vel_b"] = asset.data.root_ang_vel_b[0].detach().cpu().tolist()
+                    samples.append(sample)
             evidence = {"mode": "actual_saved_checkpoint_feedback", "checkpoint_iteration": runner.current_learning_iteration,
                         "steps": len(samples), "samples": samples, "seed": env_cfg.seed,
                         "rsl_rl_version": installed_version, "runtime": identity["runtime"],

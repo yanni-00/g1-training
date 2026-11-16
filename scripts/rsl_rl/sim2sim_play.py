@@ -205,6 +205,10 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--max-steps", required=True, type=int)
     parser.add_argument("--prepare-only", action="store_true")
+    parser.add_argument("--protocol", type=Path,
+                        help="Explicit diagnostic command protocol; default remains the frozen G1 schedule")
+    parser.add_argument("--prepared-scene", type=Path,
+                        help="Reuse the exact compiled scene from this setting's first trial")
     parser.add_argument("--physics-refinement", type=int, choices=[1, 2, 4], default=1,
                         help="Controlled numerical diagnostic; divide physics dt, preserve control dt/PD")
     args = parser.parse_args()
@@ -215,7 +219,8 @@ def main():
     runtime = identity["runtime"]
     contract = load_contract()
     controls = effective_control()
-    protocol = json.loads((ROOT / "configs/eval_schedule.json").read_text())
+    protocol_path = args.protocol or ROOT / "configs/eval_schedule.json"
+    protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     commands = [s["command"] for s in protocol["segments"]
                 for _ in range(round(s["duration_s"] / contract["step_dt"]))]
     assert len(commands) == args.max_steps
@@ -223,7 +228,15 @@ def main():
     actor = load_actor(args.checkpoint, runtime)
     physics_dt = contract["sim_dt"] / args.physics_refinement
     physics_steps = contract["decimation"] * args.physics_refinement
-    model, xml = build_model(contract, controls, args.output, runtime["gravity"], physics_dt)
+    if args.prepared_scene:
+        xml = args.prepared_scene.resolve()
+        prior_audit = json.loads((xml.parent/"runtime_audit.json").read_text(encoding="utf-8"))
+        assert sha(xml) == prior_audit["compiled_scene_sha256"]
+        assert prior_audit["urdf_sha256"] == contract["urdf_sha256"]
+        model = mujoco.MjModel.from_xml_path(str(xml))
+        assert model.opt.timestep == physics_dt
+    else:
+        model, xml = build_model(contract, controls, args.output, runtime["gravity"], physics_dt)
     data = mujoco.MjData(model)
     names = contract["model_joint_names"]
     jids = np.array([mujoco.mj_name2id(model, mujoco.mjtObj.mjOBJ_JOINT, n) for n in names])
@@ -255,6 +268,8 @@ def main():
              "gravity": model.opt.gravity.tolist(), "integrator": "implicitfast",
              "angular_velocity_frame": "mjOBJ_XBODY local: base_link regular frame, matching Isaac root_ang_vel_b",
              "base_inertial_quaternion": model.body_iquat[base_id].tolist(),
+             "protocol_sha256": sha(protocol_path), "replay_script_sha256": sha(__file__),
+             "compiled_scene_sha256": sha(xml), "compiled_scene_path": str(xml.resolve()),
              "protocol": protocol,
              "limitations": ["MuJoCo contact/solver and implicit servo differ from PhysX",
                  "No extra joint velocity clamp: source limits are recorded, not imitated by an unverified limiter",
@@ -309,7 +324,8 @@ def main():
             if fall and first_fall is None:
                 first_fall = float(data.time)
             row = {"t": float(data.time), "cmd_vx": command[0], "cmd_vy": command[1], "cmd_wz": command[2],
-                "base_z": float(data.qpos[2]), "roll": float(roll), "pitch": float(pitch), "yaw": float(yaw),
+                "base_z": float(data.qpos[2]), "world_x": float(data.qpos[0]), "world_y": float(data.qpos[1]),
+                "roll": float(roll), "pitch": float(pitch), "yaw": float(yaw),
                 "roll_deg": float(np.degrees(roll)), "pitch_deg": float(np.degrees(pitch)),
                 "vx_yaw": float(np.cos(yaw)*vx+np.sin(yaw)*vy),
                 "vy_yaw": float(-np.sin(yaw)*vx+np.cos(yaw)*vy), "wz": float(data.qvel[5]),

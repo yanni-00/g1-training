@@ -320,6 +320,20 @@ class RewardsCfg:
             "sensor_cfg": SceneEntityCfg("contact_forces", body_names=".*ankle_roll.*"),
         },
     )
+    # [OMA] r11: disabled in the original base; only a registered continuation
+    # enables this symmetric contact-geometry cost. All original terms retained.
+    contact_lateral_tilt = RewTerm(
+        func=mdp.feet_contact_lateral_tilt,
+        weight=0.0,
+        params={
+            "asset_cfg": SceneEntityCfg(
+                "robot", body_names=["left_ankle_roll", "right_ankle_roll"], preserve_order=True
+            ),
+            "sensor_cfg": SceneEntityCfg(
+                "contact_forces", body_names=["left_ankle_roll", "right_ankle_roll"], preserve_order=True
+            ),
+        },
+    )
     feet_clearance = RewTerm(
         func=mdp.foot_clearance_reward,
         weight=1.0,

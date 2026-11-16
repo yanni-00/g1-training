@@ -8,11 +8,13 @@ def apply_delta(env_cfg, delta):
     if set(delta["reward_override"]) != {"gait"}:
         raise ValueError("This experiment permits only the gait reward weight delta")
     spec = delta["reward_override"]["gait"]
-    before = {n: float(v.weight) for n,v in vars(env_cfg.rewards).items() if hasattr(v,"weight")}
+    before = {n: float(v.weight) for n,v in vars(env_cfg.rewards).items()
+              if hasattr(v,"weight") and float(v.weight) != 0.0}
     if before["gait"] != spec["from"] or not math.isfinite(spec["to"]) or spec["to"] <= 0:
         raise ValueError("Unexpected source gait weight or invalid registered target")
     env_cfg.rewards.gait.weight = spec["to"]
-    after = {n: float(v.weight) for n,v in vars(env_cfg.rewards).items() if hasattr(v,"weight")}
+    after = {n: float(v.weight) for n,v in vars(env_cfg.rewards).items()
+             if hasattr(v,"weight") and float(v.weight) != 0.0}
     if any(before[n] != after[n] for n in before if n != "gait"):
         raise ValueError("Unregistered reward change")
     # [OMA] r8: keep the parent's complete weight inventory while testing only
@@ -37,8 +39,27 @@ def apply_delta(env_cfg, delta):
         if name not in ("lin_vel_x","lin_vel_y","ang_vel_z"):
             raise ValueError("Unregistered command range field")
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
+    additions = delta.get("reward_addition", {})
+    addition_audit = {}
+    if additions:
+        if set(additions) != {"contact_lateral_tilt"}:
+            raise ValueError("Only the registered symmetric contact tilt term can be added")
+        spec = additions["contact_lateral_tilt"]
+        if (float(env_cfg.rewards.contact_lateral_tilt.weight) != spec["from"]
+                or spec["from"] != 0.0 or "contact_lateral_tilt" in after):
+            raise ValueError("Contact tilt must start disabled in the original base")
+        target = float(spec["to"])
+        if not math.isfinite(target) or target >= 0:
+            raise ValueError("Contact tilt cost must have a finite negative weight")
+        actual_parent = {n: w for n, w in after.items() if n != "contact_lateral_tilt"}
+        if actual_parent != delta["parent_reward_weights"]:
+            raise ValueError("Existing parent reward inventory changed while adding contact tilt")
+        env_cfg.rewards.contact_lateral_tilt.weight = target
+        after["contact_lateral_tilt"] = target
+        addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
     return {"reward_weights_before":before,"reward_weights_after":after,
             "reward_parameter_changes":parameter_changes,
+            "reward_additions":addition_audit,
             "command_ranges":delta["resume_command_ranges"],
             "episode_state_restored":False,"rng_state_restored":False,
             "scope":"Same actor/optimizer, observed command curriculum; simulator episodes/terrain assignments reset"}

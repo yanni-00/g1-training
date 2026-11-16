@@ -69,17 +69,25 @@ class ContractTests(unittest.TestCase):
                 verify_checkpoint(path)
 
     def test_all_entrypoints_deny_before_simulator_import(self):
-        for entry in ("scripts/rsl_rl/train.py", "scripts/rsl_rl/_isaac_train.py",
-                      "scripts/rsl_rl/play.py", "scripts/rsl_rl/_isaac_play.py", "tools/sim2sim.py"):
-            args = [sys.executable, str(ROOT / entry)]
-            if "play" in entry:
-                args += ["--checkpoint", "not_a_model.pt"]
-            if "sim2sim" in entry:
-                args += ["--checkpoint", "not_a_model.pt", "--xml", "not_a_robot.xml", "--output", "unused.csv"]
-            completed = subprocess.run(args, capture_output=True, text=True)
-            self.assertNotEqual(completed.returncode, 0)
-            self.assertIn("disabled", completed.stderr)
-            self.assertNotIn("No module named", completed.stderr)
+        # Exercise an explicitly disabled fixture, independent of the current
+        # owner's live launch authorization. Never alter the real launch file.
+        with tempfile.TemporaryDirectory(prefix="f1_disabled_fixture_") as temporary:
+            root = Path(temporary)
+            for folder in ("source", "scripts", "tools", "configs"):
+                shutil.copytree(ROOT/folder, root/folder, ignore=shutil.ignore_patterns("__pycache__"))
+            shutil.copytree(ROOT/"resources/f1", root/"resources/f1")
+            (root/"configs/launch.json").write_text(json.dumps({"authorization": {}}), encoding="utf-8")
+            for entry in ("scripts/rsl_rl/train.py", "scripts/rsl_rl/_isaac_train.py",
+                          "scripts/rsl_rl/play.py", "scripts/rsl_rl/_isaac_play.py", "tools/sim2sim.py"):
+                args = [sys.executable, str(root / entry)]
+                if "play" in entry:
+                    args += ["--checkpoint", "not_a_model.pt"]
+                if "sim2sim" in entry:
+                    args += ["--checkpoint", "not_a_model.pt", "--xml", "not_a_robot.xml", "--output", "unused.csv"]
+                completed = subprocess.run(args, capture_output=True, text=True)
+                self.assertNotEqual(completed.returncode, 0)
+                self.assertIn("disabled", completed.stderr)
+                self.assertNotIn("No module named", completed.stderr)
 
     def test_identification_partial_source_and_asset_binding(self):
         with tempfile.TemporaryDirectory(prefix="f1_id_fixture_") as temporary:

@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_width_continuation_v2",
+  "format": "f1_contact_lateral_tilt_continuation_v3",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Actual parent model10999 f1_training.command_ranges; same bounds retained. Evaluation yaw0.2 is outside training bounds and remains separately labeled.",
-  "hypothesis": "Narrower existing yaw kernel improves zero-command heading and angular-rate tracking; keep actual parent gait1 and all reward weights/PD/commands unchanged",
-  "side_effects": "May suppress leg motion/turning or sacrifice vx/attitude; preserve all original guards and compare both numerical settings. Does not claim to fix lateral coverage or arm swing.",
+  "hypothesis": "Symmetric contact-foot lateral tilt cost reduces asymmetric support and forward yaw; preserve actual11999 objective otherwise",
+  "side_effects": "May constrain lateral balance/toe-off or encourage contact avoidance; protect vx/attitude/continuity and no original fall",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -52,6 +52,14 @@
         "to": 0.1,
         "source": "Parent frozen formal source RewardsCfg.track_ang_vel_z std=sqrt0.25; candidate width=absolute upper bound of actual parent f1_training.command_ranges.ang_vel_z; engineering test, not measured optimum"
       }
+    }
+  },
+  "parent_yaw_tracking_std": 0.1,
+  "reward_addition": {
+    "contact_lateral_tilt": {
+      "from": 0.0,
+      "to": -5.0,
+      "source": "Engineering first candidate uses same -5.0 weight as existing base flat_orientation_l2; not measured optimum. Loss is mean contacting-foot lateral-axis vertical projection squared."
     }
   }
 }

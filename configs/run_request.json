@@ -1,28 +1,28 @@
 {
-  "exp_id": "exp-20261116-002",
-  "phase": "formal",
+  "exp_id": "exp-20261116-004",
+  "phase": "probe",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 1001,
+  "max_iterations": 100,
   "seed": 42,
-  "run_name": "f1_yawstd01_resume10999_formal1001_20261116",
+  "run_name": "f1_contacttilt_resume11999_admission100_20261116",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Owner 2026-11-16 explicit formal continuation: 1001 native updates from exact model_10999 to native terminal iteration 12000, same single yaw-kernel std0.1 delta as verified probe TASK_20261116_162. Execution bound, not a convergence or cost estimate",
+    "max_iterations": "Registered bounded100-update admission, not convergence/cost prediction; formal candidate separately registered after exact new-weight readiness and server diagnostics",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
     "account_index": 15,
     "spend_cap": 50.0,
     "unit": "GM credit",
-    "basis": "Selected-account existing-credit cap for this formal round; live remaining amount and zero-active-task observation revalidated in OMA resource admission before create/run",
+    "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
     "estimate": false
   },
   "resume": {
-    "sha256": "c7a30701171d82343ab5053f67cf377f5c55a330067f9e9546c5c49531565221",
-    "iteration": 10999,
-    "optimizerStep": 220020,
+    "sha256": "1d55c139b45967ec34f3a3878a0e42b208e638790500b761c1511c2f1ed2bd17",
+    "iteration": 11999,
+    "optimizerStep": 240040,
     "optimizer_learning_rate": 0.0002562890625000001
   },
   "training_delta": "configs/training_delta.json"
