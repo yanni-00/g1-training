@@ -1,0 +1,168 @@
+{
+  "scope": "Actual float32 cycle bytes; MuJoCo native FK/contact/collision and explicit name mapping",
+  "reference": "D:\\工作资料\\02机器人\\01F1项目\\oma-runs\\beyondmimic-f1\\training\\data\\regenerated\\20261109\\export_v6\\B3\\walking_cycle.npz",
+  "reference_sha256": "c2c8fdc5fe2dadeba9149da74be269981a81061a6a9d98be8674faa157fea948",
+  "urdf_sha256": "e24c87efdc047976a0c1e96efb4e6f9699fbfb0e1ff932b2fad6c65391c3f0e7",
+  "native_recomputed_errors": {
+    "joint_pos": 0.0,
+    "joint_vel": 1.430511474609375e-06,
+    "body_pos_w": 8.822707942002239e-08,
+    "body_lin_vel_w": 1.40245678359463e-06,
+    "body_ang_vel_w": 1.9161094076204983e-06,
+    "body_quaternion_dot_error": 3.915697754930392e-08
+  },
+  "maximum_adjacent_speed_over_urdf_limit_ratio": 0.6411737593351337,
+  "support_frames": [
+    31,
+    62
+  ],
+  "support_planar_speed_max_mps": {
+    "left": 5.252731644865508e-07,
+    "right": 2.704556064975921e-07
+  },
+  "support_sole_height_abs_max_m": {
+    "left": 2.07605122692911e-06,
+    "right": 2.057707306220291e-06
+  },
+  "native_checks": {
+    "kinematics": {
+      "frame_count": 63,
+      "fps": 50.0,
+      "duration_last_minus_first_s": 1.24,
+      "finite": true,
+      "quaternion_norm": {
+        "min": 0.9999999728012074,
+        "p05": 0.9999999752206972,
+        "median": 1.000000000281775,
+        "p95": 1.0000000252810475,
+        "max": 1.0000000285515855
+      },
+      "foot_mesh_center_lateral_span_m": {
+        "min": 0.2279189087856513,
+        "p05": 0.23023611317056245,
+        "median": 0.28063417723203676,
+        "p95": 0.32678549150238945,
+        "max": 0.3269716322034256
+      },
+      "lateral_projected_mesh_edge_clearance_m": {
+        "min": 0.1484325373639426,
+        "p05": 0.15057124852104076,
+        "median": 0.18274586837422052,
+        "p95": 0.21739364276545084,
+        "max": 0.21751495011225574
+      },
+      "lateral_projection_overlap_frames": 0,
+      "toe_yaw_relative_pelvis_deg": {
+        "left": {
+          "min": -9.806738675466448,
+          "p05": -9.524320453110105,
+          "median": 0.37939548073562523,
+          "p95": 11.194258728207727,
+          "max": 11.21704884904696
+        },
+        "right": {
+          "min": -9.806738436393461,
+          "p05": -9.524320836870235,
+          "median": 1.4993850411239664,
+          "p95": 11.194258686983439,
+          "max": 11.217049172802444
+        }
+      },
+      "sole_min_world_z_m": {
+        "left": {
+          "min": 2.004597064023117e-06,
+          "p05": 2.034253012159204e-06,
+          "median": 2.1037149941643962e-06,
+          "p95": 0.041649232172717564,
+          "max": 0.042404467354978555
+        },
+        "right": {
+          "min": 1.984891847411907e-06,
+          "p05": 2.0331744261047056e-06,
+          "median": 2.0828279982607056e-06,
+          "p95": 0.03365611292116271,
+          "max": 0.034193568711976485
+        }
+      },
+      "foot_mesh_center_planar_speed_mps": {
+        "left": {
+          "min": 0.1036018752610099,
+          "p05": 0.28158865076984935,
+          "median": 0.8446440622110597,
+          "p95": 2.731241102289506,
+          "max": 2.827131878762376
+        },
+        "right": {
+          "min": 0.10359345261919581,
+          "p05": 0.2815946339343139,
+          "median": 0.8446440015004328,
+          "p95": 2.7312444605805215,
+          "max": 2.827113416379116
+        }
+      },
+      "joint_position_limit_violations": [],
+      "joint_velocity_limit_violations": [],
+      "joint_max_abs_velocity_radps": {
+        "left_hip_pitch_joint": 7.358788372948766,
+        "left_hip_roll_joint": 1.748167723417282,
+        "left_hip_yaw_joint": 2.27163378149271,
+        "left_knee_pitch_joint": 5.667629837989807,
+        "left_ankle_pitch_joint": 4.85524982213974,
+        "left_ankle_roll_joint": 1.5006475150585175,
+        "right_hip_pitch_joint": 5.13939680531621,
+        "right_hip_roll_joint": 1.4821287244558334,
+        "right_hip_yaw_joint": 2.624776214361191,
+        "right_knee_pitch_joint": 3.7258684635162354,
+        "right_ankle_pitch_joint": 3.776342049241066,
+        "right_ankle_roll_joint": 1.1921701021492481,
+        "lumbar_yaw_joint": 3.409201418980956,
+        "lumbar_roll_joint": 1.6441451385617256,
+        "lumbar_pitch_joint": 2.834945230279118,
+        "left_shoulder_pitch_joint": 2.6775963604450226,
+        "left_shoulder_roll_joint": 1.5949413180351257,
+        "left_shoulder_yaw_joint": 1.0281860828399658,
+        "left_elbow_pitch_joint": 3.028392791748047,
+        "left_elbow_yaw_joint": 1.452682912349701,
+        "left_wrist_pitch_joint": 1.0920856148004532,
+        "left_wrist_roll_joint": 1.3868564506992698,
+        "right_shoulder_pitch_joint": 1.510823710123077,
+        "right_shoulder_roll_joint": 0.6184369325637817,
+        "right_shoulder_yaw_joint": 1.0018818080425262,
+        "right_elbow_pitch_joint": 0.9019434452056885,
+        "right_elbow_yaw_joint": 1.5685461461544037,
+        "right_wrist_pitch_joint": 0.8795842528343201,
+        "right_wrist_roll_joint": 1.0052584111690521
+      },
+      "global_joint_max_abs_acceleration_radps2": 106.34467005729675,
+      "finite_clip_joint_endpoint_difference_max_rad": 0.004709530621767044,
+      "contact_state_verified": false,
+      "scope": "F1 URDF kinematics only; lateral projection overlap does not prove 3D collision; speeds are finite differences"
+    },
+    "native_self_collision_pairs": {},
+    "stance_foot_center_planar_speed": {
+      "left": {
+        "maximum_mps": 0.012776031416472487,
+        "median_mps": 2.174607466570046e-07,
+        "maximum_interior_mps": 7.071710566665348e-07
+      },
+      "right": {
+        "maximum_mps": 0.012776907446658884,
+        "median_mps": 1.573075228619375e-07,
+        "maximum_interior_mps": 3.4894127918250784e-07
+      }
+    },
+    "contact_label_is_measured_force": false,
+    "collision_representation": "MuJoCo convex collision meshes from SSOT collision geometry; not exact concave triangle intersections"
+  },
+  "maximum_absolute_stance_foot_heading_rad": {
+    "left": 3.21518618187966e-08,
+    "right": 1.2324161093177244e-08
+  },
+  "name_remapping_roundtrip_passed": true,
+  "passed": true,
+  "isaaclab_loaded": false,
+  "dynamic_tracking_verified": false,
+  "owner_visual_acceptance": false,
+  "training_authorized": false,
+  "training_ready": false
+}

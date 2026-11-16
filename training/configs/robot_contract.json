@@ -1,0 +1,724 @@
+{
+  "format": "f1_beyondmimic_robot_v1",
+  "robot": "F1_29dof",
+  "urdf": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+  "urdf_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
+  "model_joint_names": [
+    "left_hip_pitch_joint",
+    "left_hip_roll_joint",
+    "left_hip_yaw_joint",
+    "left_knee_pitch_joint",
+    "left_ankle_pitch_joint",
+    "left_ankle_roll_joint",
+    "right_hip_pitch_joint",
+    "right_hip_roll_joint",
+    "right_hip_yaw_joint",
+    "right_knee_pitch_joint",
+    "right_ankle_pitch_joint",
+    "right_ankle_roll_joint",
+    "lumbar_yaw_joint",
+    "lumbar_roll_joint",
+    "lumbar_pitch_joint",
+    "left_shoulder_pitch_joint",
+    "left_shoulder_roll_joint",
+    "left_shoulder_yaw_joint",
+    "left_elbow_pitch_joint",
+    "left_elbow_yaw_joint",
+    "left_wrist_pitch_joint",
+    "left_wrist_roll_joint",
+    "right_shoulder_pitch_joint",
+    "right_shoulder_roll_joint",
+    "right_shoulder_yaw_joint",
+    "right_elbow_pitch_joint",
+    "right_elbow_yaw_joint",
+    "right_wrist_pitch_joint",
+    "right_wrist_roll_joint"
+  ],
+  "link_names": [
+    "base_link",
+    "left_ankle_pitch",
+    "left_ankle_roll",
+    "left_hip_pitch",
+    "left_hip_roll",
+    "left_hip_yaw",
+    "left_knee_pitch",
+    "right_ankle_pitch",
+    "right_ankle_roll",
+    "right_hip_pitch",
+    "right_hip_roll",
+    "right_hip_yaw",
+    "right_knee_pitch",
+    "lumbar_yaw_link",
+    "lumbar_roll_link",
+    "lumbar_pitch_link",
+    "left_shoulder_pitch_link",
+    "left_shoulder_roll_link",
+    "left_shoulder_yaw_link",
+    "left_elbow_pitch_link",
+    "left_elbow_yaw_link",
+    "left_wrist_pitch_link",
+    "left_wrist_roll_link",
+    "right_shoulder_pitch_link",
+    "right_shoulder_roll_link",
+    "right_shoulder_yaw_link",
+    "right_elbow_pitch_link",
+    "right_elbow_yaw_link",
+    "right_wrist_pitch_link",
+    "right_wrist_roll_link",
+    "waist_motor_a_link",
+    "waist_motor_a_ball_link",
+    "waist_motor_a_loop_link",
+    "waist_motor_b_link",
+    "waist_motor_b_ball_link",
+    "waist_motor_b_loop_link",
+    "arm_r_wrist_a_ball_link",
+    "arm_r_wrist_motor_a_link",
+    "arm_r_wrist_a_loop_link",
+    "arm_r_wrist_b_ball_link",
+    "arm_r_wrist_motor_b_link",
+    "arm_r_wrist_b_loop_link",
+    "arm_l_wrist_a_ball_link",
+    "arm_l_wrist_motor_a_link",
+    "arm_l_wrist_a_loop_link",
+    "arm_l_wrist_b_ball_link",
+    "arm_l_wrist_motor_b_link",
+    "arm_l_wrist_b_loop_link",
+    "neck_motor_base_link",
+    "neck_motor_bracket_link",
+    "head_face_bracket_link",
+    "camera_link",
+    "radar_link"
+  ],
+  "joint_properties": {
+    "left_hip_pitch_joint": {
+      "parent": "base_link",
+      "child": "left_hip_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -1.5708,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_hip_roll_joint": {
+      "parent": "left_hip_pitch",
+      "child": "left_hip_roll",
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -0.349066,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_hip_yaw_joint": {
+      "parent": "left_hip_roll",
+      "child": "left_hip_yaw",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -1.5708,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_knee_pitch_joint": {
+      "parent": "left_hip_yaw",
+      "child": "left_knee_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": 0.0,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_ankle_pitch_joint": {
+      "parent": "left_knee_pitch",
+      "child": "left_ankle_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 241.875,
+        "velocity": 7.57244,
+        "lower": -0.523599,
+        "upper": 0.523599
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_ankle_roll_joint": {
+      "parent": "left_ankle_pitch",
+      "child": "left_ankle_roll",
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 218.4,
+        "velocity": 8.05007,
+        "lower": -0.523599,
+        "upper": 0.523599
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_hip_pitch_joint": {
+      "parent": "base_link",
+      "child": "right_hip_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -1.5708,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_hip_roll_joint": {
+      "parent": "right_hip_pitch",
+      "child": "right_hip_roll",
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -1.5708,
+        "upper": 0.349066
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_hip_yaw_joint": {
+      "parent": "right_hip_roll",
+      "child": "right_hip_yaw",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": -1.5708,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_knee_pitch_joint": {
+      "parent": "right_hip_yaw",
+      "child": "right_knee_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 130.0,
+        "velocity": 14.6608,
+        "lower": 0.0,
+        "upper": 1.5708
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_ankle_pitch_joint": {
+      "parent": "right_knee_pitch",
+      "child": "right_ankle_pitch",
+      "axis": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 241.875,
+        "velocity": 7.57244,
+        "lower": -0.523599,
+        "upper": 0.523599
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_ankle_roll_joint": {
+      "parent": "right_ankle_pitch",
+      "child": "right_ankle_roll",
+      "axis": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "limit": {
+        "effort": 218.4,
+        "velocity": 8.05007,
+        "lower": -0.523599,
+        "upper": 0.523599
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "lumbar_yaw_joint": {
+      "parent": "base_link",
+      "child": "lumbar_yaw_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -1.0,
+        "upper": 1.0,
+        "effort": 150.0,
+        "velocity": 8.9
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "lumbar_roll_joint": {
+      "parent": "lumbar_yaw_link",
+      "child": "lumbar_roll_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -0.25,
+        "upper": 0.25,
+        "effort": 150.0,
+        "velocity": 8.9
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "lumbar_pitch_joint": {
+      "parent": "lumbar_roll_link",
+      "child": "lumbar_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -0.15,
+        "upper": 0.45,
+        "effort": 180.0,
+        "velocity": 8.9
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_shoulder_pitch_joint": {
+      "parent": "lumbar_pitch_link",
+      "child": "left_shoulder_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -2.5,
+        "upper": 1.5,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_shoulder_roll_joint": {
+      "parent": "left_shoulder_pitch_link",
+      "child": "left_shoulder_roll_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -2.0,
+        "upper": 0.0,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_shoulder_yaw_joint": {
+      "parent": "left_shoulder_roll_link",
+      "child": "left_shoulder_yaw_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -1.8,
+        "upper": 1.8,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_elbow_pitch_joint": {
+      "parent": "left_shoulder_yaw_link",
+      "child": "left_elbow_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": 0.0,
+        "upper": 2.0,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_elbow_yaw_joint": {
+      "parent": "left_elbow_pitch_link",
+      "child": "left_elbow_yaw_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -1.8,
+        "upper": 1.8,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_wrist_pitch_joint": {
+      "parent": "left_elbow_yaw_link",
+      "child": "left_wrist_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -0.4,
+        "upper": 0.4,
+        "effort": 10.0,
+        "velocity": 2.5
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "left_wrist_roll_joint": {
+      "parent": "left_wrist_pitch_link",
+      "child": "left_wrist_roll_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -0.4,
+        "upper": 0.4,
+        "effort": 10.0,
+        "velocity": 2.5
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_shoulder_pitch_joint": {
+      "parent": "lumbar_pitch_link",
+      "child": "right_shoulder_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -2.5,
+        "upper": 1.5,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_shoulder_roll_joint": {
+      "parent": "right_shoulder_pitch_link",
+      "child": "right_shoulder_roll_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -2.0,
+        "upper": 0.0,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_shoulder_yaw_joint": {
+      "parent": "right_shoulder_roll_link",
+      "child": "right_shoulder_yaw_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -1.8,
+        "upper": 1.8,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_elbow_pitch_joint": {
+      "parent": "right_shoulder_yaw_link",
+      "child": "right_elbow_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": 0.0,
+        "upper": 2.0,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_elbow_yaw_joint": {
+      "parent": "right_elbow_pitch_link",
+      "child": "right_elbow_yaw_link",
+      "axis": [
+        0.0,
+        0.0,
+        1.0
+      ],
+      "limit": {
+        "lower": -1.8,
+        "upper": 1.8,
+        "effort": 20.0,
+        "velocity": 13.61
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_wrist_pitch_joint": {
+      "parent": "right_elbow_yaw_link",
+      "child": "right_wrist_pitch_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -0.4,
+        "upper": 0.4,
+        "effort": 10.0,
+        "velocity": 2.5
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    },
+    "right_wrist_roll_joint": {
+      "parent": "right_wrist_pitch_link",
+      "child": "right_wrist_roll_link",
+      "axis": [
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "limit": {
+        "lower": -0.4,
+        "upper": 0.4,
+        "effort": 10.0,
+        "velocity": 2.5
+      },
+      "dynamics": {
+        "damping": 0.05,
+        "friction": 0.0
+      }
+    }
+  },
+  "default_joint_pos": [
+    -0.392158102434756,
+    0.0,
+    0.0,
+    0.669,
+    -0.276841897565244,
+    0.0,
+    -0.392158102434756,
+    0.0,
+    0.0,
+    0.669,
+    -0.276841897565244,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.2,
+    -0.2,
+    0.0,
+    0.6,
+    0.0,
+    0.0,
+    0.0,
+    0.2,
+    -0.2,
+    0.0,
+    0.6,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "base_position": [
+    0.0,
+    0.0,
+    0.5691774048753635
+  ],
+  "sole_offsets": {
+    "left": 0.03365828626726475,
+    "right": 0.03365828626726475
+  },
+  "feet_zero_floor": {
+    "left": -0.5691774048753635,
+    "right": -0.5691774048753635
+  },
+  "tracked_body_names": [
+    "base_link",
+    "left_hip_roll",
+    "left_knee_pitch",
+    "left_ankle_roll",
+    "right_hip_roll",
+    "right_knee_pitch",
+    "right_ankle_roll",
+    "lumbar_pitch_link",
+    "left_shoulder_roll_link",
+    "left_elbow_pitch_link",
+    "left_wrist_roll_link",
+    "right_shoulder_roll_link",
+    "right_elbow_pitch_link",
+    "right_wrist_roll_link"
+  ],
+  "anchor_body_name": "lumbar_pitch_link",
+  "feet": [
+    "left_ankle_roll",
+    "right_ankle_roll"
+  ],
+  "end_effectors": [
+    "left_ankle_roll",
+    "right_ankle_roll",
+    "left_wrist_roll_link",
+    "right_wrist_roll_link"
+  ],
+  "hardware_sdk_order": null,
+  "provenance": {
+    "pose": "BeyondMimic robots/g1.py:init_state knee/arm magnitudes; F1 FK solve hip/ankle for flat soles; negative F1 shoulder roll; unmapped joints=URDF zero",
+    "height": "minimum transformed scaled F1 sole collision STL z",
+    "order": "URDF enumeration is model identity only; motion/action/checkpoint must bind actual engine order",
+    "scope": "static initialization only, no dynamic/hardware validation"
+  },
+  "geometry_ssot_sha256": "e24c87efdc047976a0c1e96efb4e6f9699fbfb0e1ff932b2fad6c65391c3f0e7"
+}

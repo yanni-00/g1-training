@@ -1,0 +1,14 @@
+{
+  "mode": "owner_direct_formal",
+  "prior_runtime_closure_claimed": false,
+  "owner_instruction": "Do not separately run 100 updates; directly start formal training",
+  "sources": [
+    {
+      "path": "../.oma/designs/design-owner-control-training-20261116.md",
+      "sha256": "fe028f3d8f4c94ec52cfdb9441c05894e4263d6423e8c0f68697e873fcab3614",
+      "description": "User instructions 2026-11-16: direct formal training, adopted control, GM, separate branch, each task capped at 50 credit"
+    }
+  ],
+  "runtime_checks": "Actual asset/name/observation/action/control checks and first saved-new-checkpoint parity inside this formal job",
+  "hardware_deployment_verified": false
+}

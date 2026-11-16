@@ -1,0 +1,27 @@
+{
+  "format": "f1_motion_repair_engineering_settings_v1",
+  "scope": "Kinematic candidate; not a hardware specification or behavior acceptance gate",
+  "target_foot_spacing": "Neutral F1 URDF collision-mesh centers; constant per-clip world lateral translation",
+  "target_foot_yaw": "Neutral F1 foot direction relative to current pelvis heading; rotate about mesh center around world vertical",
+  "ground_strategy": "One constant lift from the actual post-IK mesh minimum if below zero; never subtract source ground_z blindly",
+  "ik": {
+    "position_tolerance_m": 0.000001,
+    "orientation_tolerance_rad": 0.00001,
+    "max_iterations": 120,
+    "initial_damping": 0.000001,
+    "minimum_damping": 0.000000000001,
+    "maximum_damping": 1000000.0,
+    "max_joint_step_rad": 0.15
+  },
+  "numeric_only_clearance_tolerance_m": 0.000002,
+  "pelvis_lowering_max_retries": 12,
+  "non_leg_velocity_filter": {
+    "weights": [0.25, 0.5, 0.25],
+    "max_passes": 128,
+    "scope": "Only source non-leg joints whose finite-difference speed exceeds their actual URDF limit; recheck delivered float32 values"
+  },
+  "render_fps": 30,
+  "render_width": 1280,
+  "render_height": 720,
+  "notes": "All tolerances, iteration limits and rendering settings are explicit software design settings. Foot spacing and correction amounts come from the actual F1 model/data."
+}

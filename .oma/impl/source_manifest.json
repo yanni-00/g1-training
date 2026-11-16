@@ -1,0 +1,729 @@
+{
+  "source_files": [
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/tracking_env_cfg.py",
+      "source_sha256": "5504f64b15e8f5330c73876f321a84558b760b92e7e2e6fa98027b395e57bb8e",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/tracking_env_cfg.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "4592c8cdf48efc3a7fefa9e2c5790bb0e302767224a7faca9f8ac91367b23972"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/commands.py",
+      "source_sha256": "d6a80630e005e8ea2d65154febf02c76c6bf026816d892b16156245298b19f2f",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/commands.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "d6a80630e005e8ea2d65154febf02c76c6bf026816d892b16156245298b19f2f"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/events.py",
+      "source_sha256": "a082248770b8a262524daddde2df9c0f1818a385d7fd859e2736067b71a95a49",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/events.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "a082248770b8a262524daddde2df9c0f1818a385d7fd859e2736067b71a95a49"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/observations.py",
+      "source_sha256": "5bb6391426385f11499b88d36d26351af9f20abc18f5679a1b103376a92ab3cb",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/observations.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "bb8da8d448930a417c46d37f929d8fd36ad591d086b156a0b9d53ef75400a537"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/rewards.py",
+      "source_sha256": "46d2243092fd37666038d8ab51224af3340604d934bf420eada7f0cc4a8c4020",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/rewards.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "22fbbbee764e0601025d8a3a45b0cf35329b585e84a6f7b4f8b3d97185cdfab9"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/terminations.py",
+      "source_sha256": "3a5ec93c101ada4754372624852c6645a7b755daa53ca5b6d0b92c44dee23033",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/terminations.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "7936b4d4d60e45b6215d935292ae90b7203c77af3595528bb29c6394c52e0bc7"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/mdp/velocity_gait.py",
+      "source_sha256": "cd2d114224a524e05bc553b7607337514a0d898a60568514dbea9281e1b43740",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/velocity_gait.py",
+      "transformation": "namespace plus F1 actual joint/body order and prepared-reference identity guards",
+      "destination_sha256": "5065651667ab3588a479da7ea656b7cab012314b8d347f3dfb077c2b90ebc5b5"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/utils/cyclic_reference_clock.py",
+      "source_sha256": "690389dacd9629bccc50c5ed848b55c6aeb58a23c141f24c58145cdbebf18671",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/utils/cyclic_reference_clock.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "cd3ed389d52e9764c01eef71cf12ac282d53b8440e5ac6f4b9ceef75bfbc8a20"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/utils/velocity_reference.py",
+      "source_sha256": "b87c84d264a5d7be8a128c74745cdff3ed908a1bfc011979bdc3717990e69274",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_reference.py",
+      "transformation": "namespace plus removal of unverified G1 joystick-axis mapping",
+      "destination_sha256": "2e7fbc3e2e52e4b43397bdb07995f5950b64af776acdce02cf1cc2dcedfd9b5d"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/utils/velocity_gait_reference.py",
+      "source_sha256": "c2fa3a296de9dee3477cca3d966bda124ff4afc171af1638e02daaeecbf48706",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_gait_reference.py",
+      "transformation": "namespace plus explicit first-version backward/lateral/nonfinite command rejection",
+      "destination_sha256": "9f37a850a7b9da1b9c2c177db73a37ba6455611c20d08d292462364350bac290"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/utils/contact_quality.py",
+      "source_sha256": "23b3705f93ad8ba86be7e9d3a98c5c7cddc91a88c822b3a9e9668a258c78f7d6",
+      "destination": "training/source/f1_beyondmimic/f1_beyondmimic/utils/contact_quality.py",
+      "transformation": "package namespace only; later F1 changes tracked separately",
+      "destination_sha256": "17ca340cd8783b339393086d07d34a085d66bcf11591188c0954ac6652c511bb"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/robots/g1.py",
+      "source_sha256": "1a7133253c64897528e6248482beae9e004d7ec8907942669d279f4f72e7e16c",
+      "destination": "training/configs/reference/robots__g1.py",
+      "transformation": "unaltered reference snapshot; never imported",
+      "destination_sha256": "1a7133253c64897528e6248482beae9e004d7ec8907942669d279f4f72e7e16c"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/config/g1/agents/rsl_rl_ppo_cfg.py",
+      "source_sha256": "ad42a70993def7bb60785680339cb2c0c2c8368e734dea9ee7a3816b89b053af",
+      "destination": "training/configs/reference/tasks__tracking__config__g1__agents__rsl_rl_ppo_cfg.py",
+      "transformation": "unaltered reference snapshot; never imported",
+      "destination_sha256": "ad42a70993def7bb60785680339cb2c0c2c8368e734dea9ee7a3816b89b053af"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/config/g1/velocity_env_cfg.py",
+      "source_sha256": "e1fecb1eb8c20fe43d1001cde60190bbf55c1123b34e0a17d64bde9fce8810e1",
+      "destination": "training/configs/reference/tasks__tracking__config__g1__velocity_env_cfg.py",
+      "transformation": "unaltered reference snapshot; never imported",
+      "destination_sha256": "e1fecb1eb8c20fe43d1001cde60190bbf55c1123b34e0a17d64bde9fce8810e1"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/config/g1/proprio_velocity_env_cfg.py",
+      "source_sha256": "4399f7a4d9b1530b0d6edb1e770001cb5f77cf47209d44aa287f5495e18118d0",
+      "destination": "training/configs/reference/tasks__tracking__config__g1__proprio_velocity_env_cfg.py",
+      "transformation": "unaltered reference snapshot; never imported",
+      "destination_sha256": "4399f7a4d9b1530b0d6edb1e770001cb5f77cf47209d44aa287f5495e18118d0"
+    },
+    {
+      "source": "6_sim-train/G1/beyondmimic_walk_stop/source/whole_body_tracking/whole_body_tracking/tasks/tracking/config/g1/deploy_proprio_env_cfg.py",
+      "source_sha256": "9594f18b6b515a4ac5c8039c14b578f358a1b9c4a34aff44fa1db15cdbccac66",
+      "destination": "training/configs/reference/tasks__tracking__config__g1__deploy_proprio_env_cfg.py",
+      "transformation": "unaltered reference snapshot; never imported",
+      "destination_sha256": "9594f18b6b515a4ac5c8039c14b578f358a1b9c4a34aff44fa1db15cdbccac66"
+    },
+    {
+      "source": "6_sim-train/F1-29DOF/sim_walking/tools/model_geometry.py",
+      "source_sha256": "23ae427b80f6f2a7229cda860293b0c959fc07c7416e5bf6c456e346a86f9a7f",
+      "destination": "training/tools/model_geometry.py",
+      "transformation": "unaltered static geometry helper",
+      "destination_sha256": "23ae427b80f6f2a7229cda860293b0c959fc07c7416e5bf6c456e346a86f9a7f"
+    }
+  ],
+  "assets": [
+    {
+      "path": "resources/f1/meshes/collision/base_link.stl",
+      "sha256": "e90bb3961c10e4d515cd1d22bab61d4f97945ac48c2784ee73b3c0864ca49079"
+    },
+    {
+      "path": "resources/f1/meshes/collision/fixed/left_knee_pitch_collision.stl",
+      "sha256": "38eca22270435966534a9ce09107346137c327c8bd090e710a620c9211556fbb"
+    },
+    {
+      "path": "resources/f1/meshes/collision/fixed/right_knee_pitch_collision.stl",
+      "sha256": "e24ef56ad37dd6c4fe88c35b712c026882df5f1be4163415e542b7a0e7ad359a"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_ankle_pitch.stl",
+      "sha256": "9be4994e5cd9b51911f5c750a0f7a353940e63dbe8dcf19a1835461d0dd9c3f9"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_ankle_roll.stl",
+      "sha256": "c5e9baa2313f7a1d8b495f49638771dbcaa5be93c095070bf50fe2038668d2cc"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_hip_pitch.stl",
+      "sha256": "02d00a4a053b0f0508f0ec56ef15359b252116fb84045c54b17f39063bcc8d91"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_hip_roll.stl",
+      "sha256": "f75a376cae72c02adf33070099a0905076529ee286af3f41ac37265280575180"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_hip_yaw.stl",
+      "sha256": "471720ee8f8e4bf01f002f4c283e1b8425294f9e9119a13e62afe5aa2658852c"
+    },
+    {
+      "path": "resources/f1/meshes/collision/left_knee_pitch.stl",
+      "sha256": "e156674d2a81bc99add00463b66a0cc47435bd4d7cadce1fb9eab4fab745e55d"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_ankle_pitch.stl",
+      "sha256": "7d98ef112fb6f5fd003b526b376ffd24208ccb6ed265166548cb03887335ea6c"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_ankle_roll.stl",
+      "sha256": "15774d22860632842e67276b57cde93f0ba6e4a10e95fb6b592f640dea287f80"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_hip_pitch.stl",
+      "sha256": "c03face2269e484ad903a4876715d20b76b5ee92bcae3b2a0f7f14c6e2df0bb0"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_hip_roll.stl",
+      "sha256": "1edea998b0f8b2456ad11be17532ebc56d8a55a7a3cf3b45dabb39bc46321676"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_hip_yaw.stl",
+      "sha256": "c55c04de30b5a36b72a8fba1624c22f199191852253df590a0cbc0870ba40b09"
+    },
+    {
+      "path": "resources/f1/meshes/collision/right_knee_pitch.stl",
+      "sha256": "d7c98c8e9717f9564d73556adbdf0e1d43371a4e32a73511fd67c64351d1f263"
+    },
+    {
+      "path": "resources/f1/meshes/visual/base_link.stl",
+      "sha256": "27267ef61a91456e0a2f58828e52c509f8c5a547474926355bd6b2b8eb55242c"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_ankle_pitch.stl",
+      "sha256": "bd00192edce367f4d9bd2939b26bafc30eb30effa07bb421993f0fdfb2156554"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_ankle_roll.stl",
+      "sha256": "82053215de6f044562def68f84a9a2be3bb8b37991ceb4a98c636a32d91b468c"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_hip_pitch.stl",
+      "sha256": "389c4147ca6cc997e7889b5cf857aef4debc82d57093718aabb8a8fe7f73eda6"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_hip_roll.stl",
+      "sha256": "aa092d4f767c10780eb68908bd08637252d3004f5e39fb225fe6f4aa61fba728"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_hip_yaw.stl",
+      "sha256": "8ef6f4d18c33c1d62f46ad76c488387b6416be101383d696916dcaedc4e07192"
+    },
+    {
+      "path": "resources/f1/meshes/visual/left_knee_pitch.stl",
+      "sha256": "bf14b2f4adf6ab00babc7756323d4ca2ebe5661e416c0513a96ae3db81848498"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_ankle_pitch.stl",
+      "sha256": "8e9b0a8bc1feecb1c2188896b67106dd95e31810f86b6f7383854bd50875beee"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_ankle_roll.stl",
+      "sha256": "2ed2e9f3e86d694696c5a65a289995c9cc5c79f0c70d871cd7c92eeee9c5645f"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_hip_pitch.stl",
+      "sha256": "28a763dd7a69fa5c7049ef8128c53a7743973b1e046dbc862802cef6ebeb1352"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_hip_roll.stl",
+      "sha256": "8cb1ec4f1d6329e452bc4c9349abc54cea45d2c2472f5c945fef2d280d0d5125"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_hip_yaw.stl",
+      "sha256": "6564f9f3f26d339f50eef3e0bdc370a0197788d6793f543c1d501c9dbbfe8a8e"
+    },
+    {
+      "path": "resources/f1/meshes/visual/right_knee_pitch.stl",
+      "sha256": "669ca5ac96b8b67accb7d5777107de0a17a181b1b0a4660835c9d1ed7981ca57"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_a_ball.STL",
+      "sha256": "ce5f5dd977f5bb9ad40ece026ee52bbfa836d06e6ed24d60d827b9fdaa119682"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_a_ball_right_perfect_mirrored.STL",
+      "sha256": "497ea8badf6acc1958c8d229e4001ed689fd3377afaa7560ee69caa8b70d2c70"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_a_loop.STL",
+      "sha256": "e3b33c1523c435cd394e812e9213e35414461e3a93935a0f8df7a56a3ade5802"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_a_loop_right_perfect_mirrored.STL",
+      "sha256": "d589b6db45dceb435fc409b1442b1985bd9635621b66d7ff59e25ab74272cea6"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_b_ball.STL",
+      "sha256": "4c0751e8acec2f97dcd764373bd6ebb1b884f64315c9cdd299503825466a52ed"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_b_ball_right_perfect_mirrored.STL",
+      "sha256": "a79732ceb80e384403b6afff460da10ac72083b71d88ae9f60a128e8cae49374"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_b_loop.STL",
+      "sha256": "d1b9d236010896f8c9a01c48f9bb4afbefd366f331d51c233dd56e9d5cf6e3c2"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_b_loop_right_perfect_mirrored.STL",
+      "sha256": "c86e819badc48d3e5aa8bfcd3e6369ab36d135fb665a6162b8538a0c2f40b0f7"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link.STL",
+      "sha256": "cf7f29028ce372ec052ec6715c8cb50cd84194f24711a775788b1c53260ec125"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link_perfect_mirrored.STL",
+      "sha256": "6d0a27b896b4147556ee9513cf46724642b513e2d6fada65057165514d7cedcf"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_motor_a_link_right_perfect_mirrored.STL",
+      "sha256": "bee8aa2a57b4cb0067cb33e53565257afb022e7e20ce6e727ab50555863348d7"
+    },
+    {
+      "path": "resources/f1/meshes/x1/arm_r_wrist_motor_b_link.STL",
+      "sha256": "23eea7a3e22974ef5a22ce19b6696247204fc15d76df465ab616573b28506be0"
+    },
+    {
+      "path": "resources/f1/meshes/x1/Camera_center_symmetric.stl",
+      "sha256": "614299d9ff902769d48b7157ede6c5cd196da3bb02deec8ecef491fa965de578"
+    },
+    {
+      "path": "resources/f1/meshes/x1/head_face_bracket_center_symmetric.stl",
+      "sha256": "72754f999b98ad8f63fd15573f27afbf6ff005e709cc4c757915b3077e36e75c"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_elbow_pitch.STL",
+      "sha256": "75b053fb2d5eef0b8f448389bd65752b04d9ebd04376f3a95696b8a960e6887c"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_elbow_yaw.STL",
+      "sha256": "f3d7bc340e1860c34e13101aca8fa98a626db5410453c6252dce1b0617a8f2c9"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_shoulder_pitch.STL",
+      "sha256": "177ddf0c042909782bb0572a967b54f9c74258a353d70ff5249c3af193a9f78f"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_shoulder_roll.STL",
+      "sha256": "3824d25ea0cf627d246dbb603956512a4c3b249f31a72e48ddeba4591014c480"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_shoulder_yaw.STL",
+      "sha256": "7e5efda35021d872b1c089cabc671013cc957bbebe9b15b89b1e5c056b589377"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_wrist_pitch.STL",
+      "sha256": "85a59d07eeff3edbdf61351feff1f23eb6fab05579ebe5b16833d79cbca977ca"
+    },
+    {
+      "path": "resources/f1/meshes/x1/left_wrist_roll.STL",
+      "sha256": "dcff6c1a91a8a4033995ed617f44f42e2fb620e7932712eaca902d602b2b6396"
+    },
+    {
+      "path": "resources/f1/meshes/x1/lumbar_pitch_center_symmetric.stl",
+      "sha256": "abb6209c8b55de92f703cf886651424e87208a1e752042abc442514a73e470fc"
+    },
+    {
+      "path": "resources/f1/meshes/x1/lumbar_roll_center_symmetric.STL",
+      "sha256": "9871222151fa0496ec28c313dd7c8759efb55ed1cab811ed8225a2bafd42af93"
+    },
+    {
+      "path": "resources/f1/meshes/x1/lumbar_yaw_center_symmetric.STL",
+      "sha256": "4d977e19b81c4fd5b241d8e7501b212f85288d7c507d39b46016e4629a4f226e"
+    },
+    {
+      "path": "resources/f1/meshes/x1/neck_motor_base_center_symmetric.stl",
+      "sha256": "f061e75884147ab6fe7e3bfabc680a0af13af7a056d9fe9d92e97eec04b80c6a"
+    },
+    {
+      "path": "resources/f1/meshes/x1/neck_motor_bracket_center_symmetric.stl",
+      "sha256": "b6ce1170308feac17d5a06ce8b25250bb2fbaadf75404e8b91736f75ade5ea25"
+    },
+    {
+      "path": "resources/f1/meshes/x1/radar_center_symmetric.stl",
+      "sha256": "360dcaa47427fa8cc7082f26ec693d2f800e19315c383adcaf54dc79236e08be"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_elbow_pitch_perfect_mirrored.STL",
+      "sha256": "57eb5998d8683426d3d0d5ecaccb105536e3bb0d5c8c0c6a3c8227f3fc66634a"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_elbow_yaw_perfect_mirrored.STL",
+      "sha256": "cb3fb2bd9c606374c1621056c48798da86b94b83e726a7f0968efb5b8f48f476"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_shoulder_pitch_perfect_mirrored.STL",
+      "sha256": "837de1c8e6a222406f1f3d22f9e98169f8ea5ab2dd60715598dea0df3936343a"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_shoulder_roll_perfect_mirrored.STL",
+      "sha256": "d3f4618b04228e3753b6946445dc17f649cd9bfdca64f78dbc79b6b5231f62ae"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_shoulder_yaw_perfect_mirrored.STL",
+      "sha256": "96a0c77266a0d6d51104f0c10a559bf4719e365ecf4aaf700d247811feda9ddf"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_wrist_pitch_perfect_mirrored.STL",
+      "sha256": "dde433fe909cd18402790941ec40492e748e14d82518e35abb7a87f57799836b"
+    },
+    {
+      "path": "resources/f1/meshes/x1/right_wrist_roll_perfect_mirrored.STL",
+      "sha256": "084fd742263a201d671f267e5c52bbeb65bc9072dada752b8017eec4c85f4f90"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_a_ball_perfect_mirrored.STL",
+      "sha256": "6429fefc8c390a49b2c96ef48cd3f5eb7b53576d49c45cffa06915e37711db30"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_a_link_perfect_mirrored.STL",
+      "sha256": "8fc55e0e2ac2410c2b0d678c47fa3a1d91d00e51d885a1a7099fda6e9ac9cc55"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_a_loop_perfect_mirrored.STL",
+      "sha256": "b08509d84b976a0dbec436164ceb0daa7b723fe1753e46a779ddaa050d37d472"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_b_ball.STL",
+      "sha256": "90a26619d146a6e85aa8a17a2ea72c7149b45f7867eed3a12df57c3c2d9fe255"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_b_link.STL",
+      "sha256": "0320a2f93c138659299daaf207b4fa237fdd029912213e2d642279e3e63ee33e"
+    },
+    {
+      "path": "resources/f1/meshes/x1/waist_motor_b_loop.STL",
+      "sha256": "d58bf5cc76ee47fc697a1885c263ec88efb946208d31551185689344f166311c"
+    },
+    {
+      "path": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+      "sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
+      "source_sha256": "e24c87efdc047976a0c1e96efb4e6f9699fbfb0e1ff932b2fad6c65391c3f0e7",
+      "transformation": "Owner-approved movable-joint friction=0/damping=0.05; all other XML definitions identical"
+    }
+  ],
+  "asset_source": "f1_simulation_ssot/01_SPEC_规范与接口/SYS-SPEC-0002-V1.1-F1整机模型29DOF",
+  "policy_weights_copied": false,
+  "raw_motion_copied": false,
+  "old_logs_copied": false,
+  "generated_training_files": [
+    {
+      "path": "training/README.md",
+      "sha256": "d5e97ef915a2b7849e0e9462ce1bf7bde693f08e3ff9aebe8fe886ecc087bba9"
+    },
+    {
+      "path": "training/configs/README.md",
+      "sha256": "df679a886889db7b397860b7f9bfcb6dc48ca1570e527c37d1d2bd5a6c55ea80"
+    },
+    {
+      "path": "training/configs/assets_archive.json",
+      "sha256": "62d9c1305194c2f0145071fc85e4731689a586dc86be67670fca4eee5618a3b7"
+    },
+    {
+      "path": "training/configs/control_profile.json",
+      "sha256": "1c5bc9b407dba530675500a18eb5a419b71cfde07190a31fbaa7c48f99ac2791"
+    },
+    {
+      "path": "training/configs/deployment_contract.json",
+      "sha256": "66dd80dadbfed5aae4b872406f87a13354e47460b036b369f6be2b90dc563185"
+    },
+    {
+      "path": "training/configs/evaluation.json",
+      "sha256": "c0a08ca9ac02654d1a0501670afef31731cedd4a4653324602207366114b75e9"
+    },
+    {
+      "path": "training/configs/launch.json",
+      "sha256": "3b23df99aa350e30d3b78b58c4b236cc279242b80a89b33c97d2e881f4a12536"
+    },
+    {
+      "path": "training/configs/motion_repair.json",
+      "sha256": "c0d9b5cc39a4f18047def0b68b2e53394952fc6a920f44d52be7fd06ab1f0200"
+    },
+    {
+      "path": "training/configs/owner_training_profile.json",
+      "sha256": "65257b37ca8582a7572c27e86aad5bcf191ffe203e1e05347af9eaeecbdcc8ff"
+    },
+    {
+      "path": "training/configs/parameter_identification.json",
+      "sha256": "7937b6ce274df0758388de0520cc3ab2b0a78cd36baba7314149f3ab8581a45e"
+    },
+    {
+      "path": "training/configs/reference/robots__g1.py",
+      "sha256": "1a7133253c64897528e6248482beae9e004d7ec8907942669d279f4f72e7e16c"
+    },
+    {
+      "path": "training/configs/reference/stable_runtime_settings.json",
+      "sha256": "9dfb21bc8321d9ae669beae86a1a42f99f3a59cc4f1a06af9e2fec1155250c70"
+    },
+    {
+      "path": "training/configs/reference/tasks__tracking__config__g1__agents__rsl_rl_ppo_cfg.py",
+      "sha256": "ad42a70993def7bb60785680339cb2c0c2c8368e734dea9ee7a3816b89b053af"
+    },
+    {
+      "path": "training/configs/reference/tasks__tracking__config__g1__deploy_proprio_env_cfg.py",
+      "sha256": "9594f18b6b515a4ac5c8039c14b578f358a1b9c4a34aff44fa1db15cdbccac66"
+    },
+    {
+      "path": "training/configs/reference/tasks__tracking__config__g1__proprio_velocity_env_cfg.py",
+      "sha256": "4399f7a4d9b1530b0d6edb1e770001cb5f77cf47209d44aa287f5495e18118d0"
+    },
+    {
+      "path": "training/configs/reference/tasks__tracking__config__g1__velocity_env_cfg.py",
+      "sha256": "e1fecb1eb8c20fe43d1001cde60190bbf55c1123b34e0a17d64bde9fce8810e1"
+    },
+    {
+      "path": "training/configs/robot_contract.json",
+      "sha256": "0f41c9e213a05ae9d6ea99c6261f86bba9beac03309a7110ca84cb6520612c24"
+    },
+    {
+      "path": "training/configs/run_request.json",
+      "sha256": "01e00560f3092e0e7548b014433595740b94a5bc9b1412a7c73f250ec24ebcb0"
+    },
+    {
+      "path": "training/configs/ssot_motion_processing.json",
+      "sha256": "0ac06449dcc7de11d25b188c413f2eae4f01cd69496eca461d2639ac79a1a124"
+    },
+    {
+      "path": "training/configs/ssot_motion_sources.json",
+      "sha256": "17551dc6ce4721cef6c8b093504316d642dfa428a07ce0bdcd4159af3932f301"
+    },
+    {
+      "path": "training/configs/ssot_retarget_requirements.lock",
+      "sha256": "1191bc92c5038698ef83bf4529c3afc942e33ecd9359fb64b3390ce924e4aff9"
+    },
+    {
+      "path": "training/configs/training_admission_policy.json",
+      "sha256": "31bc9675c6518b8bfb66c7dc78b88b7570263d812a13090203b3eda6fe88d2b1"
+    },
+    {
+      "path": "training/data/README.md",
+      "sha256": "6cfbb42ab7e58cb655278d4996c8182ffa9256ad83e6ed75645f141a0bc9b2d3"
+    },
+    {
+      "path": "training/data/motion_manifest.json",
+      "sha256": "cfedb4435c35ed3bfbcf50edcd90781a60107d2efa0871976010fc8fd49ec18c"
+    },
+    {
+      "path": "training/data/repair_candidates/20261108/README.md",
+      "sha256": "d92b563653d5116529f6d3ee2d24b4e32c9668420600e82a9a011c7e4a0f683d"
+    },
+    {
+      "path": "training/pyproject.toml",
+      "sha256": "4188c49dd6d704f0c501cc14c4bcbaf27c58a3ecfef32f01e552316692f36e78"
+    },
+    {
+      "path": "training/scripts/_bootstrap.py",
+      "sha256": "5f4945adcf750765a55d2928aa3d1a1c9e9e741bf7ad5e3984b324207d9fab51"
+    },
+    {
+      "path": "training/scripts/evaluate.py",
+      "sha256": "50ac0cfa1dd9348d4ea7c1c345aaf770bab78d58dcd3b797ed6bfe0c09b75b27"
+    },
+    {
+      "path": "training/scripts/export.py",
+      "sha256": "118a85f572de9d83db5d8940fed5e7495b6154e25a79254d1c598fd378ada580"
+    },
+    {
+      "path": "training/scripts/gm_entry.py",
+      "sha256": "a3c384d4e5fb475bc449ee1a82bb8258460e969351aea2c526ef14ef00246b13"
+    },
+    {
+      "path": "training/scripts/train.py",
+      "sha256": "c56fbe8da90a2fc271b89f95a9a45f56c8c37ea2b13a4137aeb2535771f03a9f"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/assets_archive.py",
+      "sha256": "7ec288f7fa6c1aff50f700c2fe8fe71a3a58d1285a7cc00f7fdc444ab6ed7416"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
+      "sha256": "814e4fc508325b4973b8e7f53e144f9ac573da9c68d87d8164d4924e0ba22335"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/f1.py",
+      "sha256": "f9b34ee7ca0f60b495e77e7d1c01034fe65a86c0a8f43f66c13e9dfe8b645659"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/__init__.py",
+      "sha256": "e2e9f72dafc4cce0b0eacadb39210d13604857e2ee342d4c6ecc1ce81029db75"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/environment.py",
+      "sha256": "26c77eda590251e2f7aa9ed05dbb94a45943d3a4c96f620abc7a7d866454aebe"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/f1_env_cfg.py",
+      "sha256": "a4b30393a32d300aa59222aa701840d1340ee193496bb8045b5f2d74a6ee3177"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/ppo_cfg.py",
+      "sha256": "9f9aaa9a7a581879243167f5fc47705a28beb3132f25f32f948c4d0f452d4fa6"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/__init__.py",
+      "sha256": "59b01f9f9f66f208eb9a2053cd33d2481bfea41c653dc540b985336abe586569"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/commands.py",
+      "sha256": "b69b8b3c552aec1670124e9e10de48fc08baec430225c0d7ece211a97bfe1b3a"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/events.py",
+      "sha256": "a082248770b8a262524daddde2df9c0f1818a385d7fd859e2736067b71a95a49"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/f1_actions.py",
+      "sha256": "c7ffdfc5223b0689f210e694c072ec9760fae56abd476e533b6736632554978d"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/observations.py",
+      "sha256": "bb8da8d448930a417c46d37f929d8fd36ad591d086b156a0b9d53ef75400a537"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/rewards.py",
+      "sha256": "22fbbbee764e0601025d8a3a45b0cf35329b585e84a6f7b4f8b3d97185cdfab9"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/terminations.py",
+      "sha256": "7936b4d4d60e45b6215d935292ae90b7203c77af3595528bb29c6394c52e0bc7"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/velocity_gait.py",
+      "sha256": "d1894ade19a9e95dd7ebce3966986b6fad08702358f9b74f10712c41732dc797"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/tracking_env_cfg.py",
+      "sha256": "4592c8cdf48efc3a7fefa9e2c5790bb0e302767224a7faca9f8ac91367b23972"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/actor_observations.py",
+      "sha256": "74514388412c6762f200471db9391d6e227021c833b11728aa988e83fa7390c4"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/checkpoint.py",
+      "sha256": "61d5c30fc771171511b12a65ccd25b4a413bca49545b5c80c35e570cc9379755"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/contact_quality.py",
+      "sha256": "17ca340cd8783b339393086d07d34a085d66bcf11591188c0954ac6652c511bb"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/cyclic_reference_clock.py",
+      "sha256": "cd3ed389d52e9764c01eef71cf12ac282d53b8440e5ac6f4b9ceef75bfbc8a20"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/runner.py",
+      "sha256": "487b8f1912e92ea49aed2b05255f401e7fe45d5ed3b6e7c28bb646910e24a47b"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/runtime_policy.py",
+      "sha256": "71ea854f7d8a9094464d80d48ec1644b7a8d71918d80c0d20f5ab40cf6a41536"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_gait_reference.py",
+      "sha256": "9f37a850a7b9da1b9c2c177db73a37ba6455611c20d08d292462364350bac290"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_reference.py",
+      "sha256": "2e7fbc3e2e52e4b43397bdb07995f5950b64af776acdce02cf1cc2dcedfd9b5d"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/setup.py",
+      "sha256": "67dbc9530e951b793150b49315f2311d3f574281586490414c367be1c4bbd5d4"
+    },
+    {
+      "path": "training/tests/test_contracts.py",
+      "sha256": "8b075f0112674d9a808c7e8a59f14f157f87ef31eb6be667cdc981c29393c3ba"
+    },
+    {
+      "path": "training/tests/test_motion_repair.py",
+      "sha256": "2a9b9b63e2739a40fa238075f1afb69f58d9ab8fb966bc2ea76e4f113b51bc26"
+    },
+    {
+      "path": "training/tests/test_ssot_reference_math.py",
+      "sha256": "07d8ef5e2fa1d3ed8895af2aad31b76d788c833077c21cc2ab2444eed6a01fb0"
+    },
+    {
+      "path": "training/tools/audit_gait_steps.py",
+      "sha256": "93dcb45cb06762f7f40edcbdc5b0a393a830f3b322ce8e3f65d97a755cc9afca"
+    },
+    {
+      "path": "training/tools/build_ssot_retarget.py",
+      "sha256": "e3f860d5bb55b649a99481ff06ff2c4f0b40855f8493270a51bc36f8e6d5d8f3"
+    },
+    {
+      "path": "training/tools/check_scaffold.py",
+      "sha256": "525631043d7964b33f7a11993e5bcb8473702fd87aa30b7b951a0d0e55c6c694"
+    },
+    {
+      "path": "training/tools/export_ssot_motion.py",
+      "sha256": "3983a4ef37d380bd644e8675d14067c5df0ff38819a443f260e39493194be9f3"
+    },
+    {
+      "path": "training/tools/model_geometry.py",
+      "sha256": "23ae427b80f6f2a7229cda860293b0c959fc07c7416e5bf6c456e346a86f9a7f"
+    },
+    {
+      "path": "training/tools/motion_kinematics.py",
+      "sha256": "a8395fc8c33552c5658a09a4cb5dd66091549940bf65d35e72b532e7583337a6"
+    },
+    {
+      "path": "training/tools/optimize_periodic_motion.py",
+      "sha256": "269f9e14284fe39857bb4c069f13ffe31bdbf2f4f6b010c98913f3bd42046cd4"
+    },
+    {
+      "path": "training/tools/publish_ssot_motion.py",
+      "sha256": "fb7427e2e96b59bdc2a6c5fe177194fed718b462508abe92be888d6a9555b097"
+    },
+    {
+      "path": "training/tools/refine_ssot_motion.py",
+      "sha256": "97a27da3a3f854a6b808fc1b06de6a9d33325bdcaff92955db1b2b43fc984750"
+    },
+    {
+      "path": "training/tools/regenerate_ssot_walking.py",
+      "sha256": "44eb021917ca3bc02614858a5bf96d517905d91da4112181fbe7c9c4c9112c4f"
+    },
+    {
+      "path": "training/tools/render_motion_comparison.py",
+      "sha256": "5a55817ff66e688cdb89e9f03bfc6f05216e6f80ef2a08219d659b3ad709af66"
+    },
+    {
+      "path": "training/tools/render_ssot_motion.py",
+      "sha256": "f6fdbb7845f3bb4ba749899b89cf3acf314b7decfd687a43befac538fd617a92"
+    },
+    {
+      "path": "training/tools/repair_walking_motion.py",
+      "sha256": "2a95ebbbe2c38de083b57976c0fcb7fdae3d17e6c8a2ffb08afbb3856af49fa5"
+    },
+    {
+      "path": "training/tools/run_umr_ssot.py",
+      "sha256": "b7741438919bbd0fbcee26957f714090afd4c116fd6e6462564ab760dff185df"
+    },
+    {
+      "path": "training/tools/select_valid_walking_window.py",
+      "sha256": "ec101039bb0f09dd2834581fe31c2ab6b51aa1eb4851fcdf66beb78620290777"
+    },
+    {
+      "path": "training/tools/sync_owner_control.py",
+      "sha256": "811eea9b920b941f22b7a26c91e45d673facd605d13b67f4e4749f843294e1e4"
+    }
+  ]
+}

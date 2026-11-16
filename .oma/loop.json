@@ -1,0 +1,10 @@
+{
+  "lap": 1,
+  "stage": "train",
+  "exp_id": "exp-20261116-001",
+  "goalRevision": "F1-BEYONDMIMIC-WALK-v3",
+  "status": "formal_training_preparation",
+  "pausedScopes": [],
+  "pauseReason": null,
+  "round": "r1"
+}

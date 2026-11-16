@@ -1,0 +1,160 @@
+{
+  "status": "owner_specified_simulation_baseline",
+  "urdf_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
+  "source_status": "User adoption 2026-11-16; not measured parameter identification",
+  "sources": [
+    {
+      "path": "configs/owner_training_profile.json",
+      "sha256": "65257b37ca8582a7572c27e86aad5bcf191ffe203e1e05347af9eaeecbdcc8ff",
+      "description": "User explicitly adopted this complete F1 PD/armature/passive-dynamics baseline on 2026-11-16"
+    }
+  ],
+  "delivery_filter": null,
+  "joints": {
+    "left_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "left_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "left_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13,
+      "armature": 0.0
+    },
+    "left_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "left_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5,
+      "armature": 0.0
+    },
+    "right_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "right_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "right_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13,
+      "armature": 0.0
+    },
+    "right_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5,
+      "armature": 0.0
+    },
+    "right_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5,
+      "armature": 0.0
+    },
+    "lumbar_yaw_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0
+    },
+    "lumbar_roll_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0
+    },
+    "lumbar_pitch_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0
+    },
+    "left_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "left_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    },
+    "right_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0
+    }
+  }
+}

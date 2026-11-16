@@ -1,0 +1,22 @@
+{
+  "status": "protocol_pending_data_and_baseline_alignment",
+  "first_version": [
+    "stand_initial",
+    "forward",
+    "change_speed",
+    "turn_while_walking",
+    "stop_hold",
+    "restart",
+    "continuous_forward"
+  ],
+  "deferred": [
+    "backward",
+    "lateral",
+    "in_place_turn"
+  ],
+  "schedule": null,
+  "numeric_gates": null,
+  "reference": "G1 functional/quality protocols; freeze F1 values before training, not hardware specifications",
+  "video_required": true,
+  "csv_required": true
+}

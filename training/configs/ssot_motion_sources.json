@@ -1,0 +1,20 @@
+{
+  "umr_project": "../../../f1_UMR",
+  "clips": {
+    "B1": {
+      "data": "sample_data/ACCAD/Female1Walking_c3d/B1_-_stand_to_walk_stageii.npz",
+      "sequence_key": "B1_-_stand_to_walk_stageii",
+      "cycle": false
+    },
+    "B2": {
+      "data": "sample_data/ACCAD/Female1Walking_c3d/B2_-_walk_to_stand_stageii.npz",
+      "sequence_key": "B2_-_walk_to_stand_stageii",
+      "cycle": false
+    },
+    "B3": {
+      "data": "sample_data/ACCAD/Female1Walking_c3d/B3_-_walk1_stageii.npz",
+      "sequence_key": "B3_-_walk1_stageii",
+      "cycle": true
+    }
+  }
+}

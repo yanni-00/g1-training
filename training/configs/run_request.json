@@ -1,0 +1,10 @@
+{
+  "exp_id": "exp-20261116-001",
+  "kind": "formal_training",
+  "task": "Tracking-VelocityReference-F1-Proprio-v0",
+  "num_envs": 4096,
+  "max_iterations": 30000,
+  "seed": 42,
+  "spend_cap_milli_credit": 50000,
+  "resume": null
+}

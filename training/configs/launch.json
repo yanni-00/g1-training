@@ -1,0 +1,14 @@
+{
+  "training_enabled": true,
+  "evaluation_enabled": false,
+  "training_authorization_ref": "../.oma/requirements.md",
+  "evaluation_authorization_ref": null,
+  "num_envs": 4096,
+  "max_iterations": 30000,
+  "seed": 42,
+  "preflight_evidence": {
+    "path": "../.oma/experiments/exp-20261116-001/input/submission_preflight.json",
+    "sha256": null
+  },
+  "admission_mode": "owner_direct_formal"
+}

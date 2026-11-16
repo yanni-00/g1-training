@@ -1,0 +1,16 @@
+{
+  "format": "f1_beyondmimic_owner_formal_preflight_v1",
+  "exp_id": "exp-20261116-001",
+  "canTrain": false,
+  "prior_runtime_closure_verified": false,
+  "registered_limits": {
+    "num_envs": 4096,
+    "max_iterations": 30000,
+    "seed": 42
+  },
+  "spend_cap_milli_credit": 50000,
+  "source_static_checks_passed": false,
+  "platform_account_and_request_verified": false,
+  "hardware_deployment_verified": false,
+  "owner_direct_formal_policy_sha256": "31bc9675c6518b8bfb66c7dc78b88b7570263d812a13090203b3eda6fe88d2b1"
+}

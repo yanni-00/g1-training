@@ -1,0 +1,11 @@
+{
+  "status": "pending",
+  "robot": "F1-29DOF",
+  "hardware_sdk_order": null,
+  "sources": [],
+  "observation_signal_mapping": null,
+  "control_timing": null,
+  "action_processing": null,
+  "state_machine": null,
+  "note": "G1 deploy limits/PD/sensor/FSM are not F1 facts; bind actual F1 deployment before formal training."
+}

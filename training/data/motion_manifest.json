@@ -1,0 +1,126 @@
+{
+  "status": "ready",
+  "raw_source": "../../../f1-retargeting/F1/UMR/weichai_f1_29_accad_walking",
+  "raw_data_modified": false,
+  "prepared_path": "data/prepared/owner-pd-20261116/walking_cycle_50hz.npz",
+  "prepared_sha256": "8ae03c3da3df29854ba4b26e9524995333702295ecf0b10a1350f0c1ec1a7d5e",
+  "urdf_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
+  "native_audit_path": "data/prepared/owner-pd-20261116/native_audit.json",
+  "native_audit_sha256": "b2f848f19bbcd51680db7ac4502d900eb7fb950a4b205016013e4cbee0b8c54b",
+  "source_files": [
+    {
+      "name": "B1_stand_to_walk_weichai_f1_29.npz",
+      "sha256": "25140634a6d2bcf5fbd35b06fb1e819465c3b423c8b4522ad806a2114dabcd3f"
+    },
+    {
+      "name": "B2_walk_to_stand_weichai_f1_29.npz",
+      "sha256": "c50435e2a2292397c58b91aee908b57b60e3ba3be5ef376962a3bf6cc0fc8cfe"
+    },
+    {
+      "name": "B3_walk1_weichai_f1_29.npz",
+      "sha256": "f0059a968b32cbbf1a765f6ef631884da9af31fde8828fe6de0e2ff7307bd612"
+    },
+    {
+      "name": "B4_stand_to_walk_back_weichai_f1_29.npz",
+      "sha256": "be2959394aa97209d1340a2a0515f9aca4c5a5ab8ffddf32b30d6f35dd43ffc3"
+    }
+  ],
+  "blocked_reason": null,
+  "repair_revision": "20261108",
+  "repair_report": {
+    "path": "../.oma/work/motion-repair-20261108/release-audit/audit.json",
+    "sha256": "d91d4e1089d75c17634742b2c4f59d2075938fbf656bcb800be41a01b2ca72a7"
+  },
+  "repair_candidates": [
+    {
+      "path": "data/repair_candidates/20261108/B1_stand_to_walk_weichai_f1_29_f1_geometry_candidate.npz",
+      "sha256": "035ad44b003f1cc17dd6300bcd13c7ea1cd4733726648ec7cd5c375a8cd8bca9",
+      "source_sha256": "25140634a6d2bcf5fbd35b06fb1e819465c3b423c8b4522ad806a2114dabcd3f",
+      "kinematic_checks_passed": true,
+      "training_ready": false,
+      "status": "pending_owner_and_native_contact_cycle_validation"
+    },
+    {
+      "path": "data/repair_candidates/20261108/B3_walk1_weichai_f1_29_f1_geometry_candidate.npz",
+      "sha256": "9736f0aa6f2512bb53dbadbe86cd85c7e919f760bee1f50eb9c013a63e0dc188",
+      "source_sha256": "f0059a968b32cbbf1a765f6ef631884da9af31fde8828fe6de0e2ff7307bd612",
+      "kinematic_checks_passed": true,
+      "training_ready": false,
+      "status": "pending_owner_and_native_contact_cycle_validation"
+    },
+    {
+      "path": "data/repair_candidates/20261108/B4_stand_to_walk_back_weichai_f1_29_f1_geometry_candidate.npz",
+      "sha256": "bae26fb1b77108fe824a71115c909a5faeb3f201c3b109e50be55b8d8afda249",
+      "source_sha256": "be2959394aa97209d1340a2a0515f9aca4c5a5ab8ffddf32b30d6f35dd43ffc3",
+      "kinematic_checks_passed": true,
+      "training_ready": false,
+      "status": "pending_owner_and_native_contact_cycle_validation"
+    }
+  ],
+  "excluded_clips": [
+    {
+      "source": "B2_walk_to_stand_weichai_f1_29.npz",
+      "reason": "Current constrained IK did not converge for all frames; source-side retargeting requested",
+      "failed_frames": {
+        "left": [
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          114,
+          261,
+          262,
+          263,
+          264,
+          265,
+          266,
+          267,
+          268,
+          269
+        ],
+        "right": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16
+        ]
+      },
+      "training_ready": false
+    }
+  ],
+  "regenerated_artifact_inventory": {
+    "path": "data/regenerated/20261109/artifact_inventory.json",
+    "sha256": "f1becac4ec7375646ea1256aa5f041b3ec7537b479e56770682b3f27c8abc2c3"
+  },
+  "regenerated_dataset": {
+    "path": "data/regenerated/20261109/final",
+    "manifest_sha256": "498da18ff0a537c04ff2b029214f8f1aaa9d9b8381d6b1eb524dd751df109813",
+    "native_checks_passed": true,
+    "reference_cpu_check_passed": true,
+    "training_ready": false
+  },
+  "readiness_scope": "Offline training input; Isaac dynamics and naturalness remain unaccepted"
+}
