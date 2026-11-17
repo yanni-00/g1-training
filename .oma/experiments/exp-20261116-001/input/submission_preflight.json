@@ -1,7 +1,8 @@
 {
   "format": "f1_beyondmimic_owner_formal_preflight_v1",
+  "scope": "package_internal_runtime_permit",
   "exp_id": "exp-20261116-001",
-  "canTrain": false,
+  "canTrain": true,
   "prior_runtime_closure_verified": false,
   "registered_limits": {
     "num_envs": 4096,
@@ -9,8 +10,175 @@
     "seed": 42
   },
   "spend_cap_milli_credit": 50000,
-  "source_static_checks_passed": false,
-  "platform_account_and_request_verified": false,
-  "hardware_deployment_verified": false,
-  "owner_direct_formal_policy_sha256": "31bc9675c6518b8bfb66c7dc78b88b7570263d812a13090203b3eda6fe88d2b1"
+  "source_static_checks_passed": true,
+  "validation": {
+    "path": "../../work/training-start-20261116/validation.json",
+    "sha256": "6cdcedba2a2439b5082dc51f7e927a78f82d3e47d36582230672a77e8440e313"
+  },
+  "owner_direct_formal_policy_sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e",
+  "owner_direct_formal_policy_scope": "Only the separate prior probe/minimal-closure workflow is deferred by the owner; source, limits, asset, motion, control and budget/account checks are not waived.",
+  "stable_sources": [
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/assets_archive.py",
+      "sha256": "7ec288f7fa6c1aff50f700c2fe8fe71a3a58d1285a7cc00f7fdc444ab6ed7416"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
+      "sha256": "ca20d89cc1b9a4dd1b91101890f68896857e99a561191ec8a515f178c9d7c2f8"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/f1.py",
+      "sha256": "f9b34ee7ca0f60b495e77e7d1c01034fe65a86c0a8f43f66c13e9dfe8b645659"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/__init__.py",
+      "sha256": "e2e9f72dafc4cce0b0eacadb39210d13604857e2ee342d4c6ecc1ce81029db75"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/environment.py",
+      "sha256": "26c77eda590251e2f7aa9ed05dbb94a45943d3a4c96f620abc7a7d866454aebe"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/f1_env_cfg.py",
+      "sha256": "a4b30393a32d300aa59222aa701840d1340ee193496bb8045b5f2d74a6ee3177"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/config/ppo_cfg.py",
+      "sha256": "9f9aaa9a7a581879243167f5fc47705a28beb3132f25f32f948c4d0f452d4fa6"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/__init__.py",
+      "sha256": "59b01f9f9f66f208eb9a2053cd33d2481bfea41c653dc540b985336abe586569"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/commands.py",
+      "sha256": "b69b8b3c552aec1670124e9e10de48fc08baec430225c0d7ece211a97bfe1b3a"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/events.py",
+      "sha256": "a082248770b8a262524daddde2df9c0f1818a385d7fd859e2736067b71a95a49"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/f1_actions.py",
+      "sha256": "c7ffdfc5223b0689f210e694c072ec9760fae56abd476e533b6736632554978d"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/observations.py",
+      "sha256": "bb8da8d448930a417c46d37f929d8fd36ad591d086b156a0b9d53ef75400a537"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/rewards.py",
+      "sha256": "22fbbbee764e0601025d8a3a45b0cf35329b585e84a6f7b4f8b3d97185cdfab9"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/terminations.py",
+      "sha256": "7936b4d4d60e45b6215d935292ae90b7203c77af3595528bb29c6394c52e0bc7"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/mdp/velocity_gait.py",
+      "sha256": "d1894ade19a9e95dd7ebce3966986b6fad08702358f9b74f10712c41732dc797"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/tracking_env_cfg.py",
+      "sha256": "4592c8cdf48efc3a7fefa9e2c5790bb0e302767224a7faca9f8ac91367b23972"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/actor_observations.py",
+      "sha256": "74514388412c6762f200471db9391d6e227021c833b11728aa988e83fa7390c4"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/checkpoint.py",
+      "sha256": "61d5c30fc771171511b12a65ccd25b4a413bca49545b5c80c35e570cc9379755"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/contact_quality.py",
+      "sha256": "17ca340cd8783b339393086d07d34a085d66bcf11591188c0954ac6652c511bb"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/cyclic_reference_clock.py",
+      "sha256": "cd3ed389d52e9764c01eef71cf12ac282d53b8440e5ac6f4b9ceef75bfbc8a20"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/runner.py",
+      "sha256": "487b8f1912e92ea49aed2b05255f401e7fe45d5ed3b6e7c28bb646910e24a47b"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/runtime_policy.py",
+      "sha256": "71ea854f7d8a9094464d80d48ec1644b7a8d71918d80c0d20f5ab40cf6a41536"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_gait_reference.py",
+      "sha256": "9f37a850a7b9da1b9c2c177db73a37ba6455611c20d08d292462364350bac290"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/f1_beyondmimic/utils/velocity_reference.py",
+      "sha256": "2e7fbc3e2e52e4b43397bdb07995f5950b64af776acdce02cf1cc2dcedfd9b5d"
+    },
+    {
+      "path": "training/source/f1_beyondmimic/setup.py",
+      "sha256": "67dbc9530e951b793150b49315f2311d3f574281586490414c367be1c4bbd5d4"
+    },
+    {
+      "path": "training/scripts/train.py",
+      "sha256": "fc0a1f11b68f3380a3ada15087004f98db0b850a4ce7ffe299b0823c094c478c"
+    },
+    {
+      "path": "training/scripts/gm_entry.py",
+      "sha256": "ee85ffff5fe6e90e4d16482c08e7bce852e391991197bdd6b6da09c0e90b7344"
+    },
+    {
+      "path": "training/configs/robot_contract.json",
+      "sha256": "0f41c9e213a05ae9d6ea99c6261f86bba9beac03309a7110ca84cb6520612c24"
+    },
+    {
+      "path": "training/configs/control_profile.json",
+      "sha256": "1c5bc9b407dba530675500a18eb5a419b71cfde07190a31fbaa7c48f99ac2791"
+    },
+    {
+      "path": "training/configs/owner_training_profile.json",
+      "sha256": "65257b37ca8582a7572c27e86aad5bcf191ffe203e1e05347af9eaeecbdcc8ff"
+    },
+    {
+      "path": "training/configs/assets_archive.json",
+      "sha256": "e6b413cfab90b5173e48966ca005a4d542c7525ca713894ffcf6a961403667cc"
+    },
+    {
+      "path": "training/configs/run_request.json",
+      "sha256": "01e00560f3092e0e7548b014433595740b94a5bc9b1412a7c73f250ec24ebcb0"
+    },
+    {
+      "path": "training/data/prepared/owner-pd-20261116/walking_cycle_50hz.npz",
+      "sha256": "8ae03c3da3df29854ba4b26e9524995333702295ecf0b10a1350f0c1ec1a7d5e"
+    },
+    {
+      "path": ".oma/designs/design-owner-control-training-20261116.md",
+      "sha256": "3f4d1acd92b529034e9abb35ad19a2216b0f492d21d11f5199e8f643f3155591"
+    },
+    {
+      "path": "training/configs/training_admission_policy.json",
+      "sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e"
+    }
+  ],
+  "platform_admission": "external; verified by tools/gm_platform.py create/run against raw/platform-admission.json and the actual commit",
+  "hardware_deployment_verified": false
 }

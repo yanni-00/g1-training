@@ -415,7 +415,7 @@
     },
     {
       "path": "training/configs/assets_archive.json",
-      "sha256": "62d9c1305194c2f0145071fc85e4731689a586dc86be67670fca4eee5618a3b7"
+      "sha256": "e6b413cfab90b5173e48966ca005a4d542c7525ca713894ffcf6a961403667cc"
     },
     {
       "path": "training/configs/control_profile.json",
@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "3b23df99aa350e30d3b78b58c4b236cc279242b80a89b33c97d2e881f4a12536"
+      "sha256": "2858639ed55f751f812527d4df55eecf9d41139bfd0d1f23305ba46da846fbc0"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -491,7 +491,7 @@
     },
     {
       "path": "training/configs/training_admission_policy.json",
-      "sha256": "31bc9675c6518b8bfb66c7dc78b88b7570263d812a13090203b3eda6fe88d2b1"
+      "sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e"
     },
     {
       "path": "training/data/README.md",
@@ -514,6 +514,10 @@
       "sha256": "5f4945adcf750765a55d2928aa3d1a1c9e9e741bf7ad5e3984b324207d9fab51"
     },
     {
+      "path": "training/scripts/_stage.py",
+      "sha256": "d400adc2b8ca6eb17bb5b468362f1ce5c831f8c2e50da772b8d848ed355a4de2"
+    },
+    {
       "path": "training/scripts/evaluate.py",
       "sha256": "50ac0cfa1dd9348d4ea7c1c345aaf770bab78d58dcd3b797ed6bfe0c09b75b27"
     },
@@ -523,11 +527,11 @@
     },
     {
       "path": "training/scripts/gm_entry.py",
-      "sha256": "a3c384d4e5fb475bc449ee1a82bb8258460e969351aea2c526ef14ef00246b13"
+      "sha256": "ee85ffff5fe6e90e4d16482c08e7bce852e391991197bdd6b6da09c0e90b7344"
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "c56fbe8da90a2fc271b89f95a9a45f56c8c37ea2b13a4137aeb2535771f03a9f"
+      "sha256": "fc0a1f11b68f3380a3ada15087004f98db0b850a4ce7ffe299b0823c094c478c"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",
@@ -539,7 +543,7 @@
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
-      "sha256": "814e4fc508325b4973b8e7f53e144f9ac573da9c68d87d8164d4924e0ba22335"
+      "sha256": "ca20d89cc1b9a4dd1b91101890f68896857e99a561191ec8a515f178c9d7c2f8"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",
@@ -671,7 +675,7 @@
     },
     {
       "path": "training/tools/check_scaffold.py",
-      "sha256": "525631043d7964b33f7a11993e5bcb8473702fd87aa30b7b951a0d0e55c6c694"
+      "sha256": "3b5d5cc97127e49cf0e6f107290e895dd7fa70a5615c508911c5dc406aafd173"
     },
     {
       "path": "training/tools/export_ssot_motion.py",

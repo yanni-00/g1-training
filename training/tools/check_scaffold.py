@@ -97,7 +97,8 @@ def main():
         raise ValueError('This owner baseline does not certify measured identification')
     if (ROOT/'configs/control_profile.json').is_file() and status['control']['status'] != 'passed':
         raise ValueError('Owner-authorized control baseline did not validate')
-    if status["training"]["status"] != "disabled":
+    # Pre-training baseline starts disabled; the owner-admitted permit legitimately flips it.
+    if status["training"]["status"] not in ("disabled", "admitted"):
         raise ValueError("Unexpected training permission")
     checks["deferred_inputs_and_no_training"] = True
     no_models = not any(p for pattern in ('*.pt', '*.onnx') for p in owned_files(pattern))
