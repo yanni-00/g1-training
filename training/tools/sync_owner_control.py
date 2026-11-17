@@ -138,7 +138,7 @@ def main():
         'position_max_component_error_m': position_error, 'rotation_max_component_error': rotation_error,
         'kinematic_definitions_unchanged': True, 'isaaclab_loaded': False,
         'dynamic_tracking_verified': False, 'owner_visual_acceptance': False,
-        'sources': [{'path': str(path.relative_to(TRAINING)), 'sha256': sha(path), 'description': description}
+        'sources': [{'path': path.relative_to(TRAINING).as_posix(), 'sha256': sha(path), 'description': description}
             for path, description in ((input_path, 'Unmodified delivered reference under the source SSOT'),
                 (delivery/'delivery_validation.json', 'Actual MuJoCo native FK/collision/support verification of source geometry'),
                 (target_urdf, 'Current approved training URDF; only joint dynamics changed'))]}

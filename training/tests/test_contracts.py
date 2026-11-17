@@ -1,7 +1,7 @@
 """Synthetic software fixtures only: no trained policy, FK acceptance or locomotion."""
 import copy
 import json
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import shutil
 import sys
 import tempfile
@@ -15,7 +15,7 @@ from torch import nn
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "source/f1_beyondmimic"))
 from f1_beyondmimic.contract import (FORMAT, ROOT, assert_can_run, binding, effective_control,
-    load_contract, load_json, prepared_motion, sha256, validate_motion, reorder_motion_arrays)
+    load_contract, load_json, prepared_motion, resolve, sha256, validate_motion, reorder_motion_arrays)
 from f1_beyondmimic.utils.actor_observations import contract, proprioceptive_observation, audit_native_observations
 from f1_beyondmimic.utils.runtime_policy import RuntimeActor, verify_runtime_checkpoint
 from f1_beyondmimic.utils.velocity_gait_reference import VelocityGaitReference
@@ -55,6 +55,13 @@ def fixture(c, frames=8):
 
 
 class InputContracts(unittest.TestCase):
+    def test_windows_audit_paths_resolve_under_linux_semantics(self):
+        # PurePosixPath reproduces Linux even when this test runs on Windows.
+        root = PurePosixPath('/workspace/training')
+        with patch('f1_beyondmimic.contract.Path', PurePosixPath):
+            actual = resolve(r'data\regenerated\20261109\final\walking_cycle_50hz.npz', root)
+        self.assertEqual(actual, root/'data/regenerated/20261109/final/walking_cycle_50hz.npz')
+
     def test_native_reference_name_binding_and_coverage(self):
         c = load_contract()
         a = fixture(c)

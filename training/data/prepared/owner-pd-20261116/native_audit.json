@@ -98,17 +98,17 @@
   "owner_visual_acceptance": false,
   "sources": [
     {
-      "path": "data\\regenerated\\20261109\\final\\walking_cycle_50hz.npz",
+      "path": "data/regenerated/20261109/final/walking_cycle_50hz.npz",
       "sha256": "c2c8fdc5fe2dadeba9149da74be269981a81061a6a9d98be8674faa157fea948",
       "description": "Unmodified delivered reference under the source SSOT"
     },
     {
-      "path": "data\\regenerated\\20261109\\final\\delivery_validation.json",
+      "path": "data/regenerated/20261109/final/delivery_validation.json",
       "sha256": "6b2c19eadc3f0fab30e65ff385784f6bdf08e0c5b2f8c0ef12baef5cd33cbfbc",
       "description": "Actual MuJoCo native FK/collision/support verification of source geometry"
     },
     {
-      "path": "resources\\f1\\urdf\\SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+      "path": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
       "sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
       "description": "Current approved training URDF; only joint dynamics changed"
     }

@@ -6,7 +6,7 @@
   "prepared_sha256": "8ae03c3da3df29854ba4b26e9524995333702295ecf0b10a1350f0c1ec1a7d5e",
   "urdf_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
   "native_audit_path": "data/prepared/owner-pd-20261116/native_audit.json",
-  "native_audit_sha256": "b2f848f19bbcd51680db7ac4502d900eb7fb950a4b205016013e4cbee0b8c54b",
+  "native_audit_sha256": "784ee42560f0c7a5901355fef34b63b9c0de3799477c22a442038ff7f4bdeefe",
   "source_files": [
     {
       "name": "B1_stand_to_walk_weichai_f1_29.npz",

@@ -22,7 +22,7 @@ def sha256(path):
 
 
 def resolve(path, root=ROOT):
-    path = Path(path)
+    path = Path(str(path).replace("\\", "/"))
     return path if path.is_absolute() else Path(root) / path
 
 

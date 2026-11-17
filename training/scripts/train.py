@@ -92,5 +92,13 @@ def main():
 if __name__ == "__main__":
     try:
         main()
-    except (ValueError, FileNotFoundError) as error:
-        raise SystemExit(str(error))
+    except BaseException as error:
+        if isinstance(error, SystemExit) and error.code in (None, 0):
+            raise
+        # The SDK log uploader is asynchronous. Keep the failed process alive
+        # briefly so the final traceback/marker is collected before it exits.
+        from _stage import fail
+        fail(error)
+        import time
+        time.sleep(15)
+        raise

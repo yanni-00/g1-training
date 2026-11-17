@@ -13,7 +13,7 @@
   "source_static_checks_passed": true,
   "validation": {
     "path": "../../work/training-start-20261116/validation.json",
-    "sha256": "04335c25614c368bc0b38c8d334ad75d339a3424ce5b5a2b1c4e860a2adecb5f"
+    "sha256": "e3212caba4523a99faab073da3455c7272d7baf01415ac51fbaa716e8c28c199"
   },
   "owner_direct_formal_policy_sha256": "618485891a5adc74f55411a299e7b070974a894553bd5d007d363a76bf26e21e",
   "owner_direct_formal_policy_scope": "Only the separate prior probe/minimal-closure workflow is deferred by the owner; source, limits, asset, motion, control and budget/account checks are not waived.",
@@ -28,7 +28,7 @@
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
-      "sha256": "93049e052b4fda3f3c6cf84f5f2d76d12367ddb9a6508367a8ae2c0bb443b214"
+      "sha256": "543c968753b0adc4d76f211411a475359f2f04813635d64742916048b0b47361"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",
@@ -140,7 +140,7 @@
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "2d545570157ef10b64a0464307669d5978829b086d866e699f5e42af8c972252"
+      "sha256": "bd525c687001a0eba39150f3e956622059273edde8983d9a78257c156ca00fb9"
     },
     {
       "path": "training/scripts/gm_entry.py",
@@ -177,6 +177,14 @@
     {
       "path": "training/scripts/_stage.py",
       "sha256": "474445268e2e984967c353dd8e87a6e0d2ee161a57a35ef41cecb55907acb51b"
+    },
+    {
+      "path": "training/data/prepared/owner-pd-20261116/native_audit.json",
+      "sha256": "784ee42560f0c7a5901355fef34b63b9c0de3799477c22a442038ff7f4bdeefe"
+    },
+    {
+      "path": "training/data/motion_manifest.json",
+      "sha256": "134b7e2ddd4e6f2ffc8c821ed5bb3e07cc660e4e9589dc410bb89e0dce06f26b"
     },
     {
       "path": ".oma/designs/design-owner-control-training-20261116.md",

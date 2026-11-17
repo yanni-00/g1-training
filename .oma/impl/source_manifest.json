@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "073547e48379d77a8bdf9e43764659fee9074014f564e16f6b1500ac11d3274a"
+      "sha256": "aaae334e155e1789a914ddf1443e386d3e0faec3e48037491cc4e734fa8f4fc8"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -499,7 +499,7 @@
     },
     {
       "path": "training/data/motion_manifest.json",
-      "sha256": "cfedb4435c35ed3bfbcf50edcd90781a60107d2efa0871976010fc8fd49ec18c"
+      "sha256": "134b7e2ddd4e6f2ffc8c821ed5bb3e07cc660e4e9589dc410bb89e0dce06f26b"
     },
     {
       "path": "training/data/repair_candidates/20261108/README.md",
@@ -535,7 +535,7 @@
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "2d545570157ef10b64a0464307669d5978829b086d866e699f5e42af8c972252"
+      "sha256": "bd525c687001a0eba39150f3e956622059273edde8983d9a78257c156ca00fb9"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",
@@ -547,7 +547,7 @@
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/contract.py",
-      "sha256": "93049e052b4fda3f3c6cf84f5f2d76d12367ddb9a6508367a8ae2c0bb443b214"
+      "sha256": "543c968753b0adc4d76f211411a475359f2f04813635d64742916048b0b47361"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/robots/__init__.py",
@@ -659,7 +659,7 @@
     },
     {
       "path": "training/tests/test_contracts.py",
-      "sha256": "8b075f0112674d9a808c7e8a59f14f157f87ef31eb6be667cdc981c29393c3ba"
+      "sha256": "b475cf44afaf85960ecbd461d07ca7489671815dcd81598debfab66f59683c2a"
     },
     {
       "path": "training/tests/test_motion_repair.py",
@@ -731,7 +731,7 @@
     },
     {
       "path": "training/tools/sync_owner_control.py",
-      "sha256": "811eea9b920b941f22b7a26c91e45d673facd605d13b67f4e4749f843294e1e4"
+      "sha256": "ad5da9161c7e337ead63e836dc788614362afe5091e643e2232ae2f0ded6b024"
     }
   ]
 }
