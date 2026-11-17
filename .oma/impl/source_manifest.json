@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "2858639ed55f751f812527d4df55eecf9d41139bfd0d1f23305ba46da846fbc0"
+      "sha256": "9717d976e3957a38014f330ab197e7b4c06430ae96d4b6e6fe252541c143e20d"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -530,8 +530,12 @@
       "sha256": "ee85ffff5fe6e90e4d16482c08e7bce852e391991197bdd6b6da09c0e90b7344"
     },
     {
+      "path": "training/scripts/preflight_worker.py",
+      "sha256": "4b71069831d3e33f6884ca654466556e8087488b68111153785feece642ec6da"
+    },
+    {
       "path": "training/scripts/train.py",
-      "sha256": "fc0a1f11b68f3380a3ada15087004f98db0b850a4ce7ffe299b0823c094c478c"
+      "sha256": "3926ac174ad3c730377ac84d0428f2c9e08ed12108380b40005376dda5425f3b"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",

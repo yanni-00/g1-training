@@ -2,13 +2,12 @@
 import argparse
 import json
 import os
+import subprocess
 from pathlib import Path
 import sys
 from _bootstrap import ROOT
 from _stage import mark
 mark("03b-train-module")
-from f1_beyondmimic.contract import assert_can_run, readiness, load_contract
-mark("03c-contract-imported")
 
 
 def main():
@@ -17,13 +16,23 @@ def main():
     parser.add_argument("--checkpoint", type=Path, help="Explicit F1 continuation checkpoint; never latest")
     if "--check" in sys.argv:
         parser.parse_args()
+        from f1_beyondmimic.contract import readiness
         print(json.dumps(readiness(), ensure_ascii=False, indent=2))
         return
     if "--help" in sys.argv or "-h" in sys.argv:
         parser.print_help()
         print("After authorization, AppLauncher additionally accepts --headless and --device.")
         return
-    launch = assert_can_run("training")  # Must precede Isaac imports and simulator launch.
+    # Keep NumPy/torch out of the simulator's interpreter until AppLauncher has
+    # initialized its dependency paths, as in the working sibling F1 entry.
+    # All existing authorization, asset, control and motion checks still run
+    # before simulator launch, in a fresh CPU-only interpreter. A failed worker
+    # blocks launch and its exit status remains visible in the parent log.
+    checked = subprocess.run([sys.executable, str(ROOT / "scripts/preflight_worker.py")],
+                             env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"})
+    print("[F1-BM] isolated preflight exit:", checked.returncode, flush=True)
+    checked.check_returncode()
+    launch = json.loads((ROOT / "configs/launch.json").read_text(encoding="utf-8"))
     mark("04-contract")
     for key in ("num_envs", "max_iterations", "seed"):
         value = launch.get(key)
