@@ -6,10 +6,31 @@ when the interpreter dies without a traceback (for example a native abort).
 """
 import sys
 import traceback
+import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 DIR = ROOT/'logs'/'boot'
+
+
+def memory_snapshot():
+    """Raw Linux counters; unavailable counters are omitted."""
+    result = {}
+    for relative in ("memory.current", "memory.max", "memory.events",
+                     "memory/memory.usage_in_bytes", "memory/memory.limit_in_bytes",
+                     "memory/memory.failcnt"):
+        try:
+            result[relative] = (Path('/sys/fs/cgroup')/relative).read_text().strip()
+        except OSError:
+            pass
+    try:
+        for line in Path('/proc/self/status').read_text().splitlines():
+            if line.startswith(('VmRSS:', 'VmPeak:')):
+                key, value = line.split(':', 1)
+                result[key] = value.strip()
+    except OSError:
+        pass
+    return result
 
 
 def mark(name):
@@ -18,7 +39,7 @@ def mark(name):
         (DIR/name).write_text('')
     except Exception:
         pass
-    print('[F1-BM] stage '+name, flush=True)
+    print('[F1-BM] stage '+name+' '+json.dumps(memory_snapshot()), flush=True)
 
 
 def fail(error):

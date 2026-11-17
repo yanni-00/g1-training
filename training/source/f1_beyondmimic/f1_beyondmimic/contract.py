@@ -4,8 +4,6 @@ import json
 import math
 from pathlib import Path
 
-import numpy as np
-
 ROOT = Path(__file__).resolve().parents[3]
 LOOP = ROOT.parent
 FORMAT = "f1_beyondmimic_runtime_v1"
@@ -95,6 +93,7 @@ def effective_control(root=ROOT):
 
 def validate_motion(path, root=ROOT):
     """Validate prepared data only; never repair or reinterpret raw UMR qpos."""
+    import numpy as np
     c = load_contract(root)
     required = {"fps", "joint_pos", "joint_vel", "body_pos_w", "body_quat_w", "body_lin_vel_w",
                 "body_ang_vel_w", "joint_names", "body_names", "reference_space", "cycle_frames",
@@ -173,6 +172,7 @@ def prepared_motion(root=ROOT):
 
 def reorder_motion_arrays(arrays, joint_names, body_names):
     """Bind reference tensors to actual native names, never dimension equality."""
+    import numpy as np
     requested_joints, requested_bodies = list(joint_names), list(body_names)
     stored_joints = arrays['joint_names'].tolist()
     stored_bodies = arrays['body_names'].tolist()
@@ -221,7 +221,12 @@ def verify_assets(root=ROOT):
 
 def _stage(name):
     # Stage prints go to stdout because the execution host may capture only stdout.
-    print("[F1-BM] check "+name, flush=True)
+    try:
+        from _stage import memory_snapshot
+        counters = memory_snapshot()
+    except ImportError:
+        counters = {}
+    print("[F1-BM] check "+name+" "+json.dumps(counters), flush=True)
 
 
 def assert_can_run(scope="training", root=ROOT):
