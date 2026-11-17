@@ -8,7 +8,7 @@
   "seed": 42,
   "preflight_evidence": {
     "path": "../.oma/experiments/exp-20261116-001/input/submission_preflight.json",
-    "sha256": "480ab6b0904d1b18a45c2d8860063614b18313344eab4ae071e48250a0933670"
+    "sha256": "bc9edaadaa7792f8421c35d4b487b99bbbbce5a9ca3f1fd296089cf9c38d96fb"
   },
   "admission_mode": "owner_direct_formal"
 }

@@ -431,7 +431,7 @@
     },
     {
       "path": "training/configs/launch.json",
-      "sha256": "edb29f6ba6bbb5a2340cc9ad008881cf7c2d12d9e2ce68b2498504f396c0fd67"
+      "sha256": "073547e48379d77a8bdf9e43764659fee9074014f564e16f6b1500ac11d3274a"
     },
     {
       "path": "training/configs/motion_repair.json",
@@ -515,7 +515,7 @@
     },
     {
       "path": "training/scripts/_stage.py",
-      "sha256": "7caac0b6b554dcb8e1ea7dd7d0a388d086b2352256e12e70f2f6a204642fe4a0"
+      "sha256": "474445268e2e984967c353dd8e87a6e0d2ee161a57a35ef41cecb55907acb51b"
     },
     {
       "path": "training/scripts/evaluate.py",
@@ -527,15 +527,15 @@
     },
     {
       "path": "training/scripts/gm_entry.py",
-      "sha256": "ee85ffff5fe6e90e4d16482c08e7bce852e391991197bdd6b6da09c0e90b7344"
+      "sha256": "bc8825aae9ff88e3738f12b6f653f318278dd9f91314954b01afd3b74215a357"
     },
     {
       "path": "training/scripts/preflight_worker.py",
-      "sha256": "4b71069831d3e33f6884ca654466556e8087488b68111153785feece642ec6da"
+      "sha256": "dc4124454deaf164cd459082338ed25d6649a826bcdb27a52e9e5c3e33d2e05e"
     },
     {
       "path": "training/scripts/train.py",
-      "sha256": "3926ac174ad3c730377ac84d0428f2c9e08ed12108380b40005376dda5425f3b"
+      "sha256": "2d545570157ef10b64a0464307669d5978829b086d866e699f5e42af8c972252"
     },
     {
       "path": "training/source/f1_beyondmimic/f1_beyondmimic/__init__.py",

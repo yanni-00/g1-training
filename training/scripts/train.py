@@ -5,6 +5,8 @@ import os
 import subprocess
 from pathlib import Path
 import sys
+import faulthandler
+faulthandler.enable(file=sys.stdout, all_threads=True)
 from _bootstrap import ROOT
 from _stage import mark
 mark("03b-train-module")

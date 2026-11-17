@@ -1,7 +1,6 @@
 """GM entry: consume the registered formal request, restore pinned assets, train."""
 import json
 import os
-import runpy
 import sys
 from pathlib import Path
 
@@ -36,8 +35,10 @@ if __name__ == '__main__':
         print('[F1-BM] formal request', json.dumps({key: request[key] for key in
             ('exp_id', 'num_envs', 'max_iterations', 'seed', 'spend_cap_milli_credit')}), flush=True)
         mark('03-train')
-        runpy.run_path(str(ROOT/'scripts/train.py'), run_name='__main__')
-        mark('99-done')
+        # Match the proven G1 bootstrap: replace this interpreter while keeping
+        # the PID and stdout monitored by gm-run. Do not nest the native runner
+        # inside the SDK-loaded interpreter with runpy.
+        os.execv(sys.executable, [sys.executable, *sys.argv])
     except BaseException as error:
         fail(error)
         raise

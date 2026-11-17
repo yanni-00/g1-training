@@ -16,6 +16,16 @@ DIR = ROOT/'logs'/'boot'
 def memory_snapshot():
     """Raw Linux counters; unavailable counters are omitted."""
     result = {}
+    try:
+        import resource
+        import signal
+        usage = resource.getrusage(resource.RUSAGE_SELF)
+        result['cpu_seconds'] = [usage.ru_utime, usage.ru_stime]
+        result['RLIMIT_CPU'] = resource.getrlimit(resource.RLIMIT_CPU)
+        result['RLIMIT_AS'] = resource.getrlimit(resource.RLIMIT_AS)
+        result['alarm_seconds'] = signal.getitimer(signal.ITIMER_REAL)
+    except (ImportError, AttributeError, OSError):
+        pass
     for relative in ("memory.current", "memory.max", "memory.events",
                      "memory/memory.usage_in_bytes", "memory/memory.limit_in_bytes",
                      "memory/memory.failcnt"):

@@ -1,5 +1,7 @@
 """Check the full runtime contract without loading NumPy into the Isaac parent."""
 import sys
+import faulthandler
+faulthandler.enable(file=sys.stdout, all_threads=True)
 import traceback
 from _bootstrap import ROOT
 
