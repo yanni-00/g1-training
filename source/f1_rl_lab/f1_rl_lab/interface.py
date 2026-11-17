@@ -38,9 +38,15 @@ class ActorHistory:
         return np.concatenate(pieces)
 
 
-def joint_targets(actions, contract):
+def joint_targets(actions, contract, action_clip=None):
     actions = np.asarray(actions, dtype=np.float32)
     if actions.shape != (contract["action_dim"],) or not np.isfinite(actions).all():
         raise ValueError("Invalid F1 action vector")
-    # The original G1 action has no extra software clip. Hardware protections are a separate contract.
-    return np.asarray(contract["default_joint_pos"]) + actions * contract["action_scale"]
+    targets = np.asarray(contract["default_joint_pos"]) + actions * contract["action_scale"]
+    # Legacy checkpoints preserve their original unbounded target mapping. New
+    # clipped checkpoints carry the exact postprocessing rule in runtime_v2.
+    if action_clip is not None:
+        from .action_limits import validate_position_clip
+        validate_position_clip(action_clip, contract)
+        targets = np.clip(targets, action_clip["lower"], action_clip["upper"])
+    return targets

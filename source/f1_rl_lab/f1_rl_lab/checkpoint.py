@@ -46,4 +46,6 @@ def verify_checkpoint(checkpoint, root=ROOT):
     if (rt["policy_joint_names"] != c["model_joint_names"] or rt["observation_dim"] != c["observation_dim"]
             or rt.get("binding") != data["binding"]):
         raise ValueError("Checkpoint observation/action contract mismatch")
+    from .action_limits import verify_runtime_action_contract
+    verify_runtime_action_contract(rt, c, root)
     return data

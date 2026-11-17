@@ -174,6 +174,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             raise ValueError("Explicit F1 checkpoint path required; latest/run regex is disabled")
         resume_path = os.path.abspath(args_cli.checkpoint)
         parent_identity = verify_checkpoint(resume_path)
+        if delta.get("action_postprocessing_override"):
+            previous = parent_identity["runtime"]
+            if (previous.get("action_clip") != delta["action_postprocessing_override"]["parent_action_clip"]
+                    or previous["training_objective"]["reward_weights"] != delta["parent_reward_weights"]
+                    or previous["training_objective"]["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
+                raise ValueError("Action adaptation parent metadata differs from registered source")
         if delta.get("reward_addition"):
             previous = parent_identity["runtime"]["training_objective"]
             if (previous["reward_weights"] != delta["parent_reward_weights"]
@@ -254,12 +260,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     # run training
     runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
 
-    # First-admission evidence uses the saved NEW checkpoint and actual feedback.
+    # Saved-checkpoint evidence uses the NEW actor and actual feedback after training.
     from f1_rl_lab.contract import ROOT as f1_root
     request_file = f1_root / "configs/run_request.json"
     if request_file.is_file():
         request = load_json(request_file)
-        if request.get("phase") == "probe":
+        if request.get("phase") == "probe" or request.get("verify_saved_checkpoint_feedback") is True:
             from f1_rl_lab.checkpoint import verify_checkpoint
             from f1_rl_lab.policy import load_actor, select_actor_observation
             from f1_rl_lab.contract import sha256
@@ -273,6 +279,31 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 env.reset()
                 observations = env.get_observations()
             samples = []
+            clip_feedback = None
+            if identity["runtime"].get("action_clip") is not None:
+                term = env.unwrapped.action_manager._terms["JointPositionAction"]
+                spec = identity["runtime"]["action_clip"]
+                lower = torch.tensor(spec["lower"], device=env.unwrapped.device)
+                upper = torch.tensor(spec["upper"], device=env.unwrapped.device)
+                defaults = torch.tensor(identity["runtime"]["default_joint_pos"], device=env.unwrapped.device)
+                native_apply = term.apply_actions
+                clip_feedback = {"calls": 0, "max_error": 0.0, "raw_target_outside_count": 0, "last": None}
+                def audited_apply():
+                    raw = term.raw_actions
+                    unbounded = raw * identity["runtime"]["action_scale"] + defaults
+                    expected = torch.clamp(unbounded, min=lower, max=upper)
+                    actual = term.processed_actions
+                    error = float(torch.max(torch.abs(actual - expected)).detach().cpu())
+                    if not torch.allclose(actual, expected, rtol=1e-6, atol=1e-6):
+                        raise ValueError("Native applied target differs from declared post-scale URDF clip")
+                    clip_feedback["calls"] += 1
+                    clip_feedback["max_error"] = max(clip_feedback["max_error"], error)
+                    clip_feedback["raw_target_outside_count"] += int(((unbounded < lower) | (unbounded > upper)).sum().detach().cpu())
+                    clip_feedback["last"] = {"native_raw_action": raw[0].detach().cpu().tolist(),
+                                             "applied_position_target": actual[0].detach().cpu().tolist(),
+                                             "all_env_max_target_error": error}
+                    native_apply()
+                term.apply_actions = audited_apply
             for feedback_step in range(request["readiness_steps"]):
                 with torch.inference_mode():
                     actor_observation = select_actor_observation(observations, identity["runtime"]["observation_dim"])
@@ -287,7 +318,17 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                         "velocity": asset.data.root_lin_vel_b[0].detach().cpu().tolist(),
                         "root_position": asset.data.root_pos_w[0].detach().cpu().tolist(),
                         "q": asset.data.joint_pos[0].detach().cpu().tolist(),
+                        "qvel": asset.data.joint_vel[0].detach().cpu().tolist(),
+                        "root_quat_w": asset.data.root_quat_w[0].detach().cpu().tolist(),
+                        "root_ang_vel_b": asset.data.root_ang_vel_b[0].detach().cpu().tolist(),
                         "action": actions[0].detach().cpu().tolist()}
+                    if clip_feedback is not None:
+                        if clip_feedback["last"] is None:
+                            raise ValueError("Native clipping audit did not observe apply_actions")
+                        raw = torch.tensor(clip_feedback["last"]["native_raw_action"], device=actions.device)
+                        if not torch.allclose(raw, actions[0], rtol=1e-6, atol=1e-6):
+                            raise ValueError("Raw last-action semantics changed before native action term")
+                        sample.update(clip_feedback["last"])
                     if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
                         term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
                         ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
@@ -303,6 +344,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                         "steps": len(samples), "samples": samples, "seed": env_cfg.seed,
                         "rsl_rl_version": installed_version, "runtime": identity["runtime"],
                         "scope": "admission interface/finite-state evidence; not walking or owner acceptance"}
+            if clip_feedback is not None:
+                evidence["processed_target_clip_audit"] = {
+                    key: value for key, value in clip_feedback.items() if key != "last"}
             evidence_path = Path(log_dir) / "params/readiness_feedback.json"
             evidence_path.write_text(json.dumps(evidence, allow_nan=False), encoding="utf-8")
             payload = torch.load(final, map_location="cpu", weights_only=True)

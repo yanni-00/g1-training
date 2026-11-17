@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261116-005",
-  "phase": "probe",
+  "exp_id": "exp-20261117-003",
+  "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 100,
+  "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_contacttilt_bindingfix_resume11999_admission100_20261116",
+  "run_name": "f1_clipaware_resume11999_formal1000_20261117",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Registered bounded100-update admission, not convergence/cost prediction; formal candidate separately registered after exact new-weight readiness and server diagnostics",
+    "max_iterations": "Owner2026-11-17 explicitly cancelled100-update separate probe and requested direct formal. Bounded1000 updates is an engineering allocation, not predicted convergence/cost.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
@@ -25,5 +25,6 @@
     "optimizerStep": 240040,
     "optimizer_learning_rate": 0.0002562890625000001
   },
-  "training_delta": "configs/training_delta.json"
+  "training_delta": "configs/training_delta.json",
+  "verify_saved_checkpoint_feedback": true
 }

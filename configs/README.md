@@ -30,3 +30,17 @@
 当前 control_profile.json 从 owner_training_profile.json 生成。下肢按 hip_pitch/hip_roll/hip_yaw/knee_pitch/ankle_pitch/ankle_roll，双侧同值；上身按附图。原始来源保存在 OMA 用户输入快照。
 训练 URDF 可动关节 friction=0、damping=0.05，SSOT 不变。额外 armature=0（本轮不施加该项，不是辨识结果），无额外摩擦补偿/LPF/辨识。PD kd 与被动0.05分开记录，implicit 总阻尼为二者之和。
 GitHub 分支用无损 tar.gz 传递资产，入口恢复后逐文件校验；不简化网格或更换机器人。GM 返回单独 PT 时，文件内的 f1_contract 用于校验，不依赖额外 sidecar 成功上传。
+
+
+## 2026-11-17 processed position target limits
+
+This continuation clips processed joint position targets to exact named URDF
+limits in both Isaac and MuJoCo, preserving raw action history, scale, defaults,
+PD and timing. Original physical source/checkpoint binding remains strict.
+Legacy runtime_v1 checkpoints retain action_clip=null. New runtime_v2 records
+the complete limit contract and action-interface source hashes.
+
+Owner explicitly requested direct formal1000 without a separate probe. Native
+new-contract readiness is therefore unverified before launch; CPU checks do not
+replace it. Actual saved-new-checkpoint feedback runs after formal optimization
+and audits applied targets over all environments before behavior evaluation.

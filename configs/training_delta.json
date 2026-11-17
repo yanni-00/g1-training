@@ -1,10 +1,10 @@
 {
-  "format": "f1_contact_lateral_tilt_continuation_v3",
+  "format": "f1_processed_position_clip_continuation_v4",
   "reward_override": {
     "gait": {
       "from": 0.5,
       "to": 1.0,
-      "source": "Retain actual parent gait1.0 using original source default0.5 override; this is not a change relative to parent10999."
+      "source": "Retain actual11999 gait1.0 using original bound source default0.5 override; no reward change relative to actual parent."
     }
   },
   "resume_command_ranges": {
@@ -21,9 +21,9 @@
       0.1
     ]
   },
-  "command_provenance": "Actual parent model10999 f1_training.command_ranges; same bounds retained. Evaluation yaw0.2 is outside training bounds and remains separately labeled.",
-  "hypothesis": "Symmetric contact-foot lateral tilt cost reduces asymmetric support and forward yaw; preserve actual11999 objective otherwise",
-  "side_effects": "May constrain lateral balance/toe-off or encourage contact avoidance; protect vx/attitude/continuity and no original fall",
+  "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
+  "hypothesis": "Exact G1-style URDF processed-position limits in both native training and replay reduce invalid target escalation and permit learning quiet stopping without sacrificing original11999 walking/heading",
+  "side_effects": "Saturation changes feedback dynamics and previously worsened heading in unadapted child; retain original parent reward/PD and require new fixed5ms velocity/heading/stop quality checks",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -50,16 +50,112 @@
       "std": {
         "from": 0.5,
         "to": 0.1,
-        "source": "Parent frozen formal source RewardsCfg.track_ang_vel_z std=sqrt0.25; candidate width=absolute upper bound of actual parent f1_training.command_ranges.ang_vel_z; engineering test, not measured optimum"
+        "source": "Retain actual11999 parent runtime yaw std0.1 while original bound source default is0.5; not an objective change relative to parent."
       }
     }
   },
   "parent_yaw_tracking_std": 0.1,
-  "reward_addition": {
-    "contact_lateral_tilt": {
-      "from": 0.0,
-      "to": -5.0,
-      "source": "Engineering first candidate uses same -5.0 weight as existing base flat_orientation_l2; not measured optimum. Loss is mean contacting-foot lateral-axis vertical projection squared."
+  "action_postprocessing_override": {
+    "parent_action_clip": null,
+    "to": {
+      "kind": "urdf_joint_position_limits_v1",
+      "joint_names": [
+        "left_hip_pitch_joint",
+        "left_hip_roll_joint",
+        "left_hip_yaw_joint",
+        "left_knee_pitch_joint",
+        "left_ankle_pitch_joint",
+        "left_ankle_roll_joint",
+        "right_hip_pitch_joint",
+        "right_hip_roll_joint",
+        "right_hip_yaw_joint",
+        "right_knee_pitch_joint",
+        "right_ankle_pitch_joint",
+        "right_ankle_roll_joint",
+        "lumbar_yaw_joint",
+        "lumbar_roll_joint",
+        "lumbar_pitch_joint",
+        "left_shoulder_pitch_joint",
+        "left_shoulder_roll_joint",
+        "left_shoulder_yaw_joint",
+        "left_elbow_pitch_joint",
+        "left_elbow_yaw_joint",
+        "left_wrist_pitch_joint",
+        "left_wrist_roll_joint",
+        "right_shoulder_pitch_joint",
+        "right_shoulder_roll_joint",
+        "right_shoulder_yaw_joint",
+        "right_elbow_pitch_joint",
+        "right_elbow_yaw_joint",
+        "right_wrist_pitch_joint",
+        "right_wrist_roll_joint"
+      ],
+      "lower": [
+        -1.5708,
+        -0.349066,
+        -1.5708,
+        0.0,
+        -0.523599,
+        -0.523599,
+        -1.5708,
+        -1.5708,
+        -1.5708,
+        0.0,
+        -0.523599,
+        -0.523599,
+        -1.0,
+        -0.25,
+        -0.15,
+        -2.5,
+        -2.0,
+        -1.8,
+        0.0,
+        -1.8,
+        -0.4,
+        -0.4,
+        -2.5,
+        -2.0,
+        -1.8,
+        0.0,
+        -1.8,
+        -0.4,
+        -0.4
+      ],
+      "upper": [
+        1.5708,
+        1.5708,
+        1.5708,
+        1.5708,
+        0.523599,
+        0.523599,
+        1.5708,
+        0.349066,
+        1.5708,
+        1.5708,
+        0.523599,
+        0.523599,
+        1.0,
+        0.25,
+        0.45,
+        1.5,
+        0.0,
+        1.8,
+        2.0,
+        1.8,
+        0.4,
+        0.4,
+        1.5,
+        0.0,
+        1.8,
+        2.0,
+        1.8,
+        0.4,
+        0.4
+      ],
+      "urdf_sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2",
+      "units": "rad",
+      "stage": "after_scale_and_default_offset",
+      "last_action": "raw_network_output"
     }
   }
 }

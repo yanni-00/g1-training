@@ -69,9 +69,26 @@ def apply_delta(env_cfg, delta):
         env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
+    action_change = None
+    if delta.get("action_postprocessing_override"):
+        from f1_rl_lab.contract import load_contract
+        from f1_rl_lab.action_limits import position_clip_contract
+        change = delta["action_postprocessing_override"]
+        target = position_clip_contract(load_contract())
+        if (set(change) != {"parent_action_clip", "to"} or change["parent_action_clip"] is not None
+                or change["to"] != target or env_cfg.actions.JointPositionAction.clip is not None):
+            raise ValueError("Only registered legacy-to-URDF processed-position clipping is allowed")
+        if after != delta["parent_reward_weights"]:
+            raise ValueError("Action adaptation must retain the exact parent reward inventory")
+        env_cfg.actions.JointPositionAction.clip = {
+            name: (lower, upper) for name, lower, upper in
+            zip(target["joint_names"], target["lower"], target["upper"])}
+        action_change = {"from": None, "to": target,
+                         "scope": "Native processed position target clip only; raw actions/history, scale, PD and physics unchanged"}
     return {"reward_weights_before":before,"reward_weights_after":after,
             "reward_parameter_changes":parameter_changes,
             "reward_additions":addition_audit,
+            "action_postprocessing_change": action_change,
             "command_ranges":delta["resume_command_ranges"],
             "episode_state_restored":False,"rng_state_restored":False,
             "scope":"Same actor/optimizer, observed command curriculum; simulator episodes/terrain assignments reset"}

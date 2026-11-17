@@ -2,7 +2,8 @@
 
 Source URDF geometry/inertia, named joint order, owner PD, and recorded training
 timing are preserved. MuJoCo engine/contact/drive differences remain sim2sim
-limitations. No G1 joint gains, armature, target clipping, or initial height leak in.
+limitations. Legacy targets remain unchanged; runtime_v2 explicitly declares any
+URDF target clipping. Joint gains, armature and initial height stay F1-specific.
 """
 import argparse
 import csv
@@ -209,7 +210,7 @@ def main():
                         help="Explicit diagnostic command protocol; default remains the frozen G1 schedule")
     parser.add_argument("--prepared-scene", type=Path,
                         help="Reuse the exact compiled scene from this setting's first trial")
-    parser.add_argument("--physics-refinement", type=int, choices=[1, 2, 4], default=1,
+    parser.add_argument("--physics-refinement", type=int, choices=[1, 2, 4, 5], default=1,
                         help="Controlled numerical diagnostic; divide physics dt, preserve control dt/PD")
     args = parser.parse_args()
     args.output.mkdir(parents=True, exist_ok=True)
@@ -257,6 +258,8 @@ def main():
              "model_nu": model.nu, "sim_dt": model.opt.timestep, "control_dt": contract["step_dt"],
              "reference_training_sim_dt": contract["sim_dt"], "physics_refinement": args.physics_refinement,
              "physics_substeps_per_action": physics_steps,
+             "action_clip": runtime.get("action_clip"),
+             "last_action_semantics": "raw_network_output_before_position_target_clipping",
              "kp": model.actuator_gainprm[aids, 0].tolist(),
              "pd_kd": (-model.actuator_biasprm[aids, 2]).tolist(),
              "passive_damping": model.dof_damping[vadr].tolist(),
@@ -311,7 +314,7 @@ def main():
                 "joint_vel_rel": data.qvel[vadr], "last_action": previous})
             with torch.inference_mode():
                 action = actor(torch.from_numpy(observation[None])).numpy()[0]
-            target = joint_targets(action, contract)
+            target = joint_targets(action, contract, action_clip=runtime.get("action_clip"))
             data.ctrl[aids] = target
             for _ in range(physics_steps):
                 mujoco.mj_step(model, data)
