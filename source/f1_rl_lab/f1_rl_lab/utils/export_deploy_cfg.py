@@ -127,6 +127,21 @@ def export_deploy_cfg(env, log_dir):
                 "formula": "mean over contacting feet of (2*(w*x+y*z))^2; zero if no contact",
                 "scope": "Reward only; no actor inputs or action processing changed",
             }
+    if "yaw_rate_error_l2" in env.reward_manager.active_terms:
+        from f1_rl_lab.action_limits import action_source_binding
+        from f1_rl_lab.contract import sha256
+        if action_clip is not None or projection is not None:
+            raise ValueError("Yaw-cost experiment requires the original11999 raw action mapping")
+        term = env.reward_manager.get_term_cfg("yaw_rate_error_l2")
+        if term.func.__name__ != "yaw_rate_error_l2" or term.params != {"command_name": "base_velocity", "asset_name": "robot"}:
+            raise ValueError("Unexpected resolved yaw-cost function/parameters")
+        runtime["format"] = "f1_fullbody_runtime_v4"
+        runtime["action_interface_sources"] = action_source_binding(ROOT, projection=True)
+        runtime["training_objective"]["custom_reward_sources"] = {
+            "source/f1_rl_lab/f1_rl_lab/yaw_tracking.py": sha256(ROOT / "source/f1_rl_lab/f1_rl_lab/yaw_tracking.py")}
+        runtime["training_objective"]["yaw_rate_error_l2"] = {"weight": float(term.weight),
+            "formula": "(command_base_velocity_z-root_ang_vel_b_z)^2", "frame": "root_body_z",
+            "command_name": "base_velocity", "asset_name": "robot"}
     target = Path(log_dir) / "params/f1_runtime.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(runtime, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

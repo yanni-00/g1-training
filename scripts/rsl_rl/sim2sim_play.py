@@ -260,7 +260,8 @@ def main():
              "physics_substeps_per_action": physics_steps,
              "action_clip": runtime.get("action_clip"),
              "action_input_projection": runtime.get("action_input_projection"),
-             "last_action_semantics": "raw_network_output_before_position_target_clipping",
+             "last_action_semantics": ("projected_environment_action" if runtime.get("action_input_projection") is not None
+                                       else "raw_network_output_before_position_target_clipping"),
              "kp": model.actuator_gainprm[aids, 0].tolist(),
              "pd_kd": (-model.actuator_biasprm[aids, 2]).tolist(),
              "passive_damping": model.dof_damping[vadr].tolist(),

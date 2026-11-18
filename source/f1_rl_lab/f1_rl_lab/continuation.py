@@ -16,6 +16,13 @@ def contact_tilt_term(weight):
     )
 
 
+def yaw_tracking_term(weight):
+    from isaaclab.managers import RewardTermCfg
+    from f1_rl_lab.yaw_tracking import yaw_rate_error_l2
+    return RewardTermCfg(func=yaw_rate_error_l2, weight=weight,
+                         params={"command_name": "base_velocity", "asset_name": "robot"})
+
+
 def apply_delta(env_cfg, delta):
     if set(delta["reward_override"]) != {"gait"}:
         raise ValueError("This experiment permits only the gait reward weight delta")
@@ -53,7 +60,19 @@ def apply_delta(env_cfg, delta):
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
     additions = delta.get("reward_addition", {})
     addition_audit = {}
-    if additions:
+    if set(additions) == {"yaw_rate_error_l2"}:
+        spec = additions["yaw_rate_error_l2"]
+        if (hasattr(env_cfg.rewards, "yaw_rate_error_l2")
+                or spec["from"] != 0.0 or "yaw_rate_error_l2" in after
+                or after != delta["parent_reward_weights"]):
+            raise ValueError("Yaw L2 addition requires exact unchanged parent reward inventory")
+        target = float(spec["to"])
+        if not math.isfinite(target) or target >= 0:
+            raise ValueError("Yaw error cost requires a finite negative weight")
+        env_cfg.rewards.yaw_rate_error_l2 = yaw_tracking_term(target)
+        after["yaw_rate_error_l2"] = target
+        addition_audit = {"yaw_rate_error_l2": {"from": 0.0, "to": target}}
+    elif additions:
         if set(additions) != {"contact_lateral_tilt"}:
             raise ValueError("Only the registered symmetric contact tilt term can be added")
         spec = additions["contact_lateral_tilt"]

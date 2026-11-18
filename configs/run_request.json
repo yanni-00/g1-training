@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261118-001",
+  "exp_id": "exp-20261118-003",
   "phase": "probe",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 100,
   "seed": 42,
-  "run_name": "f1_projected_feedback_resume11999_probe100_20261118",
+  "run_name": "f1_continuous_yaw_resume11999_probe100_20261118",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Engineering bounded100-update native readiness for changed environment-action/history contract after TASK134 failure. Not a convergence/cost prediction; previous direct-formal exception scoped to preceding candidate.",
+    "max_iterations": "Engineering bounded100-update single-added-yaw-cost validation from original11999 after rejecting clipping route; not convergence/cost prediction.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {

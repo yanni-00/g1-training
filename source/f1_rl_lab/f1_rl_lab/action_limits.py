@@ -36,6 +36,16 @@ def action_source_binding(root, projection=False):
 
 
 def verify_runtime_action_contract(runtime, contract, root):
+    if runtime.get("format") == "f1_fullbody_runtime_v4":
+        from .contract import sha256
+        expected_rewards = {"source/f1_rl_lab/f1_rl_lab/yaw_tracking.py":
+                            sha256(Path(root) / "source/f1_rl_lab/f1_rl_lab/yaw_tracking.py")}
+        if (runtime.get("action_clip") is not None or runtime.get("action_input_projection") is not None
+                or runtime.get("action_interface_sources") != action_source_binding(root, projection=True)
+                or runtime.get("training_objective", {}).get("custom_reward_sources") != expected_rewards):
+            raise ValueError("Yaw-cost runtime_v4 action/reward source binding changed")
+    elif runtime.get("training_objective", {}).get("custom_reward_sources"):
+        raise ValueError("Custom reward sources require explicit runtime_v4")
     spec = runtime.get("action_clip")
     projection = runtime.get("action_input_projection")
     validate_position_clip(spec, contract, projected=projection is not None)

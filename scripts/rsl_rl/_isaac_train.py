@@ -297,25 +297,26 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 observations = env.get_observations()
             samples = []
             clip_feedback = None
-            if identity["runtime"].get("action_clip") is not None:
+            if "JointPositionAction" in env.unwrapped.action_manager._terms:
                 term = env.unwrapped.action_manager._terms["JointPositionAction"]
-                spec = identity["runtime"]["action_clip"]
-                lower = torch.tensor(spec["lower"], device=env.unwrapped.device)
-                upper = torch.tensor(spec["upper"], device=env.unwrapped.device)
+                spec = identity["runtime"].get("action_clip")
+                lower = torch.tensor(spec["lower"], device=env.unwrapped.device) if spec else None
+                upper = torch.tensor(spec["upper"], device=env.unwrapped.device) if spec else None
                 defaults = torch.tensor(identity["runtime"]["default_joint_pos"], device=env.unwrapped.device)
                 native_apply = term.apply_actions
-                clip_feedback = {"calls": 0, "max_error": 0.0, "raw_target_outside_count": 0, "last": None}
+                clip_feedback = {"calls": 0, "max_error": 0.0, "raw_target_outside_count": 0, "clipping": spec is not None, "last": None}
                 def audited_apply():
                     raw = term.raw_actions
                     unbounded = raw * identity["runtime"]["action_scale"] + defaults
-                    expected = torch.clamp(unbounded, min=lower, max=upper)
+                    expected = torch.clamp(unbounded, min=lower, max=upper) if spec else unbounded
                     actual = term.processed_actions
                     error = float(torch.max(torch.abs(actual - expected)).detach().cpu())
                     if not torch.allclose(actual, expected, rtol=1e-6, atol=1e-6):
                         raise ValueError("Native applied target differs from declared post-scale URDF clip")
                     clip_feedback["calls"] += 1
                     clip_feedback["max_error"] = max(clip_feedback["max_error"], error)
-                    clip_feedback["raw_target_outside_count"] += int(((unbounded < lower) | (unbounded > upper)).sum().detach().cpu())
+                    if spec is not None:
+                        clip_feedback["raw_target_outside_count"] += int(((unbounded < lower) | (unbounded > upper)).sum().detach().cpu())
                     clip_feedback["last"] = {"native_raw_action": raw[0].detach().cpu().tolist(),
                                              "applied_position_target": actual[0].detach().cpu().tolist(),
                                              "all_env_max_target_error": error}
@@ -359,6 +360,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                             raise ValueError("Native environment action differs from declared projection")
                         sample["environment_action"] = expected_environment.detach().cpu().tolist()
                         sample.update(clip_feedback["last"])
+                    if "yaw_rate_error_l2" in env.unwrapped.reward_manager.active_terms:
+                        yaw_term = env.unwrapped.reward_manager.get_term_cfg("yaw_rate_error_l2")
+                        sample["post_step_yaw_cost_diagnostic"] = float(yaw_term.func(env.unwrapped, **yaw_term.params)[0].detach().cpu())
                     if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
                         term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
                         ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
@@ -377,8 +381,10 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             if hasattr(env.unwrapped, "f1_action_projection_audit"):
                 evidence["environment_action_projection_audit"] = dict(env.unwrapped.f1_action_projection_audit)
             if clip_feedback is not None:
-                evidence["processed_target_clip_audit"] = {
+                evidence["position_target_audit"] = {
                     key: value for key, value in clip_feedback.items() if key != "last"}
+                if clip_feedback["clipping"]:
+                    evidence["processed_target_clip_audit"] = evidence["position_target_audit"]
             evidence_path = Path(log_dir) / "params/readiness_feedback.json"
             evidence_path.write_text(json.dumps(evidence, allow_nan=False), encoding="utf-8")
             payload = torch.load(final, map_location="cpu", weights_only=True)
