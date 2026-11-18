@@ -1,0 +1,28 @@
+{
+  "format": "f1_fixed_weight_replay_request_v1",
+  "scope": "fixed_weight_simulation_diagnostic",
+  "authorization": {
+    "source": "2026-11-18 owner: replay iteration 15000 and continue Loop",
+    "simulation_replay": true,
+    "optimizer_updates": false,
+    "real_robot": false
+  },
+  "source_task": "TASK_20261117_025",
+  "protocol_sha256": "c42954bb72012e6094de1594a53f49e033940552f347848215b1ac1604e7ff1c",
+  "checkpoints": [
+    {
+      "iteration": 15000,
+      "sha256": "4fdc5e85a959e5c1cafc5228349e777f3652846f418e3ce8d11ef21a66d316d9",
+      "bytes": 6936341
+    },
+    {
+      "iteration": 0,
+      "sha256": "bef7b6cd729ae6b3afdc88b4bfc3d765677ceec254f24880a69c45efc8a78db1",
+      "bytes": 6935509
+    }
+  ],
+  "source_commit": "91b8d23510c90eb1a64e2aa51a2df9ab8b73f1c9",
+  "spend_cap_milli_credit": 50000,
+  "submission_status": "pending_platform_preflight",
+  "entry_sha256": "bde8104ef820e3b55346a7260003f7d7ba496b153ca8835158135a8d7d4dbf7f"
+}

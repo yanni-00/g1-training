@@ -1,0 +1,129 @@
+{
+  "format": "f1_fixed_weight_native_replay_v1",
+  "kind": "diagnostic_test_settings_not_acceptance_gates",
+  "seed": 1,
+  "initial_support_index": 0,
+  "schedule": [
+    {
+      "name": "stand_initial",
+      "duration_s": 2,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false
+    },
+    {
+      "name": "straight_sustained",
+      "duration_s": 20,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "speed_half",
+      "duration_s": 8,
+      "command": [
+        0.42232200503349304,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "speed_restore",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "turn_left",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        0.2
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "straight_exit",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "turn_right",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        -0.2
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "stop_hold",
+      "duration_s": 6,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false
+    },
+    {
+      "name": "restart_walk",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "stop_final",
+      "duration_s": 6,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false
+    }
+  ],
+  "sources": {
+    "durations_and_speed_fractions": "6_sim-train/G1/beyondmimic_walk_stop/configs/eval_velocity_turn.json",
+    "source_sha256": "2ae5e92b16af7eb8763831f4d43aeec13099bdcca7ea13eff2ddecfbf8a7d900",
+    "absolute_speed": "model_15000.pt#infos.f1_runtime.motion.nominal_reference_speed_mps[0]",
+    "yaw_limits": "model_15000.pt#infos.f1_runtime.command_limits[2]"
+  },
+  "render": {
+    "resolution": [
+      640,
+      480
+    ],
+    "stride": 2,
+    "eye_offset": [
+      2.0,
+      2.0,
+      1.0
+    ]
+  },
+  "behavior_acceptance": false,
+  "termination_policy": "retain all native F1 terms; break on first done, no reset counted as recovery",
+  "quality_scope": "Foot body planar speed is a slip proxy, not sole contact surface speed."
+}
