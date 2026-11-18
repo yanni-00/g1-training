@@ -1,5 +1,5 @@
 {
-  "format": "f1_continuous_yaw_cost_continuation_v5",
+  "format": "f1_standing_ankle_smoothness_continuation_v6",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -21,9 +21,9 @@
       0.1
     ]
   },
-  "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
-  "hypothesis": "Exact G1-style URDF processed-position limits in both native training and replay reduce invalid target escalation and permit learning quiet stopping without sacrificing original11999 walking/heading",
-  "side_effects": "Saturation changes feedback dynamics and previously worsened heading in unadapted child; retain original parent reward/PD and require new fixed5ms velocity/heading/stop quality checks",
+  "command_provenance": "Actual saved12998 f1_training.command_ranges; no curriculum expansion",
+  "hypothesis": "At exactlyzero velocity command, additional ankle raw-action increment cost reduces learned stop chatter while retaining moving yaw/velocity objectives and original action dynamics",
+  "side_effects": "Finite ankle action-rate cost can resist corrective reactions or delay stopping; exactzero gate excludes every nonzero command but shared policy updates can still harm walking. Protect yaw/speed/attitude and originalfall; no target hold/filter/clipping or PD change.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -43,7 +43,8 @@
     "gait": 1.0,
     "feet_slide": -0.2,
     "feet_clearance": 1.0,
-    "undesired_contacts": -1.0
+    "undesired_contacts": -1.0,
+    "yaw_rate_error_l2": -0.5
   },
   "reward_param_override": {
     "track_ang_vel_z": {
@@ -56,10 +57,13 @@
   },
   "parent_yaw_tracking_std": 0.1,
   "reward_addition": {
-    "yaw_rate_error_l2": {
+    "zero_command_ankle_action_rate_l2": {
       "from": 0.0,
-      "to": -0.5,
-      "source": "Negative magnitude of actual parent track_ang_vel_z weight0.5; engineering starting choice for continuous cost, not estimated/optimal gain."
+      "to": -0.45,
+      "source": "Engineering choice:9 times actual parent global action_rate magnitude0.05, giving total0.5 for four ankles only under exactlyzero command. Not fitted or guaranteed optimal."
     }
+  },
+  "retained_custom_rewards": {
+    "yaw_rate_error_l2": -0.5
   }
 }

@@ -1,0 +1,79 @@
+{
+  "parent_sha256": "d38091c8b93590e4e8f19b36aba476a35d903149a4c3d3c7ba1bb3702fb8bb75",
+  "producer_commit": "848b87c1c5c051d2b2a76014029da557f4853cc4",
+  "purpose": "Strict restore verification of exact parent source/action/reward identity",
+  "files": [
+    {
+      "path": "configs/control_profile.json",
+      "sha256": "5f47346e3e4d6da766917043878e37b345185c33b3b03236dde905276533af55"
+    },
+    {
+      "path": "configs/owner_training_profile.json",
+      "sha256": "65257b37ca8582a7572c27e86aad5bcf191ffe203e1e05347af9eaeecbdcc8ff"
+    },
+    {
+      "path": "configs/parameter_identification.json",
+      "sha256": "653c530b4aa1b71cdf478eff0666fb7e4cb317be99f01dc2a8761946eadfeb26"
+    },
+    {
+      "path": "configs/robot_contract.json",
+      "sha256": "b01c19ecf5cadf00ce3d04610d70428319ced2c0c9bbe44de202be7f32537968"
+    },
+    {
+      "path": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",
+      "sha256": "2bba5923828ceaa651059be2ea833b910ea2ab19bbd8ca5dcff5dbb207a18cd2"
+    },
+    {
+      "path": "scripts/rsl_rl/_isaac_train.py",
+      "sha256": "2aaf961b4346c0f6f5dafa094e7af1dccd4dce998b693039e77d44517617161d"
+    },
+    {
+      "path": "scripts/rsl_rl/sim2sim_play.py",
+      "sha256": "92f36614943420165cb519fb68ae6c4faded9482185b23dbc12b381016d39267"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/action_limits.py",
+      "sha256": "4a9d7c2f2e936958aa923841298ad40f9153e7c1e3a3795792346689bcf557ab"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/action_projection.py",
+      "sha256": "2e3b01ea7b97dffb4253e51ba985f6f14d26669314d405df84e95a28e9c88899"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/checkpoint.py",
+      "sha256": "3cb4da1e9f908ee56baebe09232ddaa2ee3dcc8c718b98de85d731dcb377cff1"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/continuation.py",
+      "sha256": "1b07a5aa39dd57f448fa1c096baf6db47f31b3b6a5d900599ba3328021c4c1b4"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/contract.py",
+      "sha256": "9de4cbb0982c051e44b8c7a48f1c98c403a33cf41bf4756babc1b45851800e00"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/interface.py",
+      "sha256": "6351bcf9b920cf0a127f49e179b11b7dcf8380f8da37dd43ac58678804ccf9e8"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/agents/rsl_rl_ppo_cfg.py",
+      "sha256": "6d4f575639880e7eb13d251fa358220c0082597d541edff14efebc4234875d34"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/rewards.py",
+      "sha256": "56c06ea442ee776b52e8c946d9048e37c23d8328aa440ee1dd6d081a2c9a0864"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/robots/f1/velocity_env_cfg.py",
+      "sha256": "15c631984304fb777c9c17a02d438b558cfc3b41ea6ca553be3557b58100e619"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/utils/export_deploy_cfg.py",
+      "sha256": "78ee0e15e467850034f18a21045493a08b9ee59325417dcce8a5cabd3d3e50d4"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",
+      "sha256": "35da7e261d1fa75f8e01d2c085f5ace63926453e371a7e7c00afaf643e4fb8a9"
+    }
+  ]
+}
