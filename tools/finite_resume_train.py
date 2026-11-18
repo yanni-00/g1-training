@@ -47,12 +47,14 @@ def audit_runner_source(runner):
 
 
 def resume_learn(runner,original_requested_iterations,request,request_path):
+    print('[F1 resume] audit 01-dispatch-entered',flush=True)
     import torch
     from f1_beyondmimic.utils.checkpoint import collect_runtime,load_checkpoint
     from f1_beyondmimic.utils.runtime_policy import verify_runtime_checkpoint
     first,remaining=validate_request(request)
     checkpoint=Path(os.environ['F1_BM_RESUME_CHECKPOINT'])
     saved=load_checkpoint(checkpoint)
+    print('[F1 resume] audit 02-parent-loaded',flush=True)
     if sha(checkpoint)!=request['parent']['sha256'] or int(saved['iter'])!=request['parent']['iteration']:
         raise ValueError('Wrong parent checkpoint')
     if runner.current_learning_iteration!=int(saved['iter']) or original_requested_iterations!=request['limits']['original_total_iterations']:
@@ -61,7 +63,9 @@ def resume_learn(runner,original_requested_iterations,request,request_path):
     if steps!={request['parent']['optimizer_step']}:raise ValueError('Optimizer was not restored exactly')
     count=int(runner.alg.policy.actor_obs_normalizer.count.item())
     if count!=request['parent']['normalizer_count']:raise ValueError('Actor normalizer was not restored')
+    print('[F1 resume] audit 03-restored-counters',flush=True)
     current=collect_runtime(runner.env,runner.alg.policy)
+    print('[F1 resume] audit 04-native-runtime-collected',flush=True)
     parent=saved['infos']['f1_runtime']
     for key in ('binding','urdf_sha256','actor_observation_contract','actor_obs_normalization','normalizer_epsilon',
                 'joint_names','body_names','tracked_body_names','anchor_body_name','policy_dt','phase_acceleration',
@@ -73,6 +77,7 @@ def resume_learn(runner,original_requested_iterations,request,request_path):
         if isinstance(value,torch.Tensor):torch.testing.assert_close(actual,value,rtol=0,atol=0)
         elif actual!=value:raise ValueError('Motion changed: '+key)
     parity=verify_runtime_checkpoint(runner.alg.policy,checkpoint)
+    print('[F1 resume] audit 05-parent-native-parity',flush=True)
     runner_source=audit_runner_source(runner)
     provenance={'exp_id':request['exp_id'],'request_sha256':sha(request_path),'entry_sha256':sha(Path(__file__)),
         'parent':request['parent'],'first_iteration':first,'additional_iterations':remaining,
@@ -115,6 +120,17 @@ def resume_learn(runner,original_requested_iterations,request,request_path):
     time.sleep(request['delivery_upload_window_s'])
 
 
+def dispatch(runner,n,request,request_path):
+    # SimulationApp.close() in the original trainer's finally can terminate
+    # Python before its outer exception handler prints. Flush inside this frame.
+    try:return resume_learn(runner,n,request,request_path)
+    except BaseException:
+        import traceback,time
+        traceback.print_exc(file=sys.stdout);sys.stdout.flush()
+        time.sleep(15)
+        raise
+
+
 def main():
     p=argparse.ArgumentParser(add_help=False);p.add_argument('--resume-request',type=Path,required=True)
     args,rest=p.parse_known_args()
@@ -131,7 +147,7 @@ def main():
     sys.path[:0]=[str(TRAINING/'scripts'),str(TRAINING/'source/f1_beyondmimic')]
     sys.argv=[str(source),*rest]
     scope={'__name__':'__main__','__file__':str(source),
-        '_finite_resume_learn':lambda runner,n:resume_learn(runner,n,request,args.resume_request)}
+        '_finite_resume_learn':lambda runner,n:dispatch(runner,n,request,args.resume_request)}
     # AppLauncher remains before any torch/NumPy/native imports, exactly as in
     # the immutable training entry. Only the finite learn-call dispatch differs.
     exec(compile(text,str(source),'exec'),scope)
