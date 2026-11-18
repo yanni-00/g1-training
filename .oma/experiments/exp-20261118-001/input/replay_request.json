@@ -24,5 +24,6 @@
   "source_commit": "91b8d23510c90eb1a64e2aa51a2df9ab8b73f1c9",
   "spend_cap_milli_credit": 50000,
   "submission_status": "pending_platform_preflight",
-  "entry_sha256": "bde8104ef820e3b55346a7260003f7d7ba496b153ca8835158135a8d7d4dbf7f"
+  "entry_sha256": "9d51c2bb0051c2f530f4e749794486b610b6ff1fd0487dc24a92d44c1667f70a",
+  "max_policy_steps": 4100
 }

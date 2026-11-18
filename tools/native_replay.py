@@ -41,6 +41,9 @@ def check_inputs(args):
         for value, (lower, upper) in zip(stage["command"], runtime["command_limits"]):
             if not lower <= value <= upper:
                 raise ValueError("Command outside this checkpoint runtime limits")
+    expected_steps = sum(math.ceil(s["duration_s"] / runtime["policy_dt"]) for s in protocol["schedule"])
+    if expected_steps != request["max_policy_steps"]:
+        raise ValueError("Protocol exceeds or differs from the registered policy step limit")
     print(json.dumps({"check": "passed", "iteration": saved["iter"], "binding": "exact",
                       "source_task": request["source_task"], "optimizer_updates": 0}), flush=True)
     return request, protocol
@@ -177,6 +180,8 @@ def main():
             for stage in schedule:
                 steps = math.ceil(stage["duration_s"] / base.step_dt)
                 for _ in range(steps):
+                    if len(rows) >= request["max_policy_steps"]:
+                        raise RuntimeError("Registered replay step limit reached")
                     command.request(stage["command"], walk_enabled=stage.get("walk_enabled", True))
                     raw = actor(obs["policy"])
                     if not torch.isfinite(raw).all():
