@@ -23,9 +23,9 @@
     ".oma/impl/source_manifest.json": "210ca32a758f95da578465a49e35a57db9e297b50c88e3b84ce4b66445733967",
     ".oma/config.json": "6b94c6dda97a4ebc5cfa2eb129b8feb54c5917b4a691c1ecb3b1917769a6bc38",
     ".oma/loop.json": "a26abfcef7679ff4a3aef12b4f27d97f6b08662b9d78c8ecc664e05a084eb089",
-    "tools/finite_resume_train.py": "f3f06aa3b5190000dcef7a4d357a0db1676163b853124c6619bd37064ad3ccac",
+    "tools/finite_resume_train.py": "b2a3c5cf153d393f4f4f856a1e7fcc019bea5df2cd2227267323765d2a8fa004",
     "tools/gm_finite_resume_entry.py": "32befb24420d64311fa1d1524fa82fe34d0b9e9d7c10dcaafe41e3b86d890a01",
-    ".oma/designs/delta-f1-finite-continuation-20261118.md": "de63e546a7750f8b3ed1f2be3ece548dca23eacf7472675a65018fdb289d0e70"
+    ".oma/designs/delta-f1-finite-continuation-20261118.md": "60c3b70cdb985cded845ae868b0e3c54b35fcef4d45379e47f7f332a54526bf2"
   },
   "original_train_entry_sha256": "bd525c687001a0eba39150f3e956622059273edde8983d9a78257c156ca00fb9",
   "delivery_upload_window_s": 120,

@@ -2,7 +2,7 @@
   "format": "f1_finite_resume_package_permit_v1",
   "exp_id": "exp-20261118-011",
   "canTrain": true,
-  "request_sha256": "9445c690d02ed38235950a09cca9283b7e9d96fd74dae47c32b4b021e46b90fc",
+  "request_sha256": "f49546964965dd074ed2e7e87f2f1656d239d966c849509642c5e68a09409011",
   "parent_loaded_and_finite": true,
   "finite_counter_and_budget_negative_checks": "passed",
   "prior_full_deployment_or_behavior_verified": false,

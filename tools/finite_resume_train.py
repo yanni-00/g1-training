@@ -31,15 +31,30 @@ def validate_request(request):
 
 def audit_runner_source(runner):
     source=textwrap.dedent(inspect.getsource(super(type(runner),runner).learn))
+    print('[F1 resume] actual native learn source '+json.dumps(source),flush=True)
+    return audit_learn_source(source)
+
+
+def audit_learn_source(source):
     tree=ast.parse(source)
+    assignments={}
+    for node in ast.walk(tree):
+        if isinstance(node,ast.Assign):
+            for target in node.targets:
+                if isinstance(target,ast.Name):assignments.setdefault(target.id,[]).append(node.value)
+    def resolve(node,seen=()):
+        if isinstance(node,ast.Name) and node.id not in seen and len(assignments.get(node.id,[]))==1:
+            return resolve(assignments[node.id][0],(*seen,node.id))
+        if isinstance(node,ast.BinOp) and isinstance(node.op,ast.Add):return ('add',resolve(node.left,seen),resolve(node.right,seen))
+        return ast.unparse(node)
     loops=[n for n in ast.walk(tree) if isinstance(n,ast.For) and isinstance(n.iter,ast.Call)
            and isinstance(n.iter.func,ast.Name) and n.iter.func.id=='range' and len(n.iter.args)==2
-           and ast.unparse(n.iter.args[0])=='self.current_learning_iteration']
+           and resolve(n.iter.args[0])=='self.current_learning_iteration']
     if len(loops)!=1:raise ValueError('Unknown RSL-RL loop semantics; no updates allowed')
-    stop=ast.unparse(loops[0].iter.args[1]);loopvar=ast.unparse(loops[0].target)
-    totals=[n for n in ast.walk(tree) if isinstance(n,ast.Assign) and any(ast.unparse(t)==stop for t in n.targets)]
-    if len(totals)!=1 or ast.unparse(totals[0].value) not in (
-        'self.current_learning_iteration + num_learning_iterations','num_learning_iterations + self.current_learning_iteration'):
+    loopvar=ast.unparse(loops[0].target)
+    if resolve(loops[0].iter.args[1]) not in (
+        ('add','self.current_learning_iteration','num_learning_iterations'),
+        ('add','num_learning_iterations','self.current_learning_iteration')):
         raise ValueError('Unknown RSL-RL upper bound')
     counters=[n for n in ast.walk(loops[0]) if isinstance(n,ast.Assign) and any(ast.unparse(t)=='self.current_learning_iteration' for t in n.targets)]
     if not any(ast.unparse(n.value)==loopvar for n in counters):raise ValueError('Unknown RSL-RL checkpoint counter')
