@@ -57,7 +57,7 @@ def platform():
     from finite_resume_train import validate_request
     if receipt.get('format')!='f1_finite_resume_package_permit_v1' or receipt.get('canTrain') is not True:
         raise ValueError('Wrong continuation package permit')
-    if receipt['request_sha256']!=sha(resume) or validate_request(read(resume))!=(15001,5000):
+    if receipt['request_sha256']!=sha(resume) or validate_request(read(resume))!=(15001,2000):
         raise ValueError('Finite request mismatch')
     for rel,digest in read(resume)['frozen_sources'].items():
         if sha(PUBLISH/rel)!=digest:raise ValueError('Published source drift: '+rel)
@@ -215,5 +215,5 @@ def main():
             if not c.get('gmTaskId'):raise ValueError('No task to run')
             flux(['task','run','--task-id',c['gmTaskId']],'task-run.json')
             c['started_at']=dt.datetime.now(dt.timezone.utc).isoformat();write(EXP/'config.json',c)
-    print(json.dumps({'action':a.action,'task_id':c.get('gmTaskId'),'additional_iterations':5000,'final_iteration':20000}))
+    print(json.dumps({'action':a.action,'task_id':c.get('gmTaskId'),'additional_iterations':2000,'final_iteration':17000}))
 if __name__=='__main__':main()

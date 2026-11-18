@@ -19,6 +19,10 @@ def main():
     validate_request(cfg)
     for rel,value in cfg['frozen_sources'].items():
         if sha(ROOT/rel)!=value:raise ValueError('Frozen continuation source changed: '+rel)
+    sys.path.insert(0,str(ROOT/'training/source/f1_beyondmimic'))
+    from f1_beyondmimic.assets_archive import ensure_assets
+    ensure_assets(ROOT/'training')
+    print('[F1 resume] original pinned asset archive restored and verified',flush=True)
     logs=ROOT/'training/logs/gm_resume';logs.mkdir(parents=True,exist_ok=True)
     checkpoint=logs/f"model_{cfg['parent']['iteration']}.pt"
     with urllib.request.urlopen(args.checkpoint_url,timeout=120) as src,checkpoint.open('wb') as dst:
