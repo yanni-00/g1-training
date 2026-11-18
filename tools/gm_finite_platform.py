@@ -41,8 +41,12 @@ def account_observation(config):
     # The owner cap is 50 credit for this experiment in total. Earlier aborted
     # attempts already consumed part of it, so the run may use what is left; the
     # cap itself is never enlarged.
-    if amount != 50000 or observation['active_tasks']['response']['data']['total'] != 0:
+    if not 0 < amount <= 50000 or observation['active_tasks']['response']['data']['total'] != 0:
         raise ValueError('Dedicated account lacks a positive balance within the owner cap or has an active task')
+    if amount < 50000:
+        initial=read(EXP/'raw/attempts/TASK_20261118_325/platform-admission.json')['account']
+        if initial['index']!=index or initial['id']!=observation['account'] or initial['balance_milli_credit']!=50000:
+            raise ValueError('Remaining balance has no original full-budget admission')
     if observation['account'] != config['execution']['account']['id']:
         raise ValueError('Bound account differs from observed identity')
     return index, observation, int(amount)
