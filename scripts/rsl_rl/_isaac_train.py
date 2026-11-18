@@ -155,6 +155,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     from f1_rl_lab.contract import ROOT as f1_root, load_json
     request = load_json(f1_root / "configs/run_request.json")
     continuation = None
+    delta = {}
     if request.get("resume"):
         from f1_rl_lab.continuation import apply_delta
         delta = load_json(f1_root / "configs/training_delta.json")
@@ -185,6 +186,20 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             if (previous["reward_weights"] != delta["parent_reward_weights"]
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Actual parent objective differs from registered continuation")
+
+    if delta.get("action_input_projection"):
+        from f1_rl_lab.action_projection import install_projection, projection_contract
+        from f1_rl_lab.contract import load_contract
+        spec = delta["action_input_projection"]
+        contract = load_contract()
+        if spec != {"parent": None, "to": projection_contract(contract)}:
+            raise ValueError("Unregistered environment projection adaptation")
+        if (parent_identity["runtime"].get("action_input_projection") is not None
+                or not delta.get("action_postprocessing_override")
+                or continuation["reward_weights_after"] != delta["parent_reward_weights"]):
+            raise ValueError("Projection requires exact legacy parent and unchanged reward inventory")
+        install_projection(env.unwrapped, spec["to"], contract)
+        continuation["action_input_projection"] = spec
 
     from f1_rl_lab.utils.export_deploy_cfg import export_deploy_cfg
     export_deploy_cfg(env.unwrapped, log_dir)
@@ -251,6 +266,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 "adaptive_learning_rate": float(runner.alg.learning_rate),
                 "optimizer_learning_rates": [float(g["lr"]) for g in runner.alg.optimizer.param_groups],
                 "objective": runtime.get("training_objective")}
+            if hasattr(env.unwrapped, "f1_action_projection_audit"):
+                payload["f1_training"]["action_projection_audit"] = dict(env.unwrapped.f1_action_projection_audit)
         torch.save(payload, staged)
         os.replace(staged, final)
         write_sidecar(final, runtime)
@@ -311,7 +328,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     if not torch.isfinite(actor_observation).all() or not torch.isfinite(actions).all():
                         raise ValueError("Non-finite fresh-checkpoint feedback")
                     observation_sample = actor_observation[0].detach().cpu().tolist()
-                    observations, _, _, _ = env.step(actions)
+                    observations, _, dones, _ = env.step(actions)
+                    if identity["runtime"].get("action_input_projection") is not None:
+                        next_actor = select_actor_observation(observations, identity["runtime"]["observation_dim"])
+                        actual_manager = env.unwrapped.action_manager.action
+                        if not torch.allclose(next_actor[:, -identity["runtime"]["action_dim"]:], actual_manager, rtol=1e-6, atol=1e-6):
+                            raise ValueError("Next native last_action observation differs from actual projected/reset manager action")
                     asset = env.unwrapped.scene["robot"]
                     sample = {"step": feedback_step, "policy_observation": observation_sample,
                         "command": env.unwrapped.command_manager.get_command("base_velocity")[0].detach().cpu().tolist(),
@@ -321,13 +343,21 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                         "qvel": asset.data.joint_vel[0].detach().cpu().tolist(),
                         "root_quat_w": asset.data.root_quat_w[0].detach().cpu().tolist(),
                         "root_ang_vel_b": asset.data.root_ang_vel_b[0].detach().cpu().tolist(),
-                        "action": actions[0].detach().cpu().tolist()}
+                        "action": actions[0].detach().cpu().tolist(),
+                        "done": bool(dones[0])}
                     if clip_feedback is not None:
                         if clip_feedback["last"] is None:
                             raise ValueError("Native clipping audit did not observe apply_actions")
                         raw = torch.tensor(clip_feedback["last"]["native_raw_action"], device=actions.device)
-                        if not torch.allclose(raw, actions[0], rtol=1e-6, atol=1e-6):
-                            raise ValueError("Raw last-action semantics changed before native action term")
+                        expected_environment = actions[0]
+                        projection = identity["runtime"].get("action_input_projection")
+                        if projection is not None:
+                            expected_environment = torch.clamp(actions[0],
+                                min=torch.tensor(projection["lower"], device=actions.device),
+                                max=torch.tensor(projection["upper"], device=actions.device))
+                        if not torch.allclose(raw, expected_environment, rtol=1e-6, atol=1e-6):
+                            raise ValueError("Native environment action differs from declared projection")
+                        sample["environment_action"] = expected_environment.detach().cpu().tolist()
                         sample.update(clip_feedback["last"])
                     if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
                         term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
@@ -344,6 +374,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                         "steps": len(samples), "samples": samples, "seed": env_cfg.seed,
                         "rsl_rl_version": installed_version, "runtime": identity["runtime"],
                         "scope": "admission interface/finite-state evidence; not walking or owner acceptance"}
+            if hasattr(env.unwrapped, "f1_action_projection_audit"):
+                evidence["environment_action_projection_audit"] = dict(env.unwrapped.f1_action_projection_audit)
             if clip_feedback is not None:
                 evidence["processed_target_clip_audit"] = {
                     key: value for key, value in clip_feedback.items() if key != "last"}

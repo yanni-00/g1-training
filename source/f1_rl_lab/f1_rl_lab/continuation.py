@@ -135,8 +135,20 @@ def install_finite_guard(runner, log_dir):
         check("before_update")
         values = native_update()
         check("after_update")
-        if any(not math.isfinite(float(v)) for v in values.values()):
-            raise FloatingPointError("Non-finite native PPO loss; no success claimed")
+        invalid_losses = {k: repr(float(v)) for k, v in values.items() if not math.isfinite(float(v))}
+        if invalid_losses:
+            path = Path(log_dir) / "params/numerical_failure.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps({"stage": "after_native_update",
+                "iteration": runner.current_learning_iteration, "invalid_losses": invalid_losses}), encoding="utf-8")
+            raise FloatingPointError("Non-finite native PPO loss: " + str(invalid_losses) + "; no success claimed")
+        raw_env = runner.env.unwrapped if hasattr(runner.env, "unwrapped") else None
+        if raw_env is not None and hasattr(raw_env, "f1_action_projection_audit"):
+            path = Path(log_dir) / "params/action_projection_training.jsonl"
+            with path.open("a", encoding="utf-8") as stream:
+                stream.write(json.dumps({"iteration": runner.current_learning_iteration,
+                    "losses": {k: float(v) for k, v in values.items()},
+                    "projection": dict(raw_env.f1_action_projection_audit)}, allow_nan=False) + "\n")
         return values
     check("restored_parent")
     runner.alg.update = update

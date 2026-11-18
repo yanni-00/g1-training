@@ -94,6 +94,17 @@ def export_deploy_cfg(env, log_dir):
         from f1_rl_lab.action_limits import action_source_binding
         runtime["format"] = "f1_fullbody_runtime_v2"
         runtime["action_interface_sources"] = action_source_binding(ROOT)
+    projection = getattr(env, "f1_action_input_projection", None)
+    if projection is not None:
+        from f1_rl_lab.action_projection import validate_projection
+        from f1_rl_lab.action_limits import action_source_binding
+        validate_projection(projection, c)
+        if action_clip is None:
+            raise ValueError("Projected input requires explicit processed target clipping")
+        runtime["format"] = "f1_fullbody_runtime_v3"
+        runtime["action_clip"] = {**action_clip, "last_action": "projected_environment_action"}
+        runtime["action_input_projection"] = projection
+        runtime["action_interface_sources"] = action_source_binding(ROOT, projection=True)
     delta_path = ROOT / "configs/training_delta.json"
     if delta_path.is_file():
         from f1_rl_lab.contract import sha256

@@ -259,6 +259,7 @@ def main():
              "reference_training_sim_dt": contract["sim_dt"], "physics_refinement": args.physics_refinement,
              "physics_substeps_per_action": physics_steps,
              "action_clip": runtime.get("action_clip"),
+             "action_input_projection": runtime.get("action_input_projection"),
              "last_action_semantics": "raw_network_output_before_position_target_clipping",
              "kp": model.actuator_gainprm[aids, 0].tolist(),
              "pd_kd": (-model.actuator_biasprm[aids, 2]).tolist(),
@@ -314,6 +315,8 @@ def main():
                 "joint_vel_rel": data.qvel[vadr], "last_action": previous})
             with torch.inference_mode():
                 action = actor(torch.from_numpy(observation[None])).numpy()[0]
+            from f1_rl_lab.action_projection import project_numpy
+            action = project_numpy(action, runtime.get("action_input_projection"), contract)
             target = joint_targets(action, contract, action_clip=runtime.get("action_clip"))
             data.ctrl[aids] = target
             for _ in range(physics_steps):
