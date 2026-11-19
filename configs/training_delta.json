@@ -1,5 +1,5 @@
 {
-  "format": "f1_standing_exposure_continuation_v7",
+  "format": "f1_loaded_lateral_tilt_continuation_v8",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -21,9 +21,9 @@
       0.1
     ]
   },
-  "command_provenance": "Actual saved12998 f1_training.command_ranges; no curriculum expansion",
-  "hypothesis": "More zero-command training exposure improves quiet standing/stopping while retaining actual12998 yaw objective and moving behavior",
-  "side_effects": "Standing-biased shared policy can slow walking or lose yaw quality. No reward removed relative actual12998; no acceptedbaseline replacement or change to PD/action/physics/noise. Protect moving speed/yaw/attitude and originalfall.",
+  "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
+  "hypothesis": "Penalize lateral tilt of feet in proportion to vertical support force when moving, reducing loaded left sole bias while keeping original standing objective and bilateral symmetry.",
+  "side_effects": "May shift support to one foot, alter stance timing or reduce tracking. Check both soles, support-force share, gait, steering, speed and late standing. No reward weight removed.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -43,8 +43,7 @@
     "gait": 1.0,
     "feet_slide": -0.2,
     "feet_clearance": 1.0,
-    "undesired_contacts": -1.0,
-    "yaw_rate_error_l2": -0.5
+    "undesired_contacts": -1.0
   },
   "reward_param_override": {
     "track_ang_vel_z": {
@@ -56,15 +55,12 @@
     }
   },
   "parent_yaw_tracking_std": 0.1,
-  "reward_addition": {},
-  "retained_custom_rewards": {
-    "yaw_rate_error_l2": -0.5
-  },
-  "command_sampling_override": {
-    "rel_standing_envs": {
-      "from": 0.02,
-      "to": 0.2,
-      "source": "Source parent velocity_env_cfg.py actual0.02; engineering10x standing sampling allocation, not measured optimum."
+  "reward_addition": {
+    "contact_lateral_tilt": {
+      "from": 0.0,
+      "to": -5.0,
+      "aggregation": "positive_world_fz_moving",
+      "source": "Reuse actual r12 tilt penalty weight; switch binary contact mean to positive normal-force weighted moving cost."
     }
   }
 }

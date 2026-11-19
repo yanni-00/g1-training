@@ -11,6 +11,23 @@ spec.loader.exec_module(module)
 
 
 class FootPostureTests(unittest.TestCase):
+    def test_loaded_foot_cost_prioritizes_support_and_excludes_standing(self):
+        # One tilted foot (30 degrees, sin squared = 1/4) and one flat foot.
+        angle = torch.tensor(torch.pi / 12, dtype=torch.float64)
+        feet = torch.tensor([[[angle.cos(), angle.sin(), 0., 0.],
+                              [1., 0., 0., 0.]]], dtype=torch.float64)
+        quat = feet.repeat(5, 1, 1)
+        force_z = torch.tensor([[3., 1.], [1., 3.], [3., 1.], [0., -1.], [3., 1.]],
+                               dtype=torch.float64)
+        contact = torch.tensor([[True, True], [True, True], [False, True],
+                                [True, True], [True, True]])
+        moving = torch.tensor([True, True, True, True, False])
+        expected = torch.tensor([3/16, 1/16, 0., 0., 0.], dtype=torch.float64)
+        torch.testing.assert_close(module.load_weighted_lateral_tilt_l2(quat, contact, force_z, moving),
+                                   expected)
+        torch.testing.assert_close(module.load_weighted_lateral_tilt_l2(
+            quat.flip(1), contact.flip(1), force_z.flip(1), moving), expected)
+
     def test_roll_contact_gating_and_mirror(self):
         # Test fixtures, not measurements: roll +/-30deg has sin²=1/4.
         angle = torch.tensor(torch.pi/12, dtype=torch.float64)

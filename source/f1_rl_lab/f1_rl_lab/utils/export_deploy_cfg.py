@@ -132,6 +132,18 @@ def export_deploy_cfg(env, log_dir):
                 "formula": "mean over contacting feet of (2*(w*x+y*z))^2; zero if no contact",
                 "scope": "Reward only; no actor inputs or action processing changed",
             }
+            if term.func.__name__ == "feet_loaded_lateral_tilt":
+                from f1_rl_lab.action_limits import action_source_binding
+                from f1_rl_lab.foot_posture import LOADED_LATERAL_TILT_FORMULA
+                if action_clip is not None or projection is not None or term.params.get("command_name") != "base_velocity":
+                    raise ValueError("Loaded-foot repair requires original actions and base_velocity command")
+                name = "source/f1_rl_lab/f1_rl_lab/foot_posture.py"
+                runtime["format"] = "f1_fullbody_runtime_v6"
+                runtime["action_interface_sources"] = action_source_binding(ROOT, projection=True)
+                runtime["training_objective"]["custom_reward_sources"] = {name: sha256(ROOT / name)}
+                runtime["training_objective"]["contact_lateral_tilt"].update(
+                    formula=LOADED_LATERAL_TILT_FORMULA, aggregation="positive_world_fz_moving",
+                    command_name="base_velocity")
     if "yaw_rate_error_l2" in env.reward_manager.active_terms:
         from f1_rl_lab.action_limits import action_source_binding
         from f1_rl_lab.contract import sha256

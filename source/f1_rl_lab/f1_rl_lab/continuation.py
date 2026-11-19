@@ -4,15 +4,18 @@ import math
 from pathlib import Path
 
 
-def contact_tilt_term(weight):
+def contact_tilt_term(weight, *, load_weighted=False):
     """Register optional reward outside the strictly bound original base files."""
     from isaaclab.managers import RewardTermCfg, SceneEntityCfg
-    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt
+    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt, feet_loaded_lateral_tilt
     feet = ["left_ankle_roll", "right_ankle_roll"]
+    params = {"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
+              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)}
+    if load_weighted:
+        params["command_name"] = "base_velocity"
     return RewardTermCfg(
-        func=feet_contact_lateral_tilt, weight=weight,
-        params={"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
-                "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)},
+        func=feet_loaded_lateral_tilt if load_weighted else feet_contact_lateral_tilt,
+        weight=weight, params=params,
     )
 
 
@@ -150,7 +153,13 @@ def apply_delta(env_cfg, delta):
         actual_parent = {n: w for n, w in after.items() if n != "contact_lateral_tilt"}
         if actual_parent != delta["parent_reward_weights"]:
             raise ValueError("Existing parent reward inventory changed while adding contact tilt")
-        env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
+        rule = spec.get("aggregation", "equal_contact")
+        if rule not in {"equal_contact", "positive_world_fz_moving"}:
+            raise ValueError("Unregistered contact tilt aggregation")
+        if rule == "positive_world_fz_moving":
+            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, load_weighted=True)
+        else:
+            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
     action_change = None

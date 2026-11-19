@@ -36,7 +36,23 @@ def action_source_binding(root, projection=False):
 
 
 def verify_runtime_action_contract(runtime, contract, root):
-    if runtime.get("format") == "f1_fullbody_runtime_v5":
+    if runtime.get("format") == "f1_fullbody_runtime_v6":
+        from .contract import sha256
+        from .foot_posture import LOADED_LATERAL_TILT_FORMULA
+        name = "source/f1_rl_lab/f1_rl_lab/foot_posture.py"
+        objective = runtime.get("training_objective", {})
+        tilt = objective.get("contact_lateral_tilt", {})
+        feet = ["left_ankle_roll", "right_ankle_roll"]
+        if (runtime.get("action_clip") is not None or runtime.get("action_input_projection") is not None
+                or runtime.get("action_interface_sources") != action_source_binding(root, projection=True)
+                or objective.get("custom_reward_sources") != {name: sha256(Path(root) / name)}
+                or tilt.get("formula") != LOADED_LATERAL_TILT_FORMULA
+                or tilt.get("function") != "feet_loaded_lateral_tilt"
+                or tilt.get("aggregation") != "positive_world_fz_moving"
+                or tilt.get("command_name") != "base_velocity"
+                or tilt.get("asset_body_names") != feet or tilt.get("sensor_body_names") != feet):
+            raise ValueError("Loaded-foot runtime_v6 source/action/foot/force binding changed")
+    elif runtime.get("format") == "f1_fullbody_runtime_v5":
         from .contract import sha256
         rewards = ["source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",
                    "source/f1_rl_lab/f1_rl_lab/standing_smoothness.py"]
