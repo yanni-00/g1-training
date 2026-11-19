@@ -182,7 +182,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     or previous["training_objective"]["reward_weights"] != delta["parent_reward_weights"]
                     or previous["training_objective"]["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Action adaptation parent metadata differs from registered source")
-        if delta.get("reward_addition"):
+        if delta.get("reward_addition") or delta.get("command_sampling_override"):
             previous = parent_identity["runtime"]["training_objective"]
             if (previous["reward_weights"] != delta["parent_reward_weights"]
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):

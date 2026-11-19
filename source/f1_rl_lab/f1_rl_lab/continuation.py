@@ -71,8 +71,9 @@ def apply_delta(env_cfg, delta):
         raise ValueError("Unregistered reward change")
     retained = delta.get("retained_custom_rewards", {})
     if retained:
+        sampling_only = bool(delta.get("command_sampling_override")) and not delta.get("reward_addition")
         if (retained != {"yaw_rate_error_l2": -0.5}
-                or delta.get("reward_addition", {}).keys() != {"zero_command_ankle_action_rate_l2"}
+                or (delta.get("reward_addition", {}).keys() != {"zero_command_ankle_action_rate_l2"} and not sampling_only)
                 or "yaw_rate_error_l2" in after):
             raise ValueError("Only the actual12998 yaw term can be retained for standing continuation")
         env_cfg.rewards.yaw_rate_error_l2 = yaw_tracking_term(retained["yaw_rate_error_l2"])
@@ -99,6 +100,18 @@ def apply_delta(env_cfg, delta):
         if name not in ("lin_vel_x","lin_vel_y","ang_vel_z"):
             raise ValueError("Unregistered command range field")
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
+    sampling_audit = {}
+    sampling = delta.get("command_sampling_override", {})
+    if sampling:
+        if set(sampling) != {"rel_standing_envs"} or after != delta["parent_reward_weights"] or delta.get("reward_addition"):
+            raise ValueError("Standing exposure permits one sampler field with exact parent rewards")
+        spec = sampling["rel_standing_envs"]
+        actual = env_cfg.commands.base_velocity.rel_standing_envs
+        target = float(spec["to"])
+        if actual != spec["from"] or not math.isfinite(target) or not 0 < target < 1:
+            raise ValueError("Unexpected standing sampler baseline or invalid probability")
+        env_cfg.commands.base_velocity.rel_standing_envs = target
+        sampling_audit = {"rel_standing_envs": {"from": actual, "to": target}}
     additions = delta.get("reward_addition", {})
     addition_audit = {}
     if set(additions) == {"zero_command_ankle_action_rate_l2"}:
@@ -160,6 +173,7 @@ def apply_delta(env_cfg, delta):
             "reward_parameter_changes":parameter_changes,
             "reward_additions":addition_audit,
             "retained_custom_rewards": retained,
+            "command_sampling_changes": sampling_audit,
             "action_postprocessing_change": action_change,
             "command_ranges":delta["resume_command_ranges"],
             "episode_state_restored":False,"rng_state_restored":False,

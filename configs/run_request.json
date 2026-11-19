@@ -1,11 +1,11 @@
 {
-  "exp_id": "exp-20261118-005",
+  "exp_id": "exp-20261119-001",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_standing_ankle_smooth_resume12998_formal1000_20261118",
+  "run_name": "f1_standing_exposure_resume12998_formal1000_20261119",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",

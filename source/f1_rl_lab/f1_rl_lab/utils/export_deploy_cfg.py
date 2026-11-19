@@ -114,6 +114,11 @@ def export_deploy_cfg(env, log_dir):
             "reward_weights": {n: float(env.reward_manager.get_term_cfg(n).weight)
                                for n in env.reward_manager.active_terms},
             "scope": "Actual runtime reward inventory; effective action postprocessing is recorded separately"}
+        command = env.command_manager.get_term("base_velocity")
+        runtime["training_objective"]["command_sampling"] = {
+            "rel_standing_envs": float(command.cfg.rel_standing_envs),
+            "resampling_time_range": list(command.cfg.resampling_time_range),
+            "source": "Resolved native CommandManager base_velocity term cfg"}
         if "contact_lateral_tilt" in env.reward_manager.active_terms:
             term = env.reward_manager.get_term_cfg("contact_lateral_tilt")
             ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]

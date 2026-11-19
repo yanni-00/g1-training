@@ -14,6 +14,25 @@ from f1_rl_lab import continuation
 
 
 class StandingSmoothnessTests(unittest.TestCase):
+    def test_sampling_only_preserves_yaw_and_all_rewards(self):
+        env=NS(rewards=NS(gait=NS(weight=.5),track_ang_vel_z=NS(weight=.5,params={'std':.5})),
+               commands=NS(base_velocity=NS(ranges=NS(),rel_standing_envs=.02)))
+        delta={'reward_override':{'gait':{'from':.5,'to':1.}},
+               'reward_param_override':{'track_ang_vel_z':{'std':{'from':.5,'to':.1}}},
+               'parent_reward_weights':{'gait':1.,'track_ang_vel_z':.5,'yaw_rate_error_l2':-.5},
+               'retained_custom_rewards':{'yaw_rate_error_l2':-.5},'resume_command_ranges':{},
+               'reward_addition':{},'command_sampling_override':{'rel_standing_envs':{'from':.02,'to':.2}}}
+        with patch.object(continuation,'yaw_tracking_term',side_effect=lambda w:NS(weight=w)):
+            working=copy.deepcopy(env);result=continuation.apply_delta(working,delta)
+            self.assertEqual(result['reward_weights_after'],delta['parent_reward_weights'])
+            self.assertEqual(working.commands.base_velocity.rel_standing_envs,.2)
+            self.assertFalse(hasattr(working.rewards,'zero_command_ankle_action_rate_l2'))
+            for value in [0.,1.,float('nan')]:
+                bad=copy.deepcopy(delta);bad['command_sampling_override']['rel_standing_envs']['to']=value
+                with self.assertRaises(ValueError):continuation.apply_delta(copy.deepcopy(env),bad)
+            bad=copy.deepcopy(delta);bad['command_sampling_override']['rel_standing_envs']['from']=.1
+            with self.assertRaises(ValueError):continuation.apply_delta(copy.deepcopy(env),bad)
+
     def test_pure_turn_translation_and_tiny_commands_are_not_penalized(self):
         commands = torch.tensor([[0.,0.,0.], [.5,0.,0.], [0.,.3,0.], [0.,0.,.2], [0.,0.,-1e-8]])
         action = torch.arange(30., dtype=torch.float32).reshape(5,6)

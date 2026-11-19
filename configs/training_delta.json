@@ -1,5 +1,5 @@
 {
-  "format": "f1_standing_ankle_smoothness_continuation_v6",
+  "format": "f1_standing_exposure_continuation_v7",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Actual saved12998 f1_training.command_ranges; no curriculum expansion",
-  "hypothesis": "At exactlyzero velocity command, additional ankle raw-action increment cost reduces learned stop chatter while retaining moving yaw/velocity objectives and original action dynamics",
-  "side_effects": "Finite ankle action-rate cost can resist corrective reactions or delay stopping; exactzero gate excludes every nonzero command but shared policy updates can still harm walking. Protect yaw/speed/attitude and originalfall; no target hold/filter/clipping or PD change.",
+  "hypothesis": "More zero-command training exposure improves quiet standing/stopping while retaining actual12998 yaw objective and moving behavior",
+  "side_effects": "Standing-biased shared policy can slow walking or lose yaw quality. No reward removed relative actual12998; no acceptedbaseline replacement or change to PD/action/physics/noise. Protect moving speed/yaw/attitude and originalfall.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -56,14 +56,15 @@
     }
   },
   "parent_yaw_tracking_std": 0.1,
-  "reward_addition": {
-    "zero_command_ankle_action_rate_l2": {
-      "from": 0.0,
-      "to": -0.45,
-      "source": "Engineering choice:9 times actual parent global action_rate magnitude0.05, giving total0.5 for four ankles only under exactlyzero command. Not fitted or guaranteed optimal."
-    }
-  },
+  "reward_addition": {},
   "retained_custom_rewards": {
     "yaw_rate_error_l2": -0.5
+  },
+  "command_sampling_override": {
+    "rel_standing_envs": {
+      "from": 0.02,
+      "to": 0.2,
+      "source": "Source parent velocity_env_cfg.py actual0.02; engineering10x standing sampling allocation, not measured optimum."
+    }
   }
 }
