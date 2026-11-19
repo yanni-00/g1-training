@@ -1,11 +1,11 @@
 {
-  "exp_id": "exp-20261119-006",
+  "exp_id": "exp-20261119-007",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_loaded_foot_tilt_resume11999_formal1000_20261119",
+  "run_name": "f1_loaded_foot_tilt_half_resume11999_formal1000_20261119",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
@@ -13,7 +13,7 @@
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
-    "account_index": 15,
+    "account_index": 16,
     "spend_cap": 50.0,
     "unit": "GM credit",
     "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",

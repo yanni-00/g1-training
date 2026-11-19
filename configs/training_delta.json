@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
-  "hypothesis": "Penalize lateral tilt of feet in proportion to vertical support force when moving, reducing loaded left sole bias while keeping original standing objective and bilateral symmetry.",
-  "side_effects": "May shift support to one foot, alter stance timing or reduce tracking. Check both soles, support-force share, gait, steering, speed and late standing. No reward weight removed.",
+  "hypothesis": "From exact11999, a weaker support-tilt objective may retain a useful left sole improvement while preserving r27 steering, speed and stopping.",
+  "side_effects": "Reducing the cost relative to r28 leaves more side tilt without necessarily restoring steering. Compare the same r27 closed loop and isolated moving turns; protect support loads, stability, and speed.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -58,9 +58,9 @@
   "reward_addition": {
     "contact_lateral_tilt": {
       "from": 0.0,
-      "to": -5.0,
+      "to": -2.5,
       "aggregation": "positive_world_fz_moving",
-      "source": "Reuse actual r12 tilt penalty weight; switch binary contact mean to positive normal-force weighted moving cost."
+      "source": "One-half of the actual r28 force-weighted penalty -5.0, chosen as an engineering comparison; no fitted optimum."
     }
   }
 }

@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261119-006",
+  "oma_exp_ref": "exp-20261119-007",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
-  "reason": "Owner reopens left eversion repair. Original11999 plus sole load-weighted lateral tilt cost, direct formal1000."
+  "reason": "User continues repair from original11999. Half strength of r28 load-weighted stance objective. Direct formal1000."
 }
