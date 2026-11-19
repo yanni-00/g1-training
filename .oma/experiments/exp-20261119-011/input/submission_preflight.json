@@ -1,0 +1,17 @@
+{
+  "format": "f1_finite_resume_package_permit_v1",
+  "exp_id": "exp-20261119-011",
+  "canTrain": true,
+  "request_sha256": "4501c227e9cc2c2d1ef4f75a985a122b97e5ec4a87ea0334e933d924c2475e79",
+  "parent_loaded_and_finite": true,
+  "finite_counter_and_budget_negative_checks": "passed",
+  "prior_full_deployment_or_behavior_verified": false,
+  "scope": "New finite continuation package binding; independent platform/account/remote/preflight admission still required",
+  "finite_limits": {
+    "target_total_iterations": 17001,
+    "additional_iterations": 1000,
+    "spend_cap_milli_credit": 50000,
+    "original_total_iterations": 30000
+  },
+  "cpu_evidence_sha256": "2609468cafefda2a70211eb556c8ff341be6919f99fba85c8fb60e74cb60e2fc"
+}

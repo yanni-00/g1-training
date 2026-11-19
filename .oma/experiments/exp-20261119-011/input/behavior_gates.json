@@ -1,0 +1,15 @@
+{
+  "settings_kind": "Preregistered engineering acceptance criteria chosen for this simulation pilot; not measured G1/F1 hardware limits or estimated performance. Frozen before launching the baseline. Heading gate is a new preregistered simulation criterion; no measured hardware limit is claimed.",
+  "stop_speed_max_mps": 0.1,
+  "stop_drift_max_m": 0.1,
+  "tilt_max_rad": 0.35,
+  "go_velocity_rmse_max_mps": 0.3,
+  "go_path_min_m": 0.5,
+  "both_contact_fraction_min": 0.8,
+  "contact_foot_speed_max_mps": 0.2,
+  "response_deadline_s": null,
+  "scope": "Inherited simulation acceptance criteria, not F1 measured hardware limits. Contact speed uses actual contact-point telemetry, unlike G1 body-origin proxy; same scalar threshold is a preregistered F1 engineering gate.",
+  "heading_error_max_rad": 0.35,
+  "source": "6_sim-train/G1/beyondmimic_walk_stop/configs/velocity_behavior_gates.json",
+  "source_sha256": "d45719b529eff110a24535edd2c42787152b860ddff661972073b2f28f40543f"
+}

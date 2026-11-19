@@ -1,0 +1,99 @@
+{
+  "format": "f1_fixed_weight_mujoco_replay_v1",
+  "kind": "diagnostic_test_settings_not_acceptance_gates",
+  "seed": 1,
+  "initial_support_index": 0,
+  "schedule": [
+    {
+      "name": "stand_initial",
+      "duration_s": 2,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false
+    },
+    {
+      "name": "straight_sustained",
+      "duration_s": 20,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "stop_hold",
+      "duration_s": 6,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false,
+      "stability_window_s": 2
+    },
+    {
+      "name": "restart_walk",
+      "duration_s": 8,
+      "command": [
+        0.8446440100669861,
+        0,
+        0
+      ],
+      "walk_enabled": true
+    },
+    {
+      "name": "stop_final",
+      "duration_s": 6,
+      "command": [
+        0.0,
+        0,
+        0
+      ],
+      "walk_enabled": false,
+      "stability_window_s": 2
+    }
+  ],
+  "sources": {
+    "durations_and_speed_fractions": "6_sim-train/G1/beyondmimic_walk_stop/configs/eval_velocity_turn.json",
+    "source_sha256": "2ae5e92b16af7eb8763831f4d43aeec13099bdcca7ea13eff2ddecfbf8a7d900",
+    "absolute_speed": "model_15000.pt#infos.f1_runtime.motion.nominal_reference_speed_mps[0]",
+    "yaw_limits": "model_15000.pt#infos.f1_runtime.command_limits[2]"
+  },
+  "render": {
+    "resolution": [
+      640,
+      480
+    ],
+    "stride": 2,
+    "eye_offset": [
+      2.0,
+      2.0,
+      1.0
+    ]
+  },
+  "behavior_acceptance": false,
+  "termination_policy": "Translate actual F1 anchor-height, projected-gravity and end-effector-height training checks; abort first failure, no resets",
+  "quality_scope": "Foot body planar speed is a slip proxy, not sole contact surface speed.",
+  "physics_dt": 0.005,
+  "physics_substeps": 4,
+  "gravity": [
+    0,
+    0,
+    -9.81
+  ],
+  "gravity_source": "Explicit simulation test setting; no measured-gravity or recorded-checkpoint-gravity claim",
+  "termination_thresholds": {
+    "anchor_z_m": 0.25,
+    "anchor_gravity_z": 0.8,
+    "end_effector_z_m": 0.25
+  },
+  "termination_thresholds_source": "training/source/f1_beyondmimic/f1_beyondmimic/tasks/tracking/tracking_env_cfg.py#TerminationsCfg",
+  "physics_source": "training/configs/reference/stable_runtime_settings.json#physics_dt,decimation",
+  "scope": "Isolate fourwrist pre-solve saturation in discrete integrator. Each actual poststep wrist effort checked against original bound, abort firstexceedance. Nativevelocityconstraint still unmapped; not deployment or originalpolicy acceptance. Forward/GO/STOP phase only; turning and speedchange postponed by owner2026-11-19.",
+  "integrator": "discrete",
+  "goalRevision": "F1-BEYONDMIMIC-WALK-v4"
+}
