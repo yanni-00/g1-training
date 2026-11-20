@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
-  "hypothesis": "From exact11999, a weaker support-tilt objective may retain a useful left sole improvement while preserving r27 steering, speed and stopping.",
-  "side_effects": "Reducing the cost relative to r28 leaves more side tilt without necessarily restoring steering. Compare the same r27 closed loop and isolated moving turns; protect support loads, stability, and speed.",
+  "hypothesis": "Left-only load-weighted lateral sole tilt can improve left support posture during combined steering while preserving the original action chain, path correction and standing.",
+  "side_effects": "Suppressing left roll in either direction can impair balance or induce shifted right load. Removing the right tilt contribution can increase right sole tilt. Guard bilateral contact, load share, speed, heading and stopped ankle motion.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -59,8 +59,8 @@
     "contact_lateral_tilt": {
       "from": 0.0,
       "to": -2.5,
-      "aggregation": "positive_world_fz_moving",
-      "source": "One-half of the actual r28 force-weighted penalty -5.0, chosen as an engineering comparison; no fitted optimum."
+      "aggregation": "positive_world_fz_moving_left",
+      "source": "Use the exact r29 cost weight; isolate the choice of left-foot numerator. The denominator and nonzero-command gate are unchanged."
     }
   }
 }

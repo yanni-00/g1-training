@@ -4,19 +4,25 @@ import math
 from pathlib import Path
 
 
-def contact_tilt_term(weight, *, load_weighted=False):
+def contact_tilt_term(weight, *, aggregation="equal_contact"):
     """Register optional reward outside the strictly bound original base files."""
     from isaaclab.managers import RewardTermCfg, SceneEntityCfg
-    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt, feet_loaded_lateral_tilt
+    from f1_rl_lab.foot_posture import (
+        LOADED_LATERAL_TILT_FORMULAS,
+        feet_contact_lateral_tilt,
+        feet_loaded_lateral_tilt,
+    )
     feet = ["left_ankle_roll", "right_ankle_roll"]
     params = {"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
               "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)}
-    if load_weighted:
+    if aggregation == "equal_contact":
+        return RewardTermCfg(func=feet_contact_lateral_tilt, weight=weight, params=params)
+    if aggregation in LOADED_LATERAL_TILT_FORMULAS:
         params["command_name"] = "base_velocity"
-    return RewardTermCfg(
-        func=feet_loaded_lateral_tilt if load_weighted else feet_contact_lateral_tilt,
-        weight=weight, params=params,
-    )
+        if aggregation == "positive_world_fz_moving_left":
+            params["left_only"] = True
+        return RewardTermCfg(func=feet_loaded_lateral_tilt, weight=weight, params=params)
+    raise ValueError("Unregistered contact tilt aggregation")
 
 
 def yaw_tracking_term(weight):
@@ -142,7 +148,7 @@ def apply_delta(env_cfg, delta):
         addition_audit = {"yaw_rate_error_l2": {"from": 0.0, "to": target}}
     elif additions:
         if set(additions) != {"contact_lateral_tilt"}:
-            raise ValueError("Only the registered symmetric contact tilt term can be added")
+            raise ValueError("Only the registered contact tilt term can be added")
         spec = additions["contact_lateral_tilt"]
         if (hasattr(env_cfg.rewards, "contact_lateral_tilt")
                 or spec["from"] != 0.0 or "contact_lateral_tilt" in after):
@@ -154,12 +160,7 @@ def apply_delta(env_cfg, delta):
         if actual_parent != delta["parent_reward_weights"]:
             raise ValueError("Existing parent reward inventory changed while adding contact tilt")
         rule = spec.get("aggregation", "equal_contact")
-        if rule not in {"equal_contact", "positive_world_fz_moving"}:
-            raise ValueError("Unregistered contact tilt aggregation")
-        if rule == "positive_world_fz_moving":
-            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, load_weighted=True)
-        else:
-            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
+        env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, aggregation=rule)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
     action_change = None

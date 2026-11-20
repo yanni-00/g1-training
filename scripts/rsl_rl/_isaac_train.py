@@ -299,18 +299,18 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             samples = []
             clip_feedback = None
             if "JointPositionAction" in env.unwrapped.action_manager._terms:
-                term = env.unwrapped.action_manager._terms["JointPositionAction"]
+                action_term = env.unwrapped.action_manager._terms["JointPositionAction"]
                 spec = identity["runtime"].get("action_clip")
                 lower = torch.tensor(spec["lower"], device=env.unwrapped.device) if spec else None
                 upper = torch.tensor(spec["upper"], device=env.unwrapped.device) if spec else None
                 defaults = torch.tensor(identity["runtime"]["default_joint_pos"], device=env.unwrapped.device)
-                native_apply = term.apply_actions
+                native_apply = action_term.apply_actions
                 clip_feedback = {"calls": 0, "max_error": 0.0, "raw_target_outside_count": 0, "clipping": spec is not None, "last": None}
                 def audited_apply():
-                    raw = term.raw_actions
+                    raw = action_term.raw_actions
                     unbounded = raw * identity["runtime"]["action_scale"] + defaults
                     expected = torch.clamp(unbounded, min=lower, max=upper) if spec else unbounded
-                    actual = term.processed_actions
+                    actual = action_term.processed_actions
                     error = float(torch.max(torch.abs(actual - expected)).detach().cpu())
                     if not torch.allclose(actual, expected, rtol=1e-6, atol=1e-6):
                         raise ValueError("Native applied target differs from declared post-scale URDF clip")
@@ -322,7 +322,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                                              "applied_position_target": actual[0].detach().cpu().tolist(),
                                              "all_env_max_target_error": error}
                     native_apply()
-                term.apply_actions = audited_apply
+                action_term.apply_actions = audited_apply
             for feedback_step in range(request["readiness_steps"]):
                 with torch.inference_mode():
                     actor_observation = select_actor_observation(observations, identity["runtime"]["observation_dim"])
@@ -384,13 +384,14 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                             "previous_ankle_action": manager.prev_action[0, ids].cpu().tolist(),
                             "cost_env0": float(actual_cost[0].cpu())}
                     if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
-                        term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
-                        ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
+                        tilt_reward = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
+                        ac, sc = tilt_reward.params["asset_cfg"], tilt_reward.params["sensor_cfg"]
                         sensor = env.unwrapped.scene.sensors[sc.name]
                         sample["foot_quat_w"] = asset.data.body_quat_w[0, ac.body_ids].detach().cpu().tolist()
                         sample["foot_contact_time"] = sensor.data.current_contact_time[0, sc.body_ids].detach().cpu().tolist()
                         sample["foot_net_forces_w"] = sensor.data.net_forces_w[0, sc.body_ids].detach().cpu().tolist()
-                        sample["contact_lateral_tilt_unweighted"] = float(term.func(env.unwrapped, **term.params)[0].detach().cpu())
+                        sample["contact_lateral_tilt_unweighted"] = float(
+                            tilt_reward.func(env.unwrapped, **tilt_reward.params)[0].detach().cpu())
                         sample["root_quat_w"] = asset.data.root_quat_w[0].detach().cpu().tolist()
                         sample["root_ang_vel_b"] = asset.data.root_ang_vel_b[0].detach().cpu().tolist()
                     samples.append(sample)

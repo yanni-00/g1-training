@@ -27,6 +27,11 @@ class FootPostureTests(unittest.TestCase):
                                    expected)
         torch.testing.assert_close(module.load_weighted_lateral_tilt_l2(
             quat.flip(1), contact.flip(1), force_z.flip(1), moving), expected)
+        torch.testing.assert_close(module.load_weighted_lateral_tilt_l2(
+            quat, contact, force_z, moving, left_only=True), expected)
+        torch.testing.assert_close(module.load_weighted_lateral_tilt_l2(
+            quat.flip(1), contact.flip(1), force_z.flip(1), moving, left_only=True),
+            torch.zeros_like(expected))
 
     def test_roll_contact_gating_and_mirror(self):
         # Test fixtures, not measurements: roll +/-30deg has sin²=1/4.

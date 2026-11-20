@@ -21,8 +21,9 @@ class ContinuationTests(unittest.TestCase):
                "resume_command_ranges":{"ang_vel_z":[-.1,.1]}}
         original=copy.deepcopy(env)
         from unittest.mock import patch
-        with patch.object(module, "contact_tilt_term", side_effect=lambda weight: NS(weight=weight)):
+        with patch.object(module, "contact_tilt_term", return_value=NS(weight=-5.)) as build_term:
             result=module.apply_delta(env,delta)
+        build_term.assert_called_once_with(-5., aggregation="equal_contact")
         self.assertEqual(result["reward_weights_after"],{**delta["parent_reward_weights"],"contact_lateral_tilt":-5.})
         self.assertEqual(env.rewards.track_ang_vel_z.params["std"],.1)
         for value in (0.,1.,float("nan")):
