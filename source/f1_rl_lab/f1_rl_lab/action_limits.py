@@ -43,6 +43,7 @@ def verify_runtime_action_contract(runtime, contract, root):
         objective = runtime.get("training_objective", {})
         tilt = objective.get("contact_lateral_tilt", {})
         aggregation = tilt.get("aggregation")
+        exposure = objective.get("command_sampling", {}).get("forward_exposure")
         feet = ["left_ankle_roll", "right_ankle_roll"]
         if (runtime.get("action_clip") is not None or runtime.get("action_input_projection") is not None
                 or runtime.get("action_interface_sources") != action_source_binding(root, projection=True)
@@ -53,6 +54,11 @@ def verify_runtime_action_contract(runtime, contract, root):
                 or tilt.get("command_name") != "base_velocity"
                 or tilt.get("asset_body_names") != feet or tilt.get("sensor_body_names") != feet):
             raise ValueError("Loaded-foot runtime_v6 source/action/foot/force binding changed")
+        if exposure is not None:
+            source = "source/f1_rl_lab/f1_rl_lab/command_exposure.py"
+            if (not isinstance(exposure, dict) or set(exposure) != {"source_sha256", "vx", "group_modulus"}
+                    or exposure["source_sha256"] != sha256(Path(root) / source)):
+                raise ValueError("Forward command exposure source binding changed")
     elif runtime.get("format") == "f1_fullbody_runtime_v5":
         from .contract import sha256
         rewards = ["source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",

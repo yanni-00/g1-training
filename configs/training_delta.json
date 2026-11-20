@@ -21,9 +21,9 @@
       0.1
     ]
   },
-  "command_provenance": "Actual11999 parent f1_training.command_ranges retained; parent_state.json binds its source task/model. yaw0.2 remains outside training ranges.",
-  "hypothesis": "Left-only load-weighted lateral sole tilt can improve left support posture during combined steering while preserving the original action chain, path correction and standing.",
-  "side_effects": "Suppressing left roll in either direction can impair balance or induce shifted right load. Removing the right tilt contribution can increase right sole tilt. Guard bilateral contact, load share, speed, heading and stopped ankle motion.",
+  "command_provenance": "Exact saved12700 command ranges; two of ten environment-index groups reserve normal forward samples. Standing selection is by the original sampler and takes priority.",
+  "hypothesis": "Explicitly sampling normal-speed pure-forward and combined steering commands from the 12700 posture baseline may improve tracking during correction while retaining flatter stance and quiet stopping.",
+  "side_effects": "Targeted examples reduce some generic command coverage, and weights shared across commands can change stop smoothness and foot support. Keep the original standing allocation and check both walking protocols, signed turning diagnostics and late stop.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -58,9 +58,13 @@
   "reward_addition": {
     "contact_lateral_tilt": {
       "from": 0.0,
-      "to": -2.5,
-      "aggregation": "positive_world_fz_moving_left",
-      "source": "Use the exact r29 cost weight; isolate the choice of left-foot numerator. The denominator and nonzero-command gate are unchanged."
+      "to": -5.0,
+      "aggregation": "positive_world_fz_moving",
+      "source": "Reuse actual r12 tilt penalty weight; switch binary contact mean to positive normal-force weighted moving cost."
     }
+  },
+  "forward_exposure": {
+    "vx": 0.5,
+    "group_modulus": 10
   }
 }

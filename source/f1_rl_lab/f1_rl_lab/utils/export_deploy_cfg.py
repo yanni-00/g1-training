@@ -119,6 +119,12 @@ def export_deploy_cfg(env, log_dir):
             "rel_standing_envs": float(command.cfg.rel_standing_envs),
             "resampling_time_range": list(command.cfg.resampling_time_range),
             "source": "Resolved native CommandManager base_velocity term cfg"}
+        if hasattr(command.cfg, "forward_exposure"):
+            from f1_rl_lab.command_exposure import ForwardExposureVelocityCommand, SOURCE_PATH
+            if not isinstance(command, ForwardExposureVelocityCommand):
+                raise ValueError("Forward exposure did not reach the native command manager")
+            runtime["training_objective"]["command_sampling"]["forward_exposure"] = {
+                **command.cfg.forward_exposure, "source_sha256": sha256(ROOT / SOURCE_PATH)}
         if "contact_lateral_tilt" in env.reward_manager.active_terms:
             term = env.reward_manager.get_term_cfg("contact_lateral_tilt")
             ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]

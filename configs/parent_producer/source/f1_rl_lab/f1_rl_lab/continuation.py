@@ -4,15 +4,18 @@ import math
 from pathlib import Path
 
 
-def contact_tilt_term(weight):
+def contact_tilt_term(weight, *, load_weighted=False):
     """Register optional reward outside the strictly bound original base files."""
     from isaaclab.managers import RewardTermCfg, SceneEntityCfg
-    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt
+    from f1_rl_lab.foot_posture import feet_contact_lateral_tilt, feet_loaded_lateral_tilt
     feet = ["left_ankle_roll", "right_ankle_roll"]
+    params = {"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
+              "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)}
+    if load_weighted:
+        params["command_name"] = "base_velocity"
     return RewardTermCfg(
-        func=feet_contact_lateral_tilt, weight=weight,
-        params={"asset_cfg": SceneEntityCfg("robot", body_names=feet, preserve_order=True),
-                "sensor_cfg": SceneEntityCfg("contact_forces", body_names=feet, preserve_order=True)},
+        func=feet_loaded_lateral_tilt if load_weighted else feet_contact_lateral_tilt,
+        weight=weight, params=params,
     )
 
 
@@ -21,6 +24,39 @@ def yaw_tracking_term(weight):
     from f1_rl_lab.yaw_tracking import yaw_rate_error_l2
     return RewardTermCfg(func=yaw_rate_error_l2, weight=weight,
                          params={"command_name": "base_velocity", "asset_name": "robot"})
+
+
+def standing_smoothness_term(weight):
+    from isaaclab.managers import RewardTermCfg
+    from f1_rl_lab.contract import load_contract
+    from f1_rl_lab.standing_smoothness import zero_command_ankle_action_rate_l2
+    names = load_contract()["model_joint_names"]
+    ankles = [f"{side}_ankle_{axis}_joint" for side in ("left", "right") for axis in ("pitch", "roll")]
+    return RewardTermCfg(func=zero_command_ankle_action_rate_l2, weight=weight,
+        params={"command_name": "base_velocity", "ankle_action_ids": [names.index(n) for n in ankles]})
+
+
+def verify_resume_checkpoint(checkpoint, request, root):
+    """Verify a source-pinned parent against its preserved producer, never waive pins."""
+    from f1_rl_lab.checkpoint import verify_checkpoint
+    from f1_rl_lab.contract import binding, sha256
+    relative = request.get("producer_root")
+    if relative is None:
+        return verify_checkpoint(checkpoint, root=root)
+    root = Path(root).resolve()
+    producer = (root / relative).resolve()
+    if not producer.is_relative_to(root) or producer == root:
+        raise ValueError("Parent producer snapshot must stay inside the published source")
+    if sha256(checkpoint) != request["sha256"]:
+        raise ValueError("Parent checkpoint differs from registered exact bytes")
+    identity = verify_checkpoint(checkpoint, root=producer)
+    if identity["binding"] != binding(root):
+        raise ValueError("Parent-to-child physical/observation/base source binding changed")
+    runtime = identity["runtime"]
+    if (runtime.get("format") != "f1_fullbody_runtime_v4" or runtime.get("action_clip") is not None
+            or runtime.get("action_input_projection") is not None):
+        raise ValueError("Standing continuation requires the exact original-action yaw-cost parent")
+    return identity
 
 
 def apply_delta(env_cfg, delta):
@@ -36,6 +72,15 @@ def apply_delta(env_cfg, delta):
              if hasattr(v,"weight") and float(v.weight) != 0.0}
     if any(before[n] != after[n] for n in before if n != "gait"):
         raise ValueError("Unregistered reward change")
+    retained = delta.get("retained_custom_rewards", {})
+    if retained:
+        sampling_only = bool(delta.get("command_sampling_override")) and not delta.get("reward_addition")
+        if (retained != {"yaw_rate_error_l2": -0.5}
+                or (delta.get("reward_addition", {}).keys() != {"zero_command_ankle_action_rate_l2"} and not sampling_only)
+                or "yaw_rate_error_l2" in after):
+            raise ValueError("Only the actual12998 yaw term can be retained for standing continuation")
+        env_cfg.rewards.yaw_rate_error_l2 = yaw_tracking_term(retained["yaw_rate_error_l2"])
+        after["yaw_rate_error_l2"] = retained["yaw_rate_error_l2"]
     # [OMA] r8: keep the parent's complete weight inventory while testing only
     # the existing yaw tracking kernel width. Do not change the physical binding.
     parameter_changes = {}
@@ -58,9 +103,32 @@ def apply_delta(env_cfg, delta):
         if name not in ("lin_vel_x","lin_vel_y","ang_vel_z"):
             raise ValueError("Unregistered command range field")
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
+    sampling_audit = {}
+    sampling = delta.get("command_sampling_override", {})
+    if sampling:
+        if set(sampling) != {"rel_standing_envs"} or after != delta["parent_reward_weights"] or delta.get("reward_addition"):
+            raise ValueError("Standing exposure permits one sampler field with exact parent rewards")
+        spec = sampling["rel_standing_envs"]
+        actual = env_cfg.commands.base_velocity.rel_standing_envs
+        target = float(spec["to"])
+        if actual != spec["from"] or not math.isfinite(target) or not 0 < target < 1:
+            raise ValueError("Unexpected standing sampler baseline or invalid probability")
+        env_cfg.commands.base_velocity.rel_standing_envs = target
+        sampling_audit = {"rel_standing_envs": {"from": actual, "to": target}}
     additions = delta.get("reward_addition", {})
     addition_audit = {}
-    if set(additions) == {"yaw_rate_error_l2"}:
+    if set(additions) == {"zero_command_ankle_action_rate_l2"}:
+        spec = additions["zero_command_ankle_action_rate_l2"]
+        if (not retained or spec["from"] != 0.0 or after != delta["parent_reward_weights"]
+                or hasattr(env_cfg.rewards, "zero_command_ankle_action_rate_l2")):
+            raise ValueError("Standing addition requires exact unchanged actual12998 reward inventory")
+        target = float(spec["to"])
+        if not math.isfinite(target) or target >= 0:
+            raise ValueError("Standing action-rate cost must have a finite negative weight")
+        env_cfg.rewards.zero_command_ankle_action_rate_l2 = standing_smoothness_term(target)
+        after["zero_command_ankle_action_rate_l2"] = target
+        addition_audit = {"zero_command_ankle_action_rate_l2": {"from": 0.0, "to": target}}
+    elif set(additions) == {"yaw_rate_error_l2"}:
         spec = additions["yaw_rate_error_l2"]
         if (hasattr(env_cfg.rewards, "yaw_rate_error_l2")
                 or spec["from"] != 0.0 or "yaw_rate_error_l2" in after
@@ -85,7 +153,13 @@ def apply_delta(env_cfg, delta):
         actual_parent = {n: w for n, w in after.items() if n != "contact_lateral_tilt"}
         if actual_parent != delta["parent_reward_weights"]:
             raise ValueError("Existing parent reward inventory changed while adding contact tilt")
-        env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
+        rule = spec.get("aggregation", "equal_contact")
+        if rule not in {"equal_contact", "positive_world_fz_moving"}:
+            raise ValueError("Unregistered contact tilt aggregation")
+        if rule == "positive_world_fz_moving":
+            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, load_weighted=True)
+        else:
+            env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
     action_change = None
@@ -107,6 +181,8 @@ def apply_delta(env_cfg, delta):
     return {"reward_weights_before":before,"reward_weights_after":after,
             "reward_parameter_changes":parameter_changes,
             "reward_additions":addition_audit,
+            "retained_custom_rewards": retained,
+            "command_sampling_changes": sampling_audit,
             "action_postprocessing_change": action_change,
             "command_ranges":delta["resume_command_ranges"],
             "episode_state_restored":False,"rng_state_restored":False,

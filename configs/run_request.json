@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261120-001",
+  "exp_id": "exp-20261120-002",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_left_loaded_tilt_resume11999_formal1000_20261120",
+  "run_name": "f1_forward_exposure_resume12700_formal1000_20261120",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Owner2026-11-18 standing instruction: no separate probes, direct formal.1000-update bounded allocation stated in current chat, not convergence/cost estimate; start from actual11999.",
+    "max_iterations": "Retain the existing bounded direct formal run length. Exact parent12700 with restored optimizer. No separate cloud trial.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
@@ -20,10 +20,12 @@
     "estimate": false
   },
   "resume": {
-    "sha256": "1d55c139b45967ec34f3a3878a0e42b208e638790500b761c1511c2f1ed2bd17",
-    "iteration": 11999,
-    "optimizerStep": 240040,
-    "optimizer_learning_rate": 0.0002562890625000001
+    "sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
+    "iteration": 12700,
+    "optimizerStep": 254080,
+    "optimizer_learning_rate": 0.0002562890625000001,
+    "producer_runtime_format": "f1_fullbody_runtime_v6",
+    "producer_root": "configs/parent_producer"
   },
   "training_delta": "configs/training_delta.json",
   "verify_saved_checkpoint_feedback": true

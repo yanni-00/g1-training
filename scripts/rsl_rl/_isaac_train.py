@@ -184,9 +184,15 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                 raise ValueError("Action adaptation parent metadata differs from registered source")
         if delta.get("reward_addition") or delta.get("command_sampling_override"):
             previous = parent_identity["runtime"]["training_objective"]
-            if (previous["reward_weights"] != delta["parent_reward_weights"]
+            expected_weights = (continuation["reward_weights_after"] if delta.get("forward_exposure")
+                                else delta["parent_reward_weights"])
+            if (previous["reward_weights"] != expected_weights
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Actual parent objective differs from registered continuation")
+            if delta.get("forward_exposure") and (
+                    previous.get("contact_lateral_tilt", {}).get("aggregation") != "positive_world_fz_moving"
+                    or previous.get("command_sampling", {}).get("forward_exposure") is not None):
+                raise ValueError("Forward exposure requires the original bilateral loaded-foot parent")
 
     if delta.get("action_input_projection"):
         from f1_rl_lab.action_projection import install_projection, projection_contract
@@ -232,6 +238,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         from f1_rl_lab.continuation import restore_adaptive_lr
         continuation.update(restore_adaptive_lr(runner, request["resume"]))
         print("[F1_RESUME]", continuation, flush=True)
+        if delta.get("forward_exposure"):
+            command_term = env.unwrapped.command_manager.get_term("base_velocity")
+            print("[F1_FORWARD_EXPOSURE]", command_term.audit_forward_commands(after_step=False), flush=True)
 
     # dump the configuration into log-directory
     dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
@@ -401,6 +410,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                         "scope": "admission interface/finite-state evidence; not walking or owner acceptance"}
             if hasattr(env.unwrapped, "f1_action_projection_audit"):
                 evidence["environment_action_projection_audit"] = dict(env.unwrapped.f1_action_projection_audit)
+            if delta.get("forward_exposure"):
+                evidence["forward_command_exposure"] = command_term.audit_forward_commands()
             if clip_feedback is not None:
                 evidence["position_target_audit"] = {
                     key: value for key, value in clip_feedback.items() if key != "last"}

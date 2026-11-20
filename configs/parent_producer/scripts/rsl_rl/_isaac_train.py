@@ -174,14 +174,15 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         if not args_cli.checkpoint:
             raise ValueError("Explicit F1 checkpoint path required; latest/run regex is disabled")
         resume_path = os.path.abspath(args_cli.checkpoint)
-        parent_identity = verify_checkpoint(resume_path)
+        from f1_rl_lab.continuation import verify_resume_checkpoint
+        parent_identity = verify_resume_checkpoint(resume_path, request["resume"], f1_root)
         if delta.get("action_postprocessing_override"):
             previous = parent_identity["runtime"]
             if (previous.get("action_clip") != delta["action_postprocessing_override"]["parent_action_clip"]
                     or previous["training_objective"]["reward_weights"] != delta["parent_reward_weights"]
                     or previous["training_objective"]["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Action adaptation parent metadata differs from registered source")
-        if delta.get("reward_addition"):
+        if delta.get("reward_addition") or delta.get("command_sampling_override"):
             previous = parent_identity["runtime"]["training_objective"]
             if (previous["reward_weights"] != delta["parent_reward_weights"]
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
@@ -363,6 +364,25 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     if "yaw_rate_error_l2" in env.unwrapped.reward_manager.active_terms:
                         yaw_term = env.unwrapped.reward_manager.get_term_cfg("yaw_rate_error_l2")
                         sample["post_step_yaw_cost_diagnostic"] = float(yaw_term.func(env.unwrapped, **yaw_term.params)[0].detach().cpu())
+                    if "zero_command_ankle_action_rate_l2" in env.unwrapped.reward_manager.active_terms:
+                        standing_term = env.unwrapped.reward_manager.get_term_cfg("zero_command_ankle_action_rate_l2")
+                        ids = standing_term.params["ankle_action_ids"]
+                        commands = env.unwrapped.command_manager.get_command("base_velocity")[:, :3]
+                        zero = torch.all(commands == 0, dim=1)
+                        manager = env.unwrapped.action_manager
+                        delta_action = (manager.action - manager.prev_action)[:, ids]
+                        expected_cost = zero.to(delta_action.dtype) * delta_action.square().sum(dim=1)
+                        actual_cost = standing_term.func(env.unwrapped, **standing_term.params)
+                        if not torch.allclose(actual_cost, expected_cost, rtol=1e-6, atol=1e-6):
+                            raise ValueError("Native standing smoothness diagnostic mismatch")
+                        sample["post_step_standing_smoothness_diagnostic"] = {
+                            "zero_command_envs": int(zero.sum().cpu()),
+                            "all_env_max_cost_error": float(abs(actual_cost-expected_cost).max().cpu()),
+                            "nonzero_command_cost_count": int((actual_cost[~zero] != 0).sum().cpu()),
+                            "cost_sum": float(actual_cost.sum().cpu()),
+                            "ankle_action": manager.action[0, ids].cpu().tolist(),
+                            "previous_ankle_action": manager.prev_action[0, ids].cpu().tolist(),
+                            "cost_env0": float(actual_cost[0].cpu())}
                     if "contact_lateral_tilt" in env.unwrapped.reward_manager.active_terms:
                         term = env.unwrapped.reward_manager.get_term_cfg("contact_lateral_tilt")
                         ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]

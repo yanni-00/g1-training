@@ -1,7 +1,6 @@
 {
-  "parent_sha256": "d38091c8b93590e4e8f19b36aba476a35d903149a4c3d3c7ba1bb3702fb8bb75",
-  "producer_commit": "848b87c1c5c051d2b2a76014029da557f4853cc4",
-  "purpose": "Strict restore verification of exact parent source/action/reward identity",
+  "parent_sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
+  "producer_commit": "b440144fdfe0ac1d8dbe5f0194924a6678de5620",
   "files": [
     {
       "path": "configs/control_profile.json",
@@ -25,7 +24,7 @@
     },
     {
       "path": "scripts/rsl_rl/_isaac_train.py",
-      "sha256": "2aaf961b4346c0f6f5dafa094e7af1dccd4dce998b693039e77d44517617161d"
+      "sha256": "03f3247beb16a41bdd3ef6f405435e29210ce8578272d421a5593f127bc98d55"
     },
     {
       "path": "scripts/rsl_rl/sim2sim_play.py",
@@ -33,7 +32,7 @@
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/action_limits.py",
-      "sha256": "4a9d7c2f2e936958aa923841298ad40f9153e7c1e3a3795792346689bcf557ab"
+      "sha256": "74f4f51951e876aaf6f2c23ff3258901e7122856df593fec08666ce41250cf48"
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/action_projection.py",
@@ -45,11 +44,15 @@
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/continuation.py",
-      "sha256": "1b07a5aa39dd57f448fa1c096baf6db47f31b3b6a5d900599ba3328021c4c1b4"
+      "sha256": "65eab266a64c2c3a937fe12af9c1a5c145035f225722a6650497222d8546a284"
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/contract.py",
       "sha256": "9de4cbb0982c051e44b8c7a48f1c98c403a33cf41bf4756babc1b45851800e00"
+    },
+    {
+      "path": "source/f1_rl_lab/f1_rl_lab/foot_posture.py",
+      "sha256": "58f33ac7378b40d7c4fd0299463f8b2e38678a073d85f21c0aad3c68dff1a8ff"
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/interface.py",
@@ -69,11 +72,7 @@
     },
     {
       "path": "source/f1_rl_lab/f1_rl_lab/utils/export_deploy_cfg.py",
-      "sha256": "78ee0e15e467850034f18a21045493a08b9ee59325417dcce8a5cabd3d3e50d4"
-    },
-    {
-      "path": "source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",
-      "sha256": "35da7e261d1fa75f8e01d2c085f5ace63926453e371a7e7c00afaf643e4fb8a9"
+      "sha256": "71f4c8a0e168522fae0fb3270f3931141a9b32bc479e62a8e4d84bf35c2c9fb0"
     }
   ]
 }

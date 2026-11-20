@@ -59,9 +59,11 @@ def verify_resume_checkpoint(checkpoint, request, root):
     if identity["binding"] != binding(root):
         raise ValueError("Parent-to-child physical/observation/base source binding changed")
     runtime = identity["runtime"]
-    if (runtime.get("format") != "f1_fullbody_runtime_v4" or runtime.get("action_clip") is not None
+    expected = request.get("producer_runtime_format", "f1_fullbody_runtime_v4")
+    if (expected not in {"f1_fullbody_runtime_v4", "f1_fullbody_runtime_v6"}
+            or runtime.get("format") != expected or runtime.get("action_clip") is not None
             or runtime.get("action_input_projection") is not None):
-        raise ValueError("Standing continuation requires the exact original-action yaw-cost parent")
+        raise ValueError("Continuation parent must match its registered original-action runtime")
     return identity
 
 
@@ -163,6 +165,15 @@ def apply_delta(env_cfg, delta):
         env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, aggregation=rule)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
+    forward_exposure = delta.get("forward_exposure")
+    if forward_exposure is not None:
+        from f1_rl_lab.command_exposure import install_forward_exposure
+        if (sampling or retained or set(additions) != {"contact_lateral_tilt"}
+                or additions["contact_lateral_tilt"].get("aggregation") != "positive_world_fz_moving"
+                or delta.get("action_postprocessing_override") or delta.get("action_input_projection")):
+            raise ValueError("Forward exposure retains the bilateral loaded-foot objective and original actions")
+        install_forward_exposure(env_cfg.commands.base_velocity, forward_exposure)
+        sampling_audit["forward_exposure"] = dict(forward_exposure)
     action_change = None
     if delta.get("action_postprocessing_override"):
         from f1_rl_lab.contract import load_contract

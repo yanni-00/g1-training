@@ -114,6 +114,11 @@ def export_deploy_cfg(env, log_dir):
             "reward_weights": {n: float(env.reward_manager.get_term_cfg(n).weight)
                                for n in env.reward_manager.active_terms},
             "scope": "Actual runtime reward inventory; effective action postprocessing is recorded separately"}
+        command = env.command_manager.get_term("base_velocity")
+        runtime["training_objective"]["command_sampling"] = {
+            "rel_standing_envs": float(command.cfg.rel_standing_envs),
+            "resampling_time_range": list(command.cfg.resampling_time_range),
+            "source": "Resolved native CommandManager base_velocity term cfg"}
         if "contact_lateral_tilt" in env.reward_manager.active_terms:
             term = env.reward_manager.get_term_cfg("contact_lateral_tilt")
             ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]
@@ -127,6 +132,18 @@ def export_deploy_cfg(env, log_dir):
                 "formula": "mean over contacting feet of (2*(w*x+y*z))^2; zero if no contact",
                 "scope": "Reward only; no actor inputs or action processing changed",
             }
+            if term.func.__name__ == "feet_loaded_lateral_tilt":
+                from f1_rl_lab.action_limits import action_source_binding
+                from f1_rl_lab.foot_posture import LOADED_LATERAL_TILT_FORMULA
+                if action_clip is not None or projection is not None or term.params.get("command_name") != "base_velocity":
+                    raise ValueError("Loaded-foot repair requires original actions and base_velocity command")
+                name = "source/f1_rl_lab/f1_rl_lab/foot_posture.py"
+                runtime["format"] = "f1_fullbody_runtime_v6"
+                runtime["action_interface_sources"] = action_source_binding(ROOT, projection=True)
+                runtime["training_objective"]["custom_reward_sources"] = {name: sha256(ROOT / name)}
+                runtime["training_objective"]["contact_lateral_tilt"].update(
+                    formula=LOADED_LATERAL_TILT_FORMULA, aggregation="positive_world_fz_moving",
+                    command_name="base_velocity")
     if "yaw_rate_error_l2" in env.reward_manager.active_terms:
         from f1_rl_lab.action_limits import action_source_binding
         from f1_rl_lab.contract import sha256
@@ -142,6 +159,25 @@ def export_deploy_cfg(env, log_dir):
         runtime["training_objective"]["yaw_rate_error_l2"] = {"weight": float(term.weight),
             "formula": "(command_base_velocity_z-root_ang_vel_b_z)^2", "frame": "root_body_z",
             "command_name": "base_velocity", "asset_name": "robot"}
+    if "zero_command_ankle_action_rate_l2" in env.reward_manager.active_terms:
+        from f1_rl_lab.contract import sha256
+        if runtime["format"] != "f1_fullbody_runtime_v4":
+            raise ValueError("Standing continuation requires original-action yaw-cost runtime")
+        term = env.reward_manager.get_term_cfg("zero_command_ankle_action_rate_l2")
+        ankles = [f"{side}_ankle_{axis}_joint" for side in ("left", "right") for axis in ("pitch", "roll")]
+        ids = [action_names.index(n) for n in ankles]
+        if (term.func.__name__ != "zero_command_ankle_action_rate_l2"
+                or term.params != {"command_name": "base_velocity", "ankle_action_ids": ids}):
+            raise ValueError("Unexpected resolved standing smoothness function or ankle order")
+        runtime["format"] = "f1_fullbody_runtime_v5"
+        name = "source/f1_rl_lab/f1_rl_lab/standing_smoothness.py"
+        runtime["training_objective"]["custom_reward_sources"][name] = sha256(ROOT / name)
+        runtime["training_objective"]["zero_command_ankle_action_rate_l2"] = {
+            "weight": float(term.weight), "function": term.func.__name__,
+            "command_name": "base_velocity", "ankle_joint_names": ankles, "ankle_action_ids": ids,
+            "gate": "all(command_vx,command_vy,command_wz)==0",
+            "formula": "zero_command * sum_4ankles((raw_action-previous_raw_action)^2)",
+            "scope": "Training-only reward; no observation, action filtering, target clipping or state mutation"}
     target = Path(log_dir) / "params/f1_runtime.json"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(json.dumps(runtime, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
