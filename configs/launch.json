@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261120-002",
+  "oma_exp_ref": "exp-20261120-003",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
-  "reason": "Owner continues the F1 Loop after 12700 review. Combined and pure forward command exposure only from exact 12700."
+  "reason": "Owner directs a new formal training from random initialization; 3000 updates for the first gate."
 }

@@ -4,26 +4,12 @@
     "gait": {
       "from": 0.5,
       "to": 1.0,
-      "source": "Retain actual11999 gait1.0 using original bound source default0.5 override; no reward change relative to actual parent."
+      "source": "Reuse the 12700 recipe from exp-20261119-006 as an objective, starting the optimizer and policy fresh."
     }
   },
-  "resume_command_ranges": {
-    "lin_vel_x": [
-      -0.5,
-      1.0
-    ],
-    "lin_vel_y": [
-      -0.3,
-      0.3
-    ],
-    "ang_vel_z": [
-      -0.1,
-      0.1
-    ]
-  },
-  "command_provenance": "Exact saved12700 command ranges; two of ten environment-index groups reserve normal forward samples. Standing selection is by the original sampler and takes priority.",
-  "hypothesis": "Explicitly sampling normal-speed pure-forward and combined steering commands from the 12700 posture baseline may improve tracking during correction while retaining flatter stance and quiet stopping.",
-  "side_effects": "Targeted examples reduce some generic command coverage, and weights shared across commands can change stop smoothness and foot support. Keep the original standing allocation and check both walking protocols, signed turning diagnostics and late stop.",
+  "command_provenance": "Original F1 CommandsCfg initial ranges and G1-style expanding curriculum; route correction and pure forward remain within the live ranges.",
+  "hypothesis": "Learn flat weight-bearing foot placement together with sustained positive forward walking, route correction and settling to zero from random initialization.",
+  "side_effects": "May shift support to one foot, alter stance timing or reduce tracking. Check both soles, support-force share, gait, steering, speed and late standing. No reward weight removed.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -50,7 +36,7 @@
       "std": {
         "from": 0.5,
         "to": 0.1,
-        "source": "Retain actual11999 parent runtime yaw std0.1 while original bound source default is0.5; not an objective change relative to parent."
+        "source": "Reuse the verified 12700 yaw tracking reward width."
       }
     }
   },
@@ -63,8 +49,28 @@
       "source": "Reuse actual r12 tilt penalty weight; switch binary contact mean to positive normal-force weighted moving cost."
     }
   },
+  "initial_command_ranges": {
+    "lin_vel_x": [
+      -0.1,
+      0.1
+    ],
+    "lin_vel_y": [
+      -0.1,
+      0.1
+    ],
+    "ang_vel_z": [
+      -0.1,
+      0.1
+    ]
+  },
   "forward_exposure": {
     "vx": 0.5,
-    "group_modulus": 10
+    "group_modulus": 10,
+    "route_stop": {
+      "heading_gain": 1.0,
+      "cross_track_gain": 0.5,
+      "ramp_s": 0.8,
+      "hold_s": 2.0
+    }
   }
 }

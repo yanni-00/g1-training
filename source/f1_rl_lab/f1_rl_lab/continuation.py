@@ -67,7 +67,7 @@ def verify_resume_checkpoint(checkpoint, request, root):
     return identity
 
 
-def apply_delta(env_cfg, delta):
+def apply_delta(env_cfg, delta, *, initial_training=False):
     if set(delta["reward_override"]) != {"gait"}:
         raise ValueError("This experiment permits only the gait reward weight delta")
     spec = delta["reward_override"]["gait"]
@@ -107,7 +107,8 @@ def apply_delta(env_cfg, delta):
         parameter_changes = {"track_ang_vel_z": {"std": {"from": old, "to": target}}}
     # The parent does not contain per-environment episode state. Restore the
     # observed curriculum command limits explicitly, never claim a bitwise resume.
-    for name,values in delta["resume_command_ranges"].items():
+    ranges = delta["initial_command_ranges" if initial_training else "resume_command_ranges"]
+    for name, values in ranges.items():
         if name not in ("lin_vel_x","lin_vel_y","ang_vel_z"):
             raise ValueError("Unregistered command range field")
         setattr(env_cfg.commands.base_velocity.ranges,name,tuple(values))
@@ -196,9 +197,11 @@ def apply_delta(env_cfg, delta):
             "retained_custom_rewards": retained,
             "command_sampling_changes": sampling_audit,
             "action_postprocessing_change": action_change,
-            "command_ranges":delta["resume_command_ranges"],
+            "command_ranges": ranges,
             "episode_state_restored":False,"rng_state_restored":False,
-            "scope":"Same actor/optimizer, observed command curriculum; simulator episodes/terrain assignments reset"}
+            "scope": ("Random actor/optimizer initialization; registered starting curriculum"
+                      if initial_training else
+                      "Same actor/optimizer, observed command curriculum; simulator episodes/terrain assignments reset")}
 
 
 def restore_adaptive_lr(runner, parent):

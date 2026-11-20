@@ -156,10 +156,15 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     request = load_json(f1_root / "configs/run_request.json")
     continuation = None
     delta = {}
-    if request.get("resume"):
+    initial_training = request.get("initial_training", False)
+    if initial_training and (request.get("resume") or agent_cfg.resume):
+        raise ValueError("Initial training cannot load an actor or optimizer checkpoint")
+    if request.get("resume") or initial_training:
         from f1_rl_lab.continuation import apply_delta
         delta = load_json(f1_root / "configs/training_delta.json")
-        continuation = apply_delta(env_cfg, delta)
+        continuation = apply_delta(env_cfg, delta, initial_training=initial_training)
+        if initial_training:
+            continuation["initialization"] = "random"
 
     # create isaac environment
     env = gym.make(args_cli.task, cfg=env_cfg, render_mode="rgb_array" if args_cli.video else None)
@@ -238,9 +243,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         from f1_rl_lab.continuation import restore_adaptive_lr
         continuation.update(restore_adaptive_lr(runner, request["resume"]))
         print("[F1_RESUME]", continuation, flush=True)
-        if delta.get("forward_exposure"):
-            command_term = env.unwrapped.command_manager.get_term("base_velocity")
-            print("[F1_FORWARD_EXPOSURE]", command_term.audit_forward_commands(after_step=False), flush=True)
+    if delta.get("forward_exposure"):
+        command_term = env.unwrapped.command_manager.get_term("base_velocity")
+        print("[F1_FORWARD_EXPOSURE]", command_term.audit_forward_commands(after_step=False), flush=True)
 
     # dump the configuration into log-directory
     dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
@@ -254,6 +259,9 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     from f1_rl_lab.continuation import install_finite_guard
     install_finite_guard(runner, log_dir)
+    if initial_training:
+        from f1_rl_lab.rollout_guard import install_rollout_guard
+        install_rollout_guard(runner, log_dir)
 
     # Bind every actual save, including intermediate checkpoints.
     from f1_rl_lab.checkpoint import write_sidecar

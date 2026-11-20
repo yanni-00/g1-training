@@ -1,32 +1,25 @@
 {
-  "exp_id": "exp-20261120-002",
+  "exp_id": "exp-20261120-003",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 1000,
+  "max_iterations": 3000,
   "seed": 42,
-  "run_name": "f1_forward_exposure_resume12700_formal1000_20261120",
+  "run_name": "f1_scratch_flat_foot_route_formal3000_20261120",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Retain the existing bounded direct formal run length. Exact parent12700 with restored optimizer. No separate cloud trial.",
+    "max_iterations": "Current owner direction chooses 3000 as first formal evaluation, with random initialization.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
-    "account_index": 17,
+    "account_index": 26,
     "spend_cap": 50.0,
     "unit": "GM credit",
     "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
     "estimate": false
   },
-  "resume": {
-    "sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
-    "iteration": 12700,
-    "optimizerStep": 254080,
-    "optimizer_learning_rate": 0.0002562890625000001,
-    "producer_runtime_format": "f1_fullbody_runtime_v6",
-    "producer_root": "configs/parent_producer"
-  },
   "training_delta": "configs/training_delta.json",
-  "verify_saved_checkpoint_feedback": true
+  "verify_saved_checkpoint_feedback": true,
+  "initial_training": true
 }

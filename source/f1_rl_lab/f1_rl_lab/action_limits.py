@@ -56,7 +56,8 @@ def verify_runtime_action_contract(runtime, contract, root):
             raise ValueError("Loaded-foot runtime_v6 source/action/foot/force binding changed")
         if exposure is not None:
             source = "source/f1_rl_lab/f1_rl_lab/command_exposure.py"
-            if (not isinstance(exposure, dict) or set(exposure) != {"source_sha256", "vx", "group_modulus"}
+            keys = {"source_sha256", "vx", "group_modulus"}
+            if (not isinstance(exposure, dict) or set(exposure) not in (keys, keys | {"route_stop"})
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
     elif runtime.get("format") == "f1_fullbody_runtime_v5":
