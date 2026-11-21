@@ -1,22 +1,22 @@
 {
-  "exp_id": "exp-20261121-001",
+  "exp_id": "exp-20261121-002",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 3000,
   "seed": 42,
-  "run_name": "f1_scratch_forward_support_formal3000_20261121",
+  "run_name": "f1_scratch_alternating_support_formal3000_20261121",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Same first-stage budget and comparison horizon as the owner's 3000-update fresh r32 training.",
+    "max_iterations": "Same owner-selected 3000-update fresh comparison horizon as r33.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
-    "account_index": 26,
+    "account_index": 27,
     "spend_cap": 50.0,
     "unit": "GM credit",
-    "basis": "Initial selected-account existing-credit cap50 for this first version; current remaining amount and no-active-task observation revalidated in OMA resource admission",
+    "basis": "Owner existing-credit authorization with refreshed zero task occupancy and previous measured spend.",
     "estimate": false
   },
   "training_delta": "configs/training_delta.json",

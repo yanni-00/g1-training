@@ -4,14 +4,49 @@ import torch
 
 SOURCE_PATH = "source/f1_rl_lab/f1_rl_lab/forward_gait.py"
 METHOD = "single_support_with_body_forward_progress"
+ALTERNATING_METHOD = "alternating_support_with_body_forward_progress"
+ALTERNATING_ADAPTER = "source/f1_rl_lab/f1_rl_lab/alternating_support_reward.py"
 
 
 def forward_gait_credit(expected_contact, actual_contact, command_x, body_vx, activation_speed):
     """Score matching single support and scale it by forward progress."""
     single_support = expected_contact.sum(dim=-1) == 1
     matched = (expected_contact == actual_contact).all(dim=-1)
+    return _credit(single_support & matched, command_x, body_vx, activation_speed)
+
+
+def _credit(eligible, command_x, body_vx, activation_speed):
     progress = (body_vx / command_x.clamp_min(activation_speed)).clamp(0, 1)
-    return (single_support & matched).to(progress.dtype) * (1 + progress)
+    return eligible.to(progress.dtype) * (1 + progress)
+
+
+class AlternatingSupport:
+    """Track actual double-to-single support transfers independently per environment."""
+
+    def __init__(self, num_envs, device):
+        self.last_side = torch.full((num_envs,), -1, dtype=torch.long, device=device)
+        self.credited_side = torch.full_like(self.last_side, -1)
+        self.was_double = torch.zeros(num_envs, dtype=torch.bool, device=device)
+
+    def reset(self, env_ids=None):
+        ids = slice(None) if env_ids is None else env_ids
+        self.last_side[ids] = -1
+        self.credited_side[ids] = -1
+        self.was_double[ids] = False
+
+    def reward(self, contact, air_time, command_x, body_vx, activation_speed, swing_limit_s):
+        active = command_x >= activation_speed
+        left, right = contact.unbind(dim=-1)
+        side = right.long()
+        single = active & (left ^ right)
+        new_support = single & self.was_double & (side != self.last_side)
+        ongoing = single & (side == self.credited_side)
+        credited = new_support | ongoing
+        self.last_side = torch.where(active, torch.where(new_support, side, self.last_side), -1)
+        self.credited_side = torch.where(credited, side, -1)
+        self.was_double = left & right
+        swing_time = torch.where(right, air_time[:, 0], air_time[:, 1])
+        return _credit(credited & (swing_time <= swing_limit_s), command_x, body_vx, activation_speed)
 
 
 def feet_gait_with_forward_progress(

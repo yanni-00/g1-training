@@ -153,18 +153,24 @@ def export_deploy_cfg(env, log_dir):
                     formula=LOADED_LATERAL_TILT_FORMULAS[aggregation], aggregation=aggregation,
                     command_name="base_velocity")
         gait = env.reward_manager.get_term_cfg("gait")
-        if gait.func.__name__ == "feet_gait_with_forward_progress":
-            from f1_rl_lab.forward_gait import METHOD, SOURCE_PATH
+        gait_name = gait.func.__name__
+        if gait_name in ("feet_gait_with_forward_progress", "AlternatingSupportGait"):
+            from f1_rl_lab.forward_gait import ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH
 
             sensor = gait.params["sensor_cfg"]
             body_names = env.scene.sensors[sensor.name].body_names
             if [body_names[i] for i in sensor.body_ids] != ["left_ankle_roll", "right_ankle_roll"]:
                 raise ValueError("Forward gait uses named left/right contact sensors in order")
-            runtime["training_objective"]["forward_gait"] = {
-                "method": METHOD,
+            alternating = gait_name == "AlternatingSupportGait"
+            spec = {
+                "method": ALTERNATING_METHOD if alternating else METHOD,
                 "activation_speed": gait.params["activation_speed"],
                 "source_sha256": sha256(ROOT / SOURCE_PATH),
             }
+            if alternating:
+                spec.update(adapter_source_sha256=sha256(ROOT / ALTERNATING_ADAPTER),
+                            swing_limit_s=gait.params["period"] * (1 - gait.params["threshold"]))
+            runtime["training_objective"]["forward_gait"] = spec
     if "yaw_rate_error_l2" in env.reward_manager.active_terms:
         from f1_rl_lab.action_limits import action_source_binding
         from f1_rl_lab.contract import sha256

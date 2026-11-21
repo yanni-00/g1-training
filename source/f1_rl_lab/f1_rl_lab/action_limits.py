@@ -62,18 +62,27 @@ def verify_runtime_action_contract(runtime, contract, root):
                 raise ValueError("Forward command exposure source binding changed")
         forward_gait = objective.get("forward_gait")
         if forward_gait is not None:
-            from .forward_gait import METHOD, SOURCE_PATH
+            from .forward_gait import ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH
             from .contract import load_json
 
             delta = load_json(Path(root) / "configs/training_delta.json")
             if (not exposure or "route_stop" not in exposure
                     or not isinstance(forward_gait, dict)
-                    or set(forward_gait) != {"method", "activation_speed", "source_sha256"}
-                    or forward_gait["method"] != METHOD
+                    or not {"method", "activation_speed", "source_sha256"} <= forward_gait.keys()
+                    or forward_gait["method"] not in (METHOD, ALTERNATING_METHOD)
                     or not 0 < forward_gait["activation_speed"] <= exposure["vx"]
                     or {k: forward_gait[k] for k in ("method", "activation_speed")} != delta.get("forward_gait")
                     or forward_gait["source_sha256"] != sha256(Path(root) / SOURCE_PATH)):
                 raise ValueError("Forward gait reward source or training parameters changed")
+            keys = {"method", "activation_speed", "source_sha256"}
+            if forward_gait["method"] == ALTERNATING_METHOD:
+                keys.update(("adapter_source_sha256", "swing_limit_s"))
+                swing_limit = forward_gait.get("swing_limit_s", 0)
+                if (not 0 < swing_limit < float("inf")
+                        or forward_gait.get("adapter_source_sha256") != sha256(Path(root) / ALTERNATING_ADAPTER)):
+                    raise ValueError("Invalid bound alternating support adapter or swing duration")
+            if set(forward_gait) != keys:
+                raise ValueError("Unexpected forward gait parameters")
     elif runtime.get("format") == "f1_fullbody_runtime_v5":
         from .contract import sha256
         rewards = ["source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",

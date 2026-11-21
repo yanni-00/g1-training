@@ -8,8 +8,8 @@
     }
   },
   "command_provenance": "Original F1 CommandsCfg initial ranges and G1-style expanding curriculum; route correction and pure forward remain within the live ranges.",
-  "hypothesis": "Removing forward gait credit for two-foot standing should produce alternating stance and actual forward progress while preserving the original goals for loaded flat feet, steering and stopping.",
-  "side_effects": "Removing partial credit can slow initial exploration. First verify sign-consistent forward transfer and correct support without flight, then apply the frozen route and stop gates.",
+  "hypothesis": "Use actual left/right support transfers instead of an unobserved episode clock while keeping single support, progression, flat foot and stopping objectives.",
+  "side_effects": "A direct exchange without a sampled double-support interval earns no new support credit. Do not promote on contact switches alone. Check heel or toe tilt, actual sustained progress, stable correction and parking.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -74,7 +74,7 @@
     }
   },
   "forward_gait": {
-    "method": "single_support_with_body_forward_progress",
+    "method": "alternating_support_with_body_forward_progress",
     "activation_speed": 0.1
   }
 }
