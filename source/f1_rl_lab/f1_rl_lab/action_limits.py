@@ -60,6 +60,20 @@ def verify_runtime_action_contract(runtime, contract, root):
             if (not isinstance(exposure, dict) or set(exposure) not in (keys, keys | {"route_stop"})
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
+        forward_gait = objective.get("forward_gait")
+        if forward_gait is not None:
+            from .forward_gait import METHOD, SOURCE_PATH
+            from .contract import load_json
+
+            delta = load_json(Path(root) / "configs/training_delta.json")
+            if (not exposure or "route_stop" not in exposure
+                    or not isinstance(forward_gait, dict)
+                    or set(forward_gait) != {"method", "activation_speed", "source_sha256"}
+                    or forward_gait["method"] != METHOD
+                    or not 0 < forward_gait["activation_speed"] <= exposure["vx"]
+                    or {k: forward_gait[k] for k in ("method", "activation_speed")} != delta.get("forward_gait")
+                    or forward_gait["source_sha256"] != sha256(Path(root) / SOURCE_PATH)):
+                raise ValueError("Forward gait reward source or training parameters changed")
     elif runtime.get("format") == "f1_fullbody_runtime_v5":
         from .contract import sha256
         rewards = ["source/f1_rl_lab/f1_rl_lab/yaw_tracking.py",

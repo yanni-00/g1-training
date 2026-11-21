@@ -175,6 +175,24 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
             raise ValueError("Forward exposure retains the bilateral loaded-foot objective and original actions")
         install_forward_exposure(env_cfg.commands.base_velocity, forward_exposure)
         sampling_audit["forward_exposure"] = dict(forward_exposure)
+    gait_method = delta.get("forward_gait")
+    if gait_method is not None:
+        from f1_rl_lab.forward_gait import METHOD, feet_gait_with_forward_progress
+        from isaaclab.managers import SceneEntityCfg
+
+        if (not initial_training or not forward_exposure or "route_stop" not in forward_exposure
+                or set(gait_method) != {"method", "activation_speed"}
+                or gait_method["method"] != METHOD
+                or gait_method["activation_speed"] != ranges["lin_vel_x"][1]
+                or not 0 < gait_method["activation_speed"] <= forward_exposure["vx"]):
+            raise ValueError("Forward gait replacement needs the registered fresh route curriculum")
+        gait_term = env_cfg.rewards.gait
+        if gait_term.func.__name__ != "feet_gait" or gait_term.params["command_name"] != "base_velocity":
+            raise ValueError("Unexpected original gait term for forward gait replacement")
+        gait_term.func = feet_gait_with_forward_progress
+        gait_term.params["activation_speed"] = gait_method["activation_speed"]
+        gait_term.params["sensor_cfg"] = SceneEntityCfg(
+            "contact_forces", body_names=["left_ankle_roll", "right_ankle_roll"], preserve_order=True)
     action_change = None
     if delta.get("action_postprocessing_override"):
         from f1_rl_lab.contract import load_contract
@@ -194,6 +212,7 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
     return {"reward_weights_before":before,"reward_weights_after":after,
             "reward_parameter_changes":parameter_changes,
             "reward_additions":addition_audit,
+            **({"forward_gait": dict(gait_method)} if gait_method is not None else {}),
             "retained_custom_rewards": retained,
             "command_sampling_changes": sampling_audit,
             "action_postprocessing_change": action_change,

@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261120-003",
+  "oma_exp_ref": "exp-20261121-001",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
-  "reason": "Owner directs a new formal training from random initialization; 3000 updates for the first gate."
+  "reason": "Current owner continues the loop after r32. Fresh controlled comparison of the forward gait reward."
 }

@@ -8,8 +8,8 @@
     }
   },
   "command_provenance": "Original F1 CommandsCfg initial ranges and G1-style expanding curriculum; route correction and pure forward remain within the live ranges.",
-  "hypothesis": "Learn flat weight-bearing foot placement together with sustained positive forward walking, route correction and settling to zero from random initialization.",
-  "side_effects": "May shift support to one foot, alter stance timing or reduce tracking. Check both soles, support-force share, gait, steering, speed and late standing. No reward weight removed.",
+  "hypothesis": "Removing forward gait credit for two-foot standing should produce alternating stance and actual forward progress while preserving the original goals for loaded flat feet, steering and stopping.",
+  "side_effects": "Removing partial credit can slow initial exploration. First verify sign-consistent forward transfer and correct support without flight, then apply the frozen route and stop gates.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -72,5 +72,9 @@
       "ramp_s": 0.8,
       "hold_s": 2.0
     }
+  },
+  "forward_gait": {
+    "method": "single_support_with_body_forward_progress",
+    "activation_speed": 0.1
   }
 }

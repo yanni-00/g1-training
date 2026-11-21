@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261120-003",
+  "exp_id": "exp-20261121-001",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 3000,
   "seed": 42,
-  "run_name": "f1_scratch_flat_foot_route_formal3000_20261120",
+  "run_name": "f1_scratch_forward_support_formal3000_20261121",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Current owner direction chooses 3000 as first formal evaluation, with random initialization.",
+    "max_iterations": "Same first-stage budget and comparison horizon as the owner's 3000-update fresh r32 training.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {
