@@ -63,6 +63,7 @@
       "source": "Reconstruct exact saved12700 bilateral normal-force weighted moving cost from the original base."
     }
   },
+  "rollout_recovery": "finite_raw_action_failure_v1",
   "forward_exposure": {
     "vx": 0.5,
     "group_modulus": 10,

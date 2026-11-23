@@ -9,17 +9,20 @@ import torch
 from .contract import load_contract
 
 
+def full_travel_raw_action_sq(contract):
+    action_scale = float(contract["action_scale"])
+    limits = [contract["joint_properties"][name]["limit"] for name in contract["model_joint_names"]]
+    return sum(((limit["upper"] - limit["lower"]) / action_scale) ** 2 for limit in limits)
+
+
 def install_rollout_guard(runner, log_dir):
     env = runner.env.unwrapped
     contract = load_contract()
     manager = env.action_manager
-    joints = contract["model_joint_names"]
-    action_scale = float(contract["action_scale"])
-    limits = [contract["joint_properties"][name]["limit"] for name in joints]
     # A displacement larger than all joints' full travels combined is evidence
     # of an extreme raw action. Routine target excursions are left unchanged.
-    maximum_delta_sq = sum(((x["upper"] - x["lower"]) / action_scale) ** 2 for x in limits)
-    if runner.env.clip_actions is not None or manager.action.shape[-1] != len(joints):
+    maximum_delta_sq = full_travel_raw_action_sq(contract)
+    if runner.env.clip_actions is not None or manager.action.shape[-1] != len(contract["model_joint_names"]):
         raise ValueError("Rollout guard requires the registered original action interface")
     native_act = runner.alg.act
     term = env.command_manager.get_term("base_velocity")

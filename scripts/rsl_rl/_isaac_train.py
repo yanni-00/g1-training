@@ -85,6 +85,7 @@ import inspect
 import os
 import shutil
 import torch
+from contextlib import nullcontext
 from datetime import datetime
 
 from rsl_rl.runners import OnPolicyRunner  # TODO: Consider printing the experiment name in the terminal.
@@ -159,12 +160,22 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     continuation = None
     delta = {}
     initial_training = request.get("initial_training", False)
+    recovery_method = None
     if initial_training and (request.get("resume") or agent_cfg.resume):
         raise ValueError("Initial training cannot load an actor or optimizer checkpoint")
     if request.get("resume") or initial_training:
         from f1_rl_lab.continuation import apply_delta
         delta = load_json(f1_root / "configs/training_delta.json")
         continuation = apply_delta(env_cfg, delta, initial_training=initial_training)
+        recovery_method = delta.get("rollout_recovery")
+        if recovery_method is not None:
+            from isaaclab.managers import TerminationTermCfg
+            from f1_rl_lab.rollout_recovery import METHOD, TERM_NAME, raw_action_failure
+
+            if (recovery_method != METHOD or initial_training
+                    or "signed_turn" not in delta.get("forward_exposure", {})):
+                raise ValueError("Raw-action recovery requires the registered signed-turn continuation")
+            setattr(env_cfg.terminations, TERM_NAME, TerminationTermCfg(func=raw_action_failure, time_out=False))
         if initial_training:
             continuation["initialization"] = "random"
 
@@ -261,7 +272,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     from f1_rl_lab.continuation import install_finite_guard
     install_finite_guard(runner, log_dir)
-    if initial_training or "signed_turn" in delta.get("forward_exposure", {}):
+    if initial_training or (recovery_method is None and "signed_turn" in delta.get("forward_exposure", {})):
         from f1_rl_lab.rollout_guard import install_rollout_guard
         install_rollout_guard(runner, log_dir)
 
@@ -294,8 +305,15 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
         return result
     runner.save = save_bound
 
-    # run training
-    runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
+    recovery = nullcontext()
+    if recovery_method is not None:
+        from f1_rl_lab.rollout_recovery import recover_rollout_actions
+        recovery = recover_rollout_actions(runner, log_dir)
+    with recovery as recovery_audit:
+        if recovery_audit is not None:
+            continuation["rollout_recovery"] = recovery_audit
+            print("[F1_ROLLOUT_RECOVERY_CONFIG]", recovery_audit, flush=True)
+        runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
 
     # Saved-checkpoint evidence uses the NEW actor and actual feedback after training.
     from f1_rl_lab.contract import ROOT as f1_root
