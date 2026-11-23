@@ -1,10 +1,14 @@
 {
-  "status": "local_handoff",
+  "status": "registered_formal",
   "authorization": {
-    "training": false,
-    "evaluation": false
+    "training": true,
+    "evaluation": true
   },
-  "oma_exp_ref": null,
+  "oma_exp_ref": "exp-20261123-002",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
-  "reason": "Local source and formal request from exact model_12700. OMA execution assigned to the training handoff."
+  "registered_at": "2026-11-23T14:45:00+08:00",
+  "decision_log_row": "r36 / exp-20261123-002 (F1_G1_WALK)",
+  "budget_policy": "Trainer-side budget evidence kept in OMA work/; see experiment exp-20261123-002",
+  "previous_failed_launch": "TASK_20261123_093 terminated at 14:40:49 because this handoff still had authorization.training=false",
+  "reason": "Training handoff granted: registered formal continuation from exact model_12700, 1000 bounded updates, code commit 1060a8db5e62."
 }
