@@ -1,10 +1,10 @@
 {
-  "status": "registered_direct_formal",
+  "status": "local_handoff",
   "authorization": {
-    "training": true,
-    "evaluation": true
+    "training": false,
+    "evaluation": false
   },
-  "oma_exp_ref": "exp-20261123-001",
+  "oma_exp_ref": null,
   "oma_project": "../../../oma-runs/f1-29dof-walking",
-  "reason": "Owner continues after r34. Controlled r34 to r35 speed bonus shape comparison."
+  "reason": "Local source and formal request from exact model_12700. OMA execution assigned to the training handoff."
 }

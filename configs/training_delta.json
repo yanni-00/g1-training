@@ -4,12 +4,26 @@
     "gait": {
       "from": 0.5,
       "to": 1.0,
-      "source": "Reuse the 12700 recipe from exp-20261119-006 as an objective, starting the optimizer and policy fresh."
+      "source": "Retain actual11999 gait1.0 using original bound source default0.5 override; no reward change relative to actual parent."
     }
   },
-  "command_provenance": "Original F1 CommandsCfg initial ranges and G1-style expanding curriculum; route correction and pure forward remain within the live ranges.",
-  "hypothesis": "Credit for matching body forward speed peaks at the forward command, and declines for overspeed to reduce pitching and improve sustained tracking.",
-  "side_effects": "Preserve the support bonus and the entire speed bonus at and below the command. Above-command burst credit now falls. Evaluate both before-stop tracking and support, route and quiet standing.",
+  "resume_command_ranges": {
+    "lin_vel_x": [
+      -0.5,
+      1.0
+    ],
+    "lin_vel_y": [
+      -0.3,
+      0.3
+    ],
+    "ang_vel_z": [
+      -0.1,
+      0.1
+    ]
+  },
+  "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
+  "hypothesis": "Single-axis signed yaw steps during established forward walking improve both turns and fixed-vx route recovery, while retaining the parent's flatter loaded sole and quiet stop.",
+  "side_effects": "Reserved command groups displace some native random commands. Check forward speed, alternation, loaded sole posture and quiet late stop alongside signed turn and route recovery.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -36,7 +50,7 @@
       "std": {
         "from": 0.5,
         "to": 0.1,
-        "source": "Reuse the verified 12700 yaw tracking reward width."
+        "source": "Retain actual11999 parent runtime yaw std0.1 while original bound source default is0.5; not an objective change relative to parent."
       }
     }
   },
@@ -46,35 +60,15 @@
       "from": 0.0,
       "to": -5.0,
       "aggregation": "positive_world_fz_moving",
-      "source": "Reuse actual r12 tilt penalty weight; switch binary contact mean to positive normal-force weighted moving cost."
+      "source": "Reconstruct exact saved12700 bilateral normal-force weighted moving cost from the original base."
     }
-  },
-  "initial_command_ranges": {
-    "lin_vel_x": [
-      -0.1,
-      0.1
-    ],
-    "lin_vel_y": [
-      -0.1,
-      0.1
-    ],
-    "ang_vel_z": [
-      -0.1,
-      0.1
-    ]
   },
   "forward_exposure": {
     "vx": 0.5,
     "group_modulus": 10,
-    "route_stop": {
-      "heading_gain": 1.0,
-      "cross_track_gain": 0.5,
-      "ramp_s": 0.8,
-      "hold_s": 2.0
+    "signed_turn": {
+      "straight_s": 5.0,
+      "yaw_rate": 0.1
     }
-  },
-  "forward_gait": {
-    "method": "alternating_support_with_body_speed_match",
-    "activation_speed": 0.1
   }
 }

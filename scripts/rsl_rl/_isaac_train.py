@@ -154,6 +154,8 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     from f1_rl_lab.contract import ROOT as f1_root, load_json
     request = load_json(f1_root / "configs/run_request.json")
+    if request.get("resume") and (not agent_cfg.resume or not args_cli.checkpoint):
+        raise ValueError("Registered continuation requires --resume and the explicit parent checkpoint")
     continuation = None
     delta = {}
     initial_training = request.get("initial_training", False)
@@ -259,7 +261,7 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
 
     from f1_rl_lab.continuation import install_finite_guard
     install_finite_guard(runner, log_dir)
-    if initial_training:
+    if initial_training or "signed_turn" in delta.get("forward_exposure", {}):
         from f1_rl_lab.rollout_guard import install_rollout_guard
         install_rollout_guard(runner, log_dir)
 

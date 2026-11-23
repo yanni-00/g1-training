@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "revision": "F1-FULLBODY-WALK-v2",
+  "date": "2026-11-13",
+  "source": "user chat 2026-11-13 lower-limb text and attached upper-body PD image",
+  "image_source": {
+    "path": "../../../oma-runs/f1-29dof-walking/.oma/impl/owner_pd_20261113.png",
+    "sha256": "9d831f891de064d197e1592daae53a0d85d072459aec01d89c8c4c8d9148cfda"
+  },
+  "joints": {
+    "left_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5
+    },
+    "left_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5
+    },
+    "left_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13
+    },
+    "left_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5
+    },
+    "left_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5
+    },
+    "left_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5
+    },
+    "right_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5
+    },
+    "right_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5
+    },
+    "right_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13
+    },
+    "right_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5
+    },
+    "right_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5
+    },
+    "right_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5
+    },
+    "lumbar_yaw_joint": {
+      "stiffness": 500,
+      "pd_damping": 5
+    },
+    "lumbar_roll_joint": {
+      "stiffness": 500,
+      "pd_damping": 5
+    },
+    "lumbar_pitch_joint": {
+      "stiffness": 500,
+      "pd_damping": 5
+    },
+    "left_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "left_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    },
+    "right_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5
+    }
+  },
+  "joint_order_semantics": "bilateral hip_pitch,hip_roll,hip_yaw,knee_pitch,ankle_pitch,ankle_roll",
+  "urdf_dynamics": {
+    "friction": 0.0,
+    "damping": 0.05
+  },
+  "additional_identification": false,
+  "additional_armature": 0.0,
+  "delivery_filter": null,
+  "source_status": "owner_specified_simulation_baseline_not_identification",
+  "authorization": {
+    "train_first_version": true,
+    "account_selection": "owner permits choosing account by live sufficient balance",
+    "github_new_branch": true,
+    "real_robot": false
+  }
+}

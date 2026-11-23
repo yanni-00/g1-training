@@ -52,6 +52,65 @@ class ForwardExposureVelocityCommand(UniformVelocityCommand):
         return counts
 
 
+class SignedTurnVelocityCommand(UniformVelocityCommand):
+    """Keep forward motion while introducing equally sampled signed yaw steps."""
+
+    def __init__(self, cfg, env):
+        super().__init__(cfg, env)
+        exposure = cfg.forward_exposure
+        groups = torch.arange(self.num_envs, device=self.device).remainder(exposure["group_modulus"])
+        self._left = groups == 0
+        self._right = groups == 1
+        self._turn_time_left = cfg.resampling_time_range[0] - exposure["signed_turn"]["straight_s"]
+
+    def _resample_command(self, env_ids):
+        super()._resample_command(env_ids)
+        ids = torch.as_tensor(env_ids, device=self.device, dtype=torch.long)
+        targeted = ids[(self._left[ids] | self._right[ids]) & ~self.is_standing_env[ids]]
+        self.vel_command_b[targeted, 0] = self.cfg.forward_exposure["vx"]
+        self.vel_command_b[targeted, 1:] = 0
+
+    def _turn_masks(self):
+        turning = (self.time_left <= self._turn_time_left) & ~self.is_standing_env
+        return turning & self._left, turning & self._right
+
+    def _update_command(self):
+        super()._update_command()
+        left, right = self._turn_masks()
+        yaw_rate = self.cfg.forward_exposure["signed_turn"]["yaw_rate"]
+        self.vel_command_b[left, 2] = yaw_rate
+        self.vel_command_b[right, 2] = -yaw_rate
+
+    def audit_forward_commands(self, *, after_step=True):
+        moving = ~self.is_standing_env
+        targeted = moving & (self._left | self._right)
+        left, right = self._turn_masks()
+        straight = targeted & ~(left | right)
+        exposure = self.cfg.forward_exposure
+        command = self.command
+        yaw_rate = exposure["signed_turn"]["yaw_rate"]
+        if not (torch.all(command[targeted, 0] == exposure["vx"])
+                and torch.all(command[targeted, 1] == 0)
+                and torch.all(command[straight, 2] == 0)
+                and torch.all(command[left, 2] == yaw_rate)
+                and torch.all(command[right, 2] == -yaw_rate)):
+            raise ValueError("Native commands do not match the signed turn schedule")
+        if after_step and not torch.all(command[~moving] == 0):
+            raise ValueError("A native standing command is nonzero after command update")
+        counts = {
+            "environments": self.num_envs,
+            "standing": int((~moving).sum().item()),
+            "pure_forward": int(straight.sum().item()),
+            "left_group_moving": int((moving & self._left).sum().item()),
+            "right_group_moving": int((moving & self._right).sum().item()),
+            "positive_yaw_active": int(left.sum().item()),
+            "negative_yaw_active": int(right.sum().item()),
+        }
+        if not after_step and (not counts["left_group_moving"] or not counts["right_group_moving"]):
+            raise ValueError("Native command snapshot lacks a signed turn group")
+        return counts
+
+
 class WalkingRouteVelocityCommand(ForwardExposureVelocityCommand):
     """Practice forward walking, path recovery and a gradual stop."""
 
@@ -111,7 +170,8 @@ class WalkingRouteVelocityCommand(ForwardExposureVelocityCommand):
 
 
 def install_forward_exposure(cfg, exposure):
-    if set(exposure) - {"vx", "group_modulus", "route_stop"} or not {"vx", "group_modulus"} <= exposure.keys():
+    required = {"vx", "group_modulus"}
+    if set(exposure) not in (required, required | {"route_stop"}, required | {"signed_turn"}):
         raise ValueError("Forward exposure requires its nominal speed and group modulus")
     vx, modulus = exposure["vx"], exposure["group_modulus"]
     routes = exposure.get("route_stop")
@@ -127,6 +187,18 @@ def install_forward_exposure(cfg, exposure):
                 or cfg.ranges.lin_vel_x[1] <= 0):
             raise ValueError("Invalid route correction or stopping schedule")
         cfg.class_type = WalkingRouteVelocityCommand
+    elif "signed_turn" in exposure:
+        turn = exposure["signed_turn"]
+        period_lo, period_hi = cfg.resampling_time_range
+        if (set(turn) != {"straight_s", "yaw_rate"}
+                or period_lo != period_hi
+                or not 0 < turn["straight_s"] < period_lo
+                or not 0 < turn["yaw_rate"] < math.inf):
+            raise ValueError("Invalid signed turn timing or yaw rate")
+        yaw_lo, yaw_hi = cfg.ranges.ang_vel_z
+        if not (yaw_lo <= -turn["yaw_rate"] and turn["yaw_rate"] <= yaw_hi):
+            raise ValueError("Signed turn yaw exceeds the restored command range")
+        cfg.class_type = SignedTurnVelocityCommand
     else:
         cfg.class_type = ForwardExposureVelocityCommand
     cfg.forward_exposure = dict(exposure)

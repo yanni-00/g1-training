@@ -37,7 +37,7 @@ def action_source_binding(root, projection=False):
 
 def verify_runtime_action_contract(runtime, contract, root):
     if runtime.get("format") == "f1_fullbody_runtime_v6":
-        from .contract import sha256
+        from .contract import load_json, sha256
         from .foot_posture import LOADED_LATERAL_TILT_FORMULAS
         name = "source/f1_rl_lab/f1_rl_lab/foot_posture.py"
         objective = runtime.get("training_objective", {})
@@ -57,14 +57,17 @@ def verify_runtime_action_contract(runtime, contract, root):
         if exposure is not None:
             source = "source/f1_rl_lab/f1_rl_lab/command_exposure.py"
             keys = {"source_sha256", "vx", "group_modulus"}
-            if (not isinstance(exposure, dict) or set(exposure) not in (keys, keys | {"route_stop"})
+            if (not isinstance(exposure, dict)
+                    or set(exposure) not in (keys, keys | {"route_stop"}, keys | {"signed_turn"})
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
+            if "signed_turn" in exposure:
+                delta = load_json(Path(root) / "configs/training_delta.json")
+                if {k: v for k, v in exposure.items() if k != "source_sha256"} != delta.get("forward_exposure"):
+                    raise ValueError("Signed turn command schedule differs from its training configuration")
         forward_gait = objective.get("forward_gait")
         if forward_gait is not None:
             from .forward_gait import ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH, SPEED_MATCH_METHOD
-            from .contract import load_json
-
             delta = load_json(Path(root) / "configs/training_delta.json")
             if (not exposure or "route_stop" not in exposure
                     or not isinstance(forward_gait, dict)

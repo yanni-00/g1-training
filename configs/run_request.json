@@ -1,25 +1,26 @@
 {
-  "exp_id": "exp-20261123-001",
+  "exp_id": null,
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
-  "max_iterations": 3000,
+  "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_scratch_support_speed_match_formal3000_20261123",
-  "readiness_steps": 100,
+  "run_name": "f1_resume12700_signed_moving_yaw_formal1000",
+  "readiness_steps": 300,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Owner-selected 3000-update scratch comparison horizon, retained for control against r34.",
-    "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
+    "max_iterations": "Bounded formal continuation length from exp-20261120-002/input/publish/configs/run_request.json.",
+    "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained",
+    "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
-  "budget": {
-    "account_index": 27,
-    "spend_cap": 50.0,
-    "unit": "GM credit",
-    "basis": "Owner existing-credit authorization with refreshed zero task occupancy and previous measured spend.",
-    "estimate": false
+  "resume": {
+    "sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
+    "iteration": 12700,
+    "optimizerStep": 254080,
+    "optimizer_learning_rate": 0.0002562890625000001,
+    "producer_runtime_format": "f1_fullbody_runtime_v6",
+    "producer_root": "configs/parent_producer_12700"
   },
   "training_delta": "configs/training_delta.json",
-  "verify_saved_checkpoint_feedback": true,
-  "initial_training": true
+  "verify_saved_checkpoint_feedback": true
 }

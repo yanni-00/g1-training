@@ -92,6 +92,43 @@ class ForwardExposureTests(unittest.TestCase):
         torch.testing.assert_close(term.command[1], torch.zeros(3))
         self.assertEqual(term.audit_forward_commands()["targeted_stopped"], 1)
 
+    def test_signed_yaw_starts_after_walking_and_resets_to_straight(self):
+        module = self.module()
+        cfg = SimpleNamespace(class_type=UniformCommandFixture, heading_command=False,
+                              resampling_time_range=(10., 10.),
+                              ranges=SimpleNamespace(lin_vel_x=(-.5, 1.), ang_vel_z=(-.1, .1)))
+        exposure = {"vx": .5, "group_modulus": 5, "signed_turn": {"straight_s": 5., "yaw_rate": .1}}
+        module.install_forward_exposure(cfg, exposure)
+        term = cfg.class_type(cfg, None)
+        term._resample_command(torch.arange(term.num_envs))
+        torch.testing.assert_close(term.command[:2], torch.tensor([[.5, 0., 0.], [.5, 0., 0.]]))
+        self.assertEqual(term.audit_forward_commands(after_step=False)["pure_forward"], 3)
+
+        term.time_left[0] = 5.02
+        term.time_left[1] = 5.
+        term._update_command()
+        torch.testing.assert_close(term.command[0], torch.tensor([.5, 0., 0.]))
+        torch.testing.assert_close(term.command[1], torch.tensor([.5, 0., -.1]))
+        term.time_left[0] = 4.98
+        term.time_left[5] = 4.98
+        term._update_command()
+        torch.testing.assert_close(term.command[0], torch.tensor([.5, 0., .1]))
+        torch.testing.assert_close(term.command[2], torch.tensor([.2, -.15, .07]))
+        torch.testing.assert_close(term.command[5], torch.zeros(3))
+        counts = term.audit_forward_commands()
+        self.assertEqual((counts["positive_yaw_active"], counts["negative_yaw_active"]), (1, 1))
+
+        term.time_left[0] = 10.
+        term._resample_command(torch.tensor([0]))
+        term._update_command()
+        torch.testing.assert_close(term.command[0], torch.tensor([.5, 0., 0.]))
+        self.assertEqual(term.audit_forward_commands()["positive_yaw_active"], 0)
+
+        cfg.class_type = UniformCommandFixture
+        cfg.ranges.ang_vel_z = (-.05, .1)
+        with self.assertRaisesRegex(ValueError, "restored command range"):
+            module.install_forward_exposure(cfg, exposure)
+
 
 if __name__ == "__main__":
     unittest.main()

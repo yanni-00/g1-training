@@ -25,9 +25,13 @@ def main():
         parser.error("--checkpoint requires --resume")
     from f1_rl_lab.assets_archive import ensure_assets
     ensure_assets()
+    from f1_rl_lab.contract import load_json
     from f1_rl_lab.launch import require_launch
     checkpoint = args.checkpoint.resolve() if args.checkpoint is not None else None
-    require_launch("training", checkpoint=checkpoint)
+    request = load_json(ROOT / "configs/run_request.json")
+    # Native continuation verification uses the archived producer and imports
+    # torch only after AppLauncher has initialized the training environment.
+    require_launch("training", checkpoint=None if request.get("resume") else checkpoint)
     if checkpoint is not None:
         for i, value in enumerate(sys.argv):
             if value == "--checkpoint":
