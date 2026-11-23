@@ -309,10 +309,18 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     if recovery_method is not None:
         from f1_rl_lab.rollout_recovery import recover_rollout_actions
         recovery = recover_rollout_actions(runner, log_dir)
-    with recovery as recovery_audit:
+    diagnostics = nullcontext()
+    if "signed_turn" in (delta.get("forward_exposure") or {}):
+        from f1_rl_lab.yaw_diagnostics import install_yaw_diagnostics
+        diagnostics = install_yaw_diagnostics(
+            runner, log_dir, std=float(env_cfg.rewards.track_ang_vel_z.params["std"]), every=10)
+    with recovery as recovery_audit, diagnostics as diagnostics_audit:
         if recovery_audit is not None:
             continuation["rollout_recovery"] = recovery_audit
             print("[F1_ROLLOUT_RECOVERY_CONFIG]", recovery_audit, flush=True)
+        if diagnostics_audit is not None:
+            continuation["yaw_diagnostics"] = diagnostics_audit
+            print("[F1_YAW_DIAG_CONFIG]", diagnostics_audit, flush=True)
         runner.learn(num_learning_iterations=agent_cfg.max_iterations, init_at_random_ep_len=True)
 
     # Saved-checkpoint evidence uses the NEW actor and actual feedback after training.
