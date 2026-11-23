@@ -8,8 +8,8 @@
     }
   },
   "command_provenance": "Original F1 CommandsCfg initial ranges and G1-style expanding curriculum; route correction and pure forward remain within the live ranges.",
-  "hypothesis": "Use actual left/right support transfers instead of an unobserved episode clock while keeping single support, progression, flat foot and stopping objectives.",
-  "side_effects": "A direct exchange without a sampled double-support interval earns no new support credit. Do not promote on contact switches alone. Check heel or toe tilt, actual sustained progress, stable correction and parking.",
+  "hypothesis": "Credit for matching body forward speed peaks at the forward command, and declines for overspeed to reduce pitching and improve sustained tracking.",
+  "side_effects": "Preserve the support bonus and the entire speed bonus at and below the command. Above-command burst credit now falls. Evaluate both before-stop tracking and support, route and quiet standing.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -74,7 +74,7 @@
     }
   },
   "forward_gait": {
-    "method": "alternating_support_with_body_forward_progress",
+    "method": "alternating_support_with_body_speed_match",
     "activation_speed": 0.1
   }
 }

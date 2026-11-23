@@ -5,6 +5,7 @@ import torch
 SOURCE_PATH = "source/f1_rl_lab/f1_rl_lab/forward_gait.py"
 METHOD = "single_support_with_body_forward_progress"
 ALTERNATING_METHOD = "alternating_support_with_body_forward_progress"
+SPEED_MATCH_METHOD = "alternating_support_with_body_speed_match"
 ALTERNATING_ADAPTER = "source/f1_rl_lab/f1_rl_lab/alternating_support_reward.py"
 
 
@@ -15,8 +16,9 @@ def forward_gait_credit(expected_contact, actual_contact, command_x, body_vx, ac
     return _credit(single_support & matched, command_x, body_vx, activation_speed)
 
 
-def _credit(eligible, command_x, body_vx, activation_speed):
-    progress = (body_vx / command_x.clamp_min(activation_speed)).clamp(0, 1)
+def _credit(eligible, command_x, body_vx, activation_speed, *, match_speed=False):
+    ratio = body_vx / command_x.clamp_min(activation_speed)
+    progress = (torch.minimum(ratio, 2 - ratio) if match_speed else ratio).clamp(0, 1)
     return eligible.to(progress.dtype) * (1 + progress)
 
 
@@ -34,7 +36,8 @@ class AlternatingSupport:
         self.credited_side[ids] = -1
         self.was_double[ids] = False
 
-    def reward(self, contact, air_time, command_x, body_vx, activation_speed, swing_limit_s):
+    def reward(self, contact, air_time, command_x, body_vx, activation_speed, swing_limit_s,
+               *, match_speed=False):
         active = command_x >= activation_speed
         left, right = contact.unbind(dim=-1)
         side = right.long()
@@ -46,7 +49,8 @@ class AlternatingSupport:
         self.credited_side = torch.where(credited, side, -1)
         self.was_double = left & right
         swing_time = torch.where(right, air_time[:, 0], air_time[:, 1])
-        return _credit(credited & (swing_time <= swing_limit_s), command_x, body_vx, activation_speed)
+        return _credit(credited & (swing_time <= swing_limit_s), command_x, body_vx, activation_speed,
+                       match_speed=match_speed)
 
 
 def feet_gait_with_forward_progress(

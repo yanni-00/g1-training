@@ -155,7 +155,9 @@ def export_deploy_cfg(env, log_dir):
         gait = env.reward_manager.get_term_cfg("gait")
         gait_name = gait.func.__name__
         if gait_name in ("feet_gait_with_forward_progress", "AlternatingSupportGait"):
-            from f1_rl_lab.forward_gait import ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH
+            from f1_rl_lab.forward_gait import (
+                ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH, SPEED_MATCH_METHOD,
+            )
 
             sensor = gait.params["sensor_cfg"]
             body_names = env.scene.sensors[sensor.name].body_names
@@ -168,6 +170,8 @@ def export_deploy_cfg(env, log_dir):
                 "source_sha256": sha256(ROOT / SOURCE_PATH),
             }
             if alternating:
+                if gait.params.get("match_speed", False):
+                    spec["method"] = SPEED_MATCH_METHOD
                 spec.update(adapter_source_sha256=sha256(ROOT / ALTERNATING_ADAPTER),
                             swing_limit_s=gait.params["period"] * (1 - gait.params["threshold"]))
             runtime["training_objective"]["forward_gait"] = spec

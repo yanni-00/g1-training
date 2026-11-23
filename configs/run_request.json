@@ -1,15 +1,15 @@
 {
-  "exp_id": "exp-20261121-002",
+  "exp_id": "exp-20261123-001",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 3000,
   "seed": 42,
-  "run_name": "f1_scratch_alternating_support_formal3000_20261121",
+  "run_name": "f1_scratch_support_speed_match_formal3000_20261123",
   "readiness_steps": 100,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Same owner-selected 3000-update fresh comparison horizon as r33.",
+    "max_iterations": "Owner-selected 3000-update scratch comparison horizon, retained for control against r34.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained"
   },
   "budget": {

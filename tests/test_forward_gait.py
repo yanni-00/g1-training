@@ -12,6 +12,16 @@ spec.loader.exec_module(module)
 
 
 class ForwardGaitTests(unittest.TestCase):
+    def test_speed_matching_preserves_credit_at_and_below_command_and_reduces_overspeed(self):
+        command = torch.full((6,), 0.5)
+        speeds = torch.tensor([-0.2, 0.0, 0.25, 0.5, 0.75, 1.0])
+        eligible = torch.tensor([True, True, True, True, True, True])
+        original = module._credit(eligible, command, speeds, 0.1)
+        matched = module._credit(eligible, command, speeds, 0.1, match_speed=True)
+        torch.testing.assert_close(matched[:4], original[:4])
+        torch.testing.assert_close(matched[4:], torch.tensor([1.5, 1.0]))
+        self.assertEqual(module._credit(~eligible, command, speeds, 0.1, match_speed=True).sum(), 0)
+
     def test_credit_requires_the_correct_single_support_and_favors_forward_motion(self):
         expected = torch.tensor([[True, False]] * 6 + [[True, True], [False, True]])
         actual = torch.tensor([
