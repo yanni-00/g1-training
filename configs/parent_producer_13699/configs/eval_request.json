@@ -1,0 +1,31 @@
+{
+  "exp_id": "exp-20261114-001",
+  "task": "F1-29dof-Velocity",
+  "max_steps": 2100,
+  "seed": 42,
+  "checkpoint_iteration": 10000,
+  "checkpoint_sha256": "73010809f889897c2becbaf1b4f4bcf4efc0683012195f2b229be6b0e270e040",
+  "video_resolution": [
+    640,
+    480
+  ],
+  "camera_offset": [
+    2.5,
+    2.5,
+    1.5
+  ],
+  "evaluation_overrides": {
+    "terrain": "flat plane",
+    "material_mass_randomization": false,
+    "push": false,
+    "policy_observation_corruption": false,
+    "initial_root_pose_randomization": false,
+    "initial_joint_velocity_randomization": false,
+    "horizon": "complete frozen G1 command schedule plus one control step",
+    "fall_termination": "original height/orientation thresholds retained; stop first termination, capture before auto reset",
+    "actor": "deterministic saved mean; no PPO updates",
+    "history": "contract ActorHistory, term major oldest first",
+    "force_threshold": "raw forces only; no fabricated gait phase"
+  },
+  "engineering_limits_note": "video resolution/camera/one environment/finite steps are explicit execution choices, not predicted performance"
+}

@@ -4,8 +4,32 @@
   "purpose": "Strict restore verification of the exact r37 parent source/action/reward identity",
   "files": [
     {
+      "path": "configs/README.md",
+      "sha256": "f5eaba0c91a8819c09f0969c7f36c84bdb660e1f3acea44bddd1a99facda8378"
+    },
+    {
+      "path": "configs/assets_archive.json",
+      "sha256": "62d9c1305194c2f0145071fc85e4731689a586dc86be67670fca4eee5618a3b7"
+    },
+    {
+      "path": "configs/continuation_12700_plan.md",
+      "sha256": "1c73e3e79d6f9884de482d3111161bd6b96da649dc78479e2c4a10e904eea1ce"
+    },
+    {
       "path": "configs/control_profile.json",
       "sha256": "5f47346e3e4d6da766917043878e37b345185c33b3b03236dde905276533af55"
+    },
+    {
+      "path": "configs/eval_request.json",
+      "sha256": "9bdd1e6047ef40632ff8d23d868aac1207fe11130bef08b0e6feb67f319efed8"
+    },
+    {
+      "path": "configs/eval_schedule.json",
+      "sha256": "ac8f9ed01d7e7553bbe9fe847158585fcefd9508894535e8f9e62197317fc8b1"
+    },
+    {
+      "path": "configs/launch.json",
+      "sha256": "5578b6c994a3f08dd63f52afe0c620bbbb1d70a73c2e7b23db93ef25422ee3e5"
     },
     {
       "path": "configs/owner_training_profile.json",
@@ -16,8 +40,44 @@
       "sha256": "653c530b4aa1b71cdf478eff0666fb7e4cb317be99f01dc2a8761946eadfeb26"
     },
     {
+      "path": "configs/reference/g1_11k_manifest.json",
+      "sha256": "29e4be8e94aadfe17357baa92adc8a90d7d0f6a9d961133c3346049adf9b3f24"
+    },
+    {
+      "path": "configs/reference/g1_original_unitree.py",
+      "sha256": "98631185e13326435c9c0585a883608ed339c476d571d767b291c57c0074a1a8"
+    },
+    {
+      "path": "configs/reference/g1_original_velocity_env_cfg.py",
+      "sha256": "e71b92ff547768948dae3852d939f8362a2edcf4b0fec4c017b3ba5c50ab0d42"
+    },
+    {
+      "path": "configs/reference/g1_reference.urdf",
+      "sha256": "c0ae739c640c3e2c00d1bdd8810b5d6e59601487bd1a3995859f9543269ee5c8"
+    },
+    {
+      "path": "configs/reference/owner_pd_20261113.png",
+      "sha256": "9d831f891de064d197e1592daae53a0d85d072459aec01d89c8c4c8d9148cfda"
+    },
+    {
+      "path": "configs/reference/rsl_runner_counter.json",
+      "sha256": "c3ce681b006708e4fcc74ffeaef1cf6bda5b70e428499055cf9efba39d9a357a"
+    },
+    {
       "path": "configs/robot_contract.json",
       "sha256": "b01c19ecf5cadf00ce3d04610d70428319ced2c0c9bbe44de202be7f32537968"
+    },
+    {
+      "path": "configs/run_request.json",
+      "sha256": "21f2bf52763833e4a23a82f515b9439c1fce07d9e57d284863c43f728b3ff930"
+    },
+    {
+      "path": "configs/source_manifest.json",
+      "sha256": "3483160fc253860330e49fd865c69d03c980779b79a0680a20113c275dc4fb5b"
+    },
+    {
+      "path": "configs/training_delta.json",
+      "sha256": "c3efc0e2c2de4f16e5f9a54fd8d36a0871cca9b475687cf58b66f5645e5a271c"
     },
     {
       "path": "resources/f1/urdf/SYS-SPEC-0002-V1.1-F1整机模型29DOF.urdf",

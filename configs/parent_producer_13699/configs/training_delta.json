@@ -1,0 +1,75 @@
+{
+  "format": "f1_yaw_std_continuation_v10",
+  "reward_override": {
+    "gait": {
+      "from": 0.5,
+      "to": 1.0,
+      "source": "Retain actual11999 gait1.0 using original bound source default0.5 override; no reward change relative to actual parent."
+    }
+  },
+  "resume_command_ranges": {
+    "lin_vel_x": [
+      -0.5,
+      1.0
+    ],
+    "lin_vel_y": [
+      -0.3,
+      0.3
+    ],
+    "ang_vel_z": [
+      -0.1,
+      0.1
+    ]
+  },
+  "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
+  "hypothesis": "The r37 right-turn response decays because later gait phases cancel it; a further 1000 updates at the same std 0.3 should show whether the cancellation weakens, without changing sampling, weights or actions.",
+  "side_effects": "If the cancellation persists, more updates buy nothing and cost budget; the stop jitter and vx MAE regressions may also persist or worsen.",
+  "parent_reward_weights": {
+    "track_lin_vel_xy": 1.0,
+    "track_ang_vel_z": 0.5,
+    "alive": 0.15,
+    "base_linear_velocity": -2.0,
+    "base_angular_velocity": -0.05,
+    "joint_vel": -0.001,
+    "joint_acc": -2.5e-07,
+    "action_rate": -0.05,
+    "dof_pos_limits": -5.0,
+    "energy": -2e-05,
+    "joint_deviation_arms": -0.1,
+    "joint_deviation_waists": -1.0,
+    "joint_deviation_legs": -1.0,
+    "flat_orientation_l2": -5.0,
+    "base_height": -10.0,
+    "gait": 1.0,
+    "feet_slide": -0.2,
+    "feet_clearance": 1.0,
+    "undesired_contacts": -1.0
+  },
+  "reward_param_override": {
+    "track_ang_vel_z": {
+      "std": {
+        "from": 0.5,
+        "to": 0.3,
+        "source": "Carried unchanged from the exact model_13699 runtime: yaw kernel std 0.3; original bound source default0.5 overridden to the same target."
+      }
+    }
+  },
+  "parent_yaw_tracking_std": 0.3,
+  "reward_addition": {
+    "contact_lateral_tilt": {
+      "from": 0.0,
+      "to": -5.0,
+      "aggregation": "positive_world_fz_moving",
+      "source": "Reconstruct exact saved12700 bilateral normal-force weighted moving cost from the original base."
+    }
+  },
+  "rollout_recovery": "finite_raw_action_failure_v1",
+  "forward_exposure": {
+    "vx": 0.5,
+    "group_modulus": 10,
+    "signed_turn": {
+      "straight_s": 5.0,
+      "yaw_rate": 0.1
+    }
+  }
+}
