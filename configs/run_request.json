@@ -1,15 +1,15 @@
 {
-  "exp_id": null,
+  "exp_id": "exp-20261124-001",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_resume12700_signed_moving_yaw_recovery_formal1000",
+  "run_name": "f1_yaw_std30_resume12700_formal1000_20261124",
   "readiness_steps": 300,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Bounded formal continuation length from exp-20261120-002/input/publish/configs/run_request.json.",
+    "max_iterations": "Bounded formal1000 continuation inherited from exp-20261123-003/input/publish/configs/run_request.json; one variable only (yaw tracking std).",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained",
     "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
