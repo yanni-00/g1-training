@@ -1,0 +1,208 @@
+{
+  "status": "owner_specified_baseline",
+  "joints": {
+    "left_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_hip_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_hip_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_hip_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_knee_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_ankle_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_ankle_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_hip_pitch_joint": {
+      "stiffness": 65,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_hip_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_hip_roll_joint": {
+      "stiffness": 88,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_hip_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_hip_yaw_joint": {
+      "stiffness": 100,
+      "pd_damping": 13,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_hip_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_knee_pitch_joint": {
+      "stiffness": 81,
+      "pd_damping": 6.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_knee_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_ankle_pitch_joint": {
+      "stiffness": 40,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_ankle_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_ankle_roll_joint": {
+      "stiffness": 100,
+      "pd_damping": 5.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_ankle_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "lumbar_yaw_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.lumbar_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "lumbar_roll_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.lumbar_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "lumbar_pitch_joint": {
+      "stiffness": 500,
+      "pd_damping": 5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.lumbar_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_shoulder_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_shoulder_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_shoulder_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_elbow_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_elbow_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_wrist_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "left_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.left_wrist_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_shoulder_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_shoulder_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_shoulder_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_shoulder_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_shoulder_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_shoulder_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_elbow_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_elbow_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_elbow_yaw_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_elbow_yaw_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_wrist_pitch_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_wrist_pitch_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    },
+    "right_wrist_roll_joint": {
+      "stiffness": 80,
+      "pd_damping": 1.5,
+      "armature": 0.0,
+      "source": "configs/owner_training_profile.json:joints.right_wrist_roll_joint",
+      "source_status": "owner_specified_simulation_baseline_not_identification"
+    }
+  }
+}

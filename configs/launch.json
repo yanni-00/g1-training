@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261124-001",
+  "oma_exp_ref": "exp-20261124-002",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
   "registered_at": "2026-11-23T16:40:00+08:00",
   "decision_log_row": "r36 recovery attempt / exp-20261123-002 (F1_G1_WALK)",
@@ -12,5 +12,5 @@
     "TASK_20261123_093 at 14:40:49 (authorization.training=false)",
     "TASK_20261123_158 at 16:31:20 (same cause; recovery commit 8d7f50e did not carry the grant)"
   ],
-  "reason": "Owner-directed std-only contrast from exact model_12700: yaw tracking std 0.1->0.3; everything else frozen."
+  "reason": "Owner-directed continuation from exact model_13699: same std 0.3, 1000 more updates to test whether the right-turn cancellation weakens."
 }

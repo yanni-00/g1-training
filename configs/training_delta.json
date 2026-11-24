@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_std_continuation_v9",
+  "format": "f1_yaw_std_continuation_v10",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "Reward kernel width, not command coverage, binds yaw command learning: widening only track_ang_vel_z.std from the exact 12700 runtime 0.1 to 0.3 rad/s keeps both signed-turn buckets out of the reward dead zone while sampling, weights and original actions stay frozen.",
-  "side_effects": "A wider kernel also credits yaw error from gait sway and free drift, and can increase command-following variance; straight speed, alternating support, loaded-foot tilt and quiet stop can trade off. No other variable changes.",
+  "hypothesis": "The r37 right-turn response decays because later gait phases cancel it; a further 1000 updates at the same std 0.3 should show whether the cancellation weakens, without changing sampling, weights or actions.",
+  "side_effects": "If the cancellation persists, more updates buy nothing and cost budget; the stop jitter and vx MAE regressions may also persist or worsen.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -50,11 +50,11 @@
       "std": {
         "from": 0.5,
         "to": 0.3,
-        "source": "Single-variable contrast from the exact saved12700 runtime: only the yaw tracking kernel std moves 0.1->0.3 rad/s; original bound source default0.5 is overridden to this target."
+        "source": "Carried unchanged from the exact model_13699 runtime: yaw kernel std 0.3; original bound source default0.5 overridden to the same target."
       }
     }
   },
-  "parent_yaw_tracking_std": 0.1,
+  "parent_yaw_tracking_std": 0.3,
   "reward_addition": {
     "contact_lateral_tilt": {
       "from": 0.0,
