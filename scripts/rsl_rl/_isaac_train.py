@@ -207,10 +207,14 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             if (previous["reward_weights"] != expected_weights
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Actual parent objective differs from registered continuation")
+            existing_exposure = previous.get("command_sampling", {}).get("forward_exposure")
             if delta.get("forward_exposure") and (
                     previous.get("contact_lateral_tilt", {}).get("aggregation") != "positive_world_fz_moving"
-                    or previous.get("command_sampling", {}).get("forward_exposure") is not None):
-                raise ValueError("Forward exposure requires the original bilateral loaded-foot parent")
+                    or (existing_exposure is not None
+                        and {k: v for k, v in existing_exposure.items() if k != "source_sha256"}
+                        != delta["forward_exposure"])):
+                raise ValueError("Forward exposure requires the original bilateral loaded-foot parent "
+                                 "or an identical parent exposure")
 
     if delta.get("action_input_projection"):
         from f1_rl_lab.action_projection import install_projection, projection_contract
