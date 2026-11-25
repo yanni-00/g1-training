@@ -1,7 +1,5 @@
 """Cross-step yaw reward: symmetry, zero-net rejection, reset and command-change isolation."""
-import importlib.util
 import sys
-import types
 from pathlib import Path
 from types import SimpleNamespace as NS
 import unittest
@@ -9,29 +7,8 @@ import unittest
 import torch
 
 ROOT = Path(__file__).resolve().parents[1]
-
-
-def _stub(name, **attrs):
-    mod = types.ModuleType(name)
-    for key, value in attrs.items():
-        setattr(mod, key, value)
-    sys.modules[name] = mod
-    return mod
-
-
-_stub("isaaclab")
-_stub("isaaclab.utils")
-_stub("isaaclab.utils.math", quat_apply_inverse=lambda *a, **k: None)
-_stub("isaaclab.assets", Articulation=object, RigidObject=object)
-_stub("isaaclab.managers", SceneEntityCfg=type("SceneEntityCfg", (), {"__init__": lambda self, name: setattr(self, "name", name)}))
-_stub("isaaclab.sensors", ContactSensor=object)
-_stub("isaaclab.envs", ManagerBasedRLEnv=object)
-
-spec = importlib.util.spec_from_file_location(
-    "f1_rewards_window_test",
-    ROOT / "source/f1_rl_lab/f1_rl_lab/tasks/locomotion/mdp/rewards.py")
-rewards = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(rewards)
+sys.path.insert(0, str(ROOT / "source/f1_rl_lab"))
+from f1_rl_lab.yaw_tracking import track_ang_vel_z_window_exp as window_reward
 
 
 class Env:
@@ -47,8 +24,7 @@ class Env:
         self.command = torch.tensor([command], dtype=torch.float32)
         self.velocity = torch.tensor([[0.0, 0.0, wz]], dtype=torch.float32)
         self.scene["robot"].data.root_ang_vel_b = self.velocity
-        return rewards.track_ang_vel_z_window_exp(
-            self, std=0.3, window_s=1.0, return_debug=True)
+        return window_reward(self, std=0.3, window_s=1.0, return_debug=True)
 
 
 class WindowRewardTests(unittest.TestCase):

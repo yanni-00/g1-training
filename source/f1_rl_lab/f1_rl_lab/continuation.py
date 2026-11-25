@@ -112,10 +112,15 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
                 or not math.isfinite(float(window["window_s"])) or float(window["window_s"]) <= 0
                 or after != delta["parent_reward_weights"]):
             raise ValueError("Only the registered cross-step yaw window override is allowed")
+        from isaaclab.managers import RewardTermCfg
+        from f1_rl_lab.yaw_tracking import track_ang_vel_z_window_exp
         term = env_cfg.rewards.track_ang_vel_z
-        if (term.func.__name__ != window["function"]
-                or abs(float(term.params.get("window_s", -1.0)) - float(window["window_s"])) > 1e-12):
-            raise ValueError("Resolved yaw window reward differs from the registered override")
+        weight = float(term.weight)
+        std = float(term.params["std"])
+        env_cfg.rewards.track_ang_vel_z = RewardTermCfg(
+            func=track_ang_vel_z_window_exp, weight=weight,
+            params={"command_name": "base_velocity", "asset_name": "robot",
+                    "std": std, "window_s": float(window["window_s"])})
         parameter_changes["track_ang_vel_z"]["window_s"] = {
             "from": window["from"], "to": float(window["window_s"]),
             "function": window["function"]}
