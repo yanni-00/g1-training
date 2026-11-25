@@ -75,7 +75,6 @@
   "yaw_window_override": {
     "function": "track_ang_vel_z_window_exp",
     "window_s": 1.0,
-    "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)",
-    "source": "Single-variable contrast from the exact model_12700 runtime at std 0.3: only the yaw tracking score changes from instantaneous body wz to the mean body wz over the last 1 s while forward walking with an unchanged command; reset/command change/stop clear the window and fall back to the instantaneous term."
+    "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)"
   }
 }
