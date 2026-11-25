@@ -223,3 +223,74 @@ def joint_mirror(env: ManagerBasedRLEnv, asset_cfg: SceneEntityCfg, mirror_joint
         )
     reward *= 1 / len(mirror_joints) if len(mirror_joints) > 0 else 0
     return reward
+
+def track_ang_vel_z_window_exp(
+    env: ManagerBasedRLEnv,
+    std: float,
+    command_name: str = "base_velocity",
+    asset_cfg: SceneEntityCfg = SceneEntityCfg("robot"),
+    window_s: float = 1.0,
+    return_debug: bool = False,
+):
+    """Yaw tracking on the recent body-wz average, with instantaneous fallback.
+
+    For forward walking with an unchanged command the error uses the mean body wz over
+    the last ``window_s`` seconds. The buffer is cleared on reset, command change, or
+    stop (command vx <= 0); until the window is full and while stopped, the original
+    instantaneous value is used.
+    """
+    asset: Articulation = env.scene[asset_cfg.name]
+    command = env.command_manager.get_command(command_name)
+    wz = asset.data.root_ang_vel_b[:, 2]
+    cmd = command[:, :3]
+    num_envs = cmd.shape[0]
+    device = cmd.device
+
+    dt = getattr(env, "step_dt", None)
+    if dt is None:
+        cfg = getattr(env, "cfg", None)
+        dt = float(cfg.sim.dt) * int(cfg.decimation) if cfg is not None else 0.02
+    n = max(1, int(round(float(window_s) / float(dt))))
+
+    state = getattr(env, "_f1_yaw_window_state", None)
+    if state is None or state["n"] != n or state["num_envs"] != num_envs:
+        state = {
+            "n": n,
+            "num_envs": num_envs,
+            "buffer": torch.zeros((num_envs, n), device=device, dtype=wz.dtype),
+            "count": torch.zeros(num_envs, device=device, dtype=torch.long),
+            "prev_cmd": cmd.detach().clone(),
+        }
+        env._f1_yaw_window_state = state
+
+    clear = (cmd != state["prev_cmd"]).any(dim=1) | (cmd[:, 0] <= 0)
+    episode = getattr(env, "episode_length_buf", None)
+    if episode is not None:
+        clear = clear | (episode <= 0)
+    for attr in ("reset_buf", "reset_terminated", "reset_time_outs"):
+        flag = getattr(env, attr, None)
+        if flag is not None:
+            clear = clear | flag.bool()
+
+    buffer = state["buffer"]
+    count = state["count"]
+    if clear.any():
+        buffer[clear] = 0.0
+        count[clear] = 0
+    buffer = torch.cat((buffer[:, 1:], wz.reshape(-1, 1)), dim=1)
+    count = torch.clamp(count + 1, max=n)
+    if clear.any():
+        count[clear] = 1
+        buffer[clear] = 0.0
+        buffer[clear, -1] = wz[clear]
+    state["buffer"], state["count"], state["prev_cmd"] = buffer, count, cmd.detach().clone()
+
+    use_window = (count >= n) & (cmd[:, 0] > 0) & (~clear)
+    average = buffer.sum(dim=1) / count.clamp(min=1).to(wz.dtype)
+    actual = torch.where(use_window, average, wz)
+    reward = torch.exp(-torch.square(cmd[:, 2] - actual) / float(std) ** 2)
+    if return_debug:
+        return reward, {"used_window": use_window, "count": count, "average": average,
+                        "actual": actual, "clear": clear}
+    return reward
+

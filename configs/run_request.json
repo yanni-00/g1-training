@@ -1,25 +1,25 @@
 {
-  "exp_id": "exp-20261124-002",
+  "exp_id": "exp-20261125-001",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_yaw_std03_ext1000_resume13699_formal1000_20261124",
+  "run_name": "f1_yaw_window1s_resume12700_formal1000_20261125",
   "readiness_steps": 300,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Continuation extension of exp-20261124-001: same bounded formal1000 window, no other change.",
+    "max_iterations": "Bounded formal1000 continuation from exp-20261124-001; one variable only: instantaneous -> 1 s window yaw tracking.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained",
     "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
   "resume": {
-    "sha256": "1801dc3b57f13932cda4c830ef85fc42d659d7fadd033659ef3e255a376a6621",
-    "iteration": 13699,
-    "optimizerStep": 274080,
-    "optimizer_learning_rate": 3.3750000000000014e-05,
+    "sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
+    "iteration": 12700,
+    "optimizerStep": 254080,
+    "optimizer_learning_rate": 0.0002562890625000001,
     "producer_runtime_format": "f1_fullbody_runtime_v6",
-    "producer_root": "configs/parent_producer_13699"
+    "producer_root": "configs/parent_producer_12700"
   },
   "training_delta": "configs/training_delta.json",
   "verify_saved_checkpoint_feedback": true

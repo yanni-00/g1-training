@@ -105,6 +105,20 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
             raise ValueError("Unexpected source yaw std or invalid registered target")
         term.params["std"] = target
         parameter_changes = {"track_ang_vel_z": {"std": {"from": old, "to": target}}}
+    window = delta.get("yaw_window_override")
+    if window:
+        if (set(window) != {"function", "window_s", "from"}
+                or window["function"] != "track_ang_vel_z_window_exp"
+                or not math.isfinite(float(window["window_s"])) or float(window["window_s"]) <= 0
+                or after != delta["parent_reward_weights"]):
+            raise ValueError("Only the registered cross-step yaw window override is allowed")
+        term = env_cfg.rewards.track_ang_vel_z
+        if (term.func.__name__ != window["function"]
+                or abs(float(term.params.get("window_s", -1.0)) - float(window["window_s"])) > 1e-12):
+            raise ValueError("Resolved yaw window reward differs from the registered override")
+        parameter_changes["track_ang_vel_z"]["window_s"] = {
+            "from": window["from"], "to": float(window["window_s"]),
+            "function": window["function"]}
     # The parent does not contain per-environment episode state. Restore the
     # observed curriculum command limits explicitly, never claim a bitwise resume.
     ranges = delta["initial_command_ranges" if initial_training else "resume_command_ranges"]
