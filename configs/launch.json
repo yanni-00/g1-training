@@ -4,7 +4,7 @@
     "training": true,
     "evaluation": true
   },
-  "oma_exp_ref": "exp-20261126-007",
+  "oma_exp_ref": "exp-20261126-008",
   "oma_project": "../../../oma-runs/f1-29dof-walking",
   "registered_at": "2026-11-25T00:00:00+08:00",
   "decision_log_row": "r42 turn13+ordinary10s / exp-20261126-005 (F1_G1_WALK)",
