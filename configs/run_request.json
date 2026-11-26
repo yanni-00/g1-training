@@ -17,7 +17,7 @@
     "sha256": "1b01a1b6a11fde54a1aa7a811eece4f5957c38c86efccab2f40f105644307623",
     "iteration": 13699,
     "optimizerStep": 274080,
-    "optimizer_learning_rate": 0.0002562890625000001,
+    "optimizer_learning_rate": 0.00038443359375000017,
     "producer_runtime_format": "f1_fullbody_runtime_v6",
     "producer_root": "configs/parent_producer_13699_r41"
   },
