@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_window_continuation_v11",
+  "format": "f1_yaw_window_gate_v12",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "Instantaneous yaw tracking penalizes the alternating within-cycle yaw that a turning gait needs and rewards a common-mode pattern whose net average is near zero. Scoring the 1 s body-wz average should credit net turn per gait cycle and allow asymmetric steps, turning sustained right response on while preserving first-step response.",
-  "side_effects": "A 1 s average can also credit slow natural drift and delay stop response; speed, loaded-foot tilt, alternating support and stop quiescence must be rechecked. No other variable changes.",
+  "hypothesis": "r39 showed window scoring opens the right-turn channel (differential -0.118) but credits slow straight drift (+0.135) and coincides with stop jitter. Restricting the window to forward turning states should keep the turn-channel benefit while straight walking reverts to instantaneous scoring (r37 straight -0.017).",
+  "side_effects": "Turn-response gains may partly depend on straight-state window credit; stop jitter may persist since it originates in the policy targets. Speed, tilt, alternating support and stop quiescence re-checked; no other variable changes.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -75,6 +75,8 @@
   "yaw_window_override": {
     "function": "track_ang_vel_z_window_exp",
     "window_s": 1.0,
-    "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)"
+    "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)",
+    "gate": "forward_and_wz_nonzero",
+    "source": "r40 single-variable from exact model_12700 at std 0.3: the 1 s body-wz window applies only while walking forward with a nonzero wz command; straight (wz=0) and stopped states always score the instantaneous body wz so natural straight drift is never credited by the window."
   }
 }

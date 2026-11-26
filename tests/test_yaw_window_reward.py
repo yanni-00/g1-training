@@ -63,6 +63,29 @@ class WindowRewardTests(unittest.TestCase):
         self.assertTrue(bool(dbg["used_window"][0]))
         self.assertAlmostEqual(float(reward), 1.0, places=6)
 
+    def test_straight_wz_zero_never_uses_window(self):
+        env = Env(command=(0.5, 0.0, 0.0))
+        for _ in range(60):
+            reward, dbg = env.step((0.5, 0.0, 0.0), 0.135)
+        self.assertFalse(bool(dbg["used_window"][0]))
+        self.assertLess(float(reward), 0.9)  # instantaneous |0.135| vs cmd 0 keeps reward low
+        env2 = Env(command=(0.5, 0.0, 0.0))
+        for _ in range(60):
+            reward0, _ = env2.step((0.5, 0.0, 0.0), 0.0)
+        self.assertAlmostEqual(float(reward0), 1.0, places=6)
+
+    def test_window_activates_again_when_wz_becomes_nonzero(self):
+        env = Env(command=(0.5, 0.0, 0.0))
+        for _ in range(60):
+            env.step((0.5, 0.0, 0.0), 0.135)
+        _, dbg = env.step((0.5, 0.0, -0.1), -0.1)
+        self.assertFalse(bool(dbg["used_window"][0]))  # command change cleared
+        self.assertEqual(int(dbg["count"][0]), 1)
+        for _ in range(60):
+            reward, dbg = env.step((0.5, 0.0, -0.1), -0.1)
+        self.assertTrue(bool(dbg["used_window"][0]))
+        self.assertAlmostEqual(float(reward), 1.0, places=6)
+
     def test_reset_and_stop_clear_the_window(self):
         env = Env()
         for _ in range(60):

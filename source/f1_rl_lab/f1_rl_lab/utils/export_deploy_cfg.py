@@ -121,7 +121,8 @@ def export_deploy_cfg(env, log_dir):
                 "weight": float(yaw_term.weight),
                 "std": float(yaw_term.params["std"]),
                 "window_s": float(yaw_term.params["window_s"]),
-                "formula": "exp(-(cmd_wz-mean(last window_s body wz))^2/std^2); instantaneous fallback when unfilled/stopped",
+                "gate": "forward_and_wz_nonzero",
+                "formula": "exp(-(cmd_wz-mean(last window_s body wz))^2/std^2); window only while forward and cmd_wz!=0; instantaneous otherwise",
                 "scope": "Reward only; actor inputs, actions, sampling and weights unchanged"}
         command = env.command_manager.get_term("base_velocity")
         runtime["training_objective"]["command_sampling"] = {

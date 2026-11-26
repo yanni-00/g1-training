@@ -107,9 +107,10 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
         parameter_changes = {"track_ang_vel_z": {"std": {"from": old, "to": target}}}
     window = delta.get("yaw_window_override")
     if window:
-        if (set(window) != {"function", "window_s", "from"}
+        if (set(window) != {"function", "window_s", "from", "gate"}
                 or window["function"] != "track_ang_vel_z_window_exp"
                 or not math.isfinite(float(window["window_s"])) or float(window["window_s"]) <= 0
+                or window.get("gate") != "forward_and_wz_nonzero"
                 or after != delta["parent_reward_weights"]):
             raise ValueError("Only the registered cross-step yaw window override is allowed")
         from isaaclab.managers import RewardTermCfg
@@ -123,7 +124,7 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
                     "std": std, "window_s": float(window["window_s"])})
         parameter_changes["track_ang_vel_z"]["window_s"] = {
             "from": window["from"], "to": float(window["window_s"]),
-            "function": window["function"]}
+            "function": window["function"], "gate": window["gate"]}
     # The parent does not contain per-environment episode state. Restore the
     # observed curriculum command limits explicitly, never claim a bitwise resume.
     ranges = delta["initial_command_ranges" if initial_training else "resume_command_ranges"]

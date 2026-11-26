@@ -5,11 +5,11 @@
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_yaw_window1s_resume12700_formal1000_20261125",
+  "run_name": "f1_yaw_windowgate_resume12700_formal1000_20261126",
   "readiness_steps": 300,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Bounded formal1000 continuation from exp-20261124-001; one variable only: instantaneous -> 1 s window yaw tracking.",
+    "max_iterations": "Bounded formal1000 from exp-20261124-001; one variable vs r39: window only active for forward walking with nonzero wz.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained",
     "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
