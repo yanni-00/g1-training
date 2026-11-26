@@ -59,10 +59,15 @@ def verify_runtime_action_contract(runtime, contract, root):
             keys = {"source_sha256", "vx", "group_modulus"}
             turn_keys = {"straight_s", "yaw_rate", "turn_s"}
             base_turn = {"straight_s", "yaw_rate"}
+            window_keys = keys | {"signed_turn", "signed_turn_turn_window_s"}
             if (not isinstance(exposure, dict)
-                    or set(exposure) not in (keys, keys | {"route_stop"}, keys | {"signed_turn"})
+                    or set(exposure) not in (keys, keys | {"route_stop"}, keys | {"signed_turn"}, window_keys,
+                                             keys | {"route_stop", "signed_turn", "signed_turn_turn_window_s"})
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
+            if "signed_turn_turn_window_s" in exposure and "signed_turn" in exposure:
+                if (exposure["signed_turn"].get("turn_s") != exposure["signed_turn_turn_window_s"]):
+                    raise ValueError("Recorded turn window differs from the registered turn_s")
             if "signed_turn" in exposure and set(exposure["signed_turn"]) not in (base_turn, turn_keys):
                 raise ValueError("Signed turn schedule fields differ from the registered set")
             if "signed_turn" in exposure:
