@@ -189,7 +189,8 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
     cycle = delta.get("command_cycle_override")
     if cycle:
         if (set(cycle) != {"resampling_time_s", "from"} or not math.isfinite(float(cycle["resampling_time_s"]))
-                or float(cycle["resampling_time_s"]) <= 0 or after != delta["parent_reward_weights"]):
+                or float(cycle["resampling_time_s"]) <= 0
+                or {k: v for k, v in after.items() if k in delta["parent_reward_weights"]} != delta["parent_reward_weights"]):
             raise ValueError("Only the registered command cycle override is allowed")
         term = env_cfg.commands.base_velocity
         lo, hi = term.resampling_time_range

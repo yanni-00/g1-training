@@ -103,9 +103,12 @@ class CommandCycleTests(unittest.TestCase):
                commands=NS(base_velocity=NS(ranges=NS(),resampling_time_range=(10.,10.))))
         delta={"reward_override":{"gait":{"from":1.,"to":1.}},
                "parent_reward_weights":{"gait":1.,"track_ang_vel_z":.5},
+               "reward_addition":{"contact_lateral_tilt":{"from":0.,"to":-5.}},
                "resume_command_ranges":{},
                "command_cycle_override":{"resampling_time_s":20.,"from":10.}}
-        result=module.apply_delta(env,delta)
+        from unittest.mock import patch
+        with patch.object(module, "contact_tilt_term", return_value=NS(weight=-5.)):
+            result=module.apply_delta(env,delta)
         self.assertEqual(env.commands.base_velocity.resampling_time_range,(20.,20.))
         self.assertEqual(result["command_sampling_changes"]["command_cycle"],{"from":10.,"to":20.})
         bad=copy.deepcopy(delta); bad["command_cycle_override"]["resampling_time_s"]=0.
