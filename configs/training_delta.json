@@ -76,7 +76,6 @@
     "function": "track_ang_vel_z_window_exp",
     "window_s": 1.0,
     "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)",
-    "gate": "forward_and_wz_nonzero",
-    "source": "r40 single-variable from exact model_12700 at std 0.3: the 1 s body-wz window applies only while walking forward with a nonzero wz command; straight (wz=0) and stopped states always score the instantaneous body wz so natural straight drift is never credited by the window."
+    "gate": "forward_and_wz_nonzero"
   }
 }
