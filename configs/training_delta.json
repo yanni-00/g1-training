@@ -81,7 +81,6 @@
   },
   "command_cycle_override": {
     "resampling_time_s": 20.0,
-    "from": 10.0,
-    "source": "r41: extending the signed-turn segment to 13 s cannot fit the 10 s cycle; the global command resampling cycle extends to 20 s (straight lead-in 7 s for the turn groups; other groups keep the native sampler but resample every 20 s instead of 10 s)."
+    "from": 10.0
   }
 }
