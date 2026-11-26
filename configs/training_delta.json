@@ -50,11 +50,11 @@
       "std": {
         "from": 0.5,
         "to": 0.3,
-        "source": "Single-variable contrast from the exact saved12700 runtime: only the yaw tracking kernel std moves 0.1->0.3 rad/s; original bound source default0.5 is overridden to this target."
+        "source": "Carried unchanged from the verified r41 parent runtime: yaw kernel std 0.3; original bound source default0.5 overridden to the same target."
       }
     }
   },
-  "parent_yaw_tracking_std": 0.1,
+  "parent_yaw_tracking_std": 0.3,
   "reward_addition": {
     "contact_lateral_tilt": {
       "from": 0.0,
