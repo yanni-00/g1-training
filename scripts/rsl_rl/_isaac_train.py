@@ -208,11 +208,16 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Actual parent objective differs from registered continuation")
             existing_exposure = previous.get("command_sampling", {}).get("forward_exposure")
+            expected_exposure = {k: v for k, v in delta["forward_exposure"].items() if k != "source_sha256"}
+            observed_exposure = ({k: v for k, v in existing_exposure.items() if k != "source_sha256"}
+                                 if existing_exposure is not None else None)
+            if (observed_exposure is not None and "ordinary_resample_s" not in observed_exposure
+                    and "ordinary_resample_s" in expected_exposure):
+                # Registered continuation: the parent predates per-group ordinary resampling.
+                expected_exposure.pop("ordinary_resample_s")
             if delta.get("forward_exposure") and (
                     previous.get("contact_lateral_tilt", {}).get("aggregation") != "positive_world_fz_moving"
-                    or (existing_exposure is not None
-                        and {k: v for k, v in existing_exposure.items() if k != "source_sha256"}
-                        != delta["forward_exposure"])):
+                    or (observed_exposure is not None and observed_exposure != expected_exposure)):
                 raise ValueError("Forward exposure requires the original bilateral loaded-foot parent "
                                  "or an identical parent exposure")
 
