@@ -140,6 +140,9 @@ def export_deploy_cfg(env, log_dir):
                 raise ValueError("Forward exposure did not reach the native command manager")
             runtime["training_objective"]["command_sampling"]["forward_exposure"] = {
                 **command.cfg.forward_exposure, "source_sha256": sha256(ROOT / SOURCE_PATH)}
+            if "signed_turn" in command.cfg.forward_exposure and "turn_s" in command.cfg.forward_exposure["signed_turn"]:
+                runtime["training_objective"]["command_sampling"]["forward_exposure"]["signed_turn_turn_window_s"] = (
+                    float(command.cfg.forward_exposure["signed_turn"]["turn_s"]))
         if "contact_lateral_tilt" in env.reward_manager.active_terms:
             term = env.reward_manager.get_term_cfg("contact_lateral_tilt")
             ac, sc = term.params["asset_cfg"], term.params["sensor_cfg"]

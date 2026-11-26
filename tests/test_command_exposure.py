@@ -132,3 +132,37 @@ class ForwardExposureTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class SignedTurnWindowTests(ForwardExposureTests):
+    """turn_s override: continuous turning longer than the 5 s default inside the cycle."""
+
+    def test_turn_s_extends_window_and_keeps_straight_lead(self):
+        module = self.module()
+        cfg = SimpleNamespace(class_type=UniformCommandFixture, heading_command=False,
+                              resampling_time_range=(20., 20.),
+                              ranges=SimpleNamespace(lin_vel_x=(-.5, 1.), ang_vel_z=(-.1, .1)))
+        exposure = {"vx": .5, "group_modulus": 5,
+                    "signed_turn": {"straight_s": 5., "yaw_rate": .1, "turn_s": 13.}}
+        module.install_forward_exposure(cfg, exposure)
+        term = cfg.class_type(cfg, None)
+        term._resample_command(torch.arange(term.num_envs))
+        # cycle 20 s: straight for 7 s (time_left > 13), turning for 13 s
+        term.time_left[0] = 13.02
+        term.time_left[1] = 13.
+        term._update_command()
+        torch.testing.assert_close(term.command[0], torch.tensor([.5, 0., 0.]))
+        torch.testing.assert_close(term.command[1], torch.tensor([.5, 0., -.1]))
+        term.time_left[0] = 12.98
+        term._update_command()
+        torch.testing.assert_close(term.command[0], torch.tensor([.5, 0., .1]))
+        counts = term.audit_forward_commands()
+        self.assertAlmostEqual(counts["turn_window_s"], 13.)
+        # invalid: turn_s leaving no straight lead-in must be rejected at install time
+        with self.assertRaises(ValueError):
+            module.install_forward_exposure(cfg, {**exposure,
+                "signed_turn": {"straight_s": 5., "yaw_rate": .1, "turn_s": 16.}})
+
+
+if __name__ == "__main__":
+    unittest.main()

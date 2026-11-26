@@ -57,14 +57,22 @@ def verify_runtime_action_contract(runtime, contract, root):
         if exposure is not None:
             source = "source/f1_rl_lab/f1_rl_lab/command_exposure.py"
             keys = {"source_sha256", "vx", "group_modulus"}
+            turn_keys = {"straight_s", "yaw_rate", "turn_s"}
+            base_turn = {"straight_s", "yaw_rate"}
             if (not isinstance(exposure, dict)
                     or set(exposure) not in (keys, keys | {"route_stop"}, keys | {"signed_turn"})
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
+            if "signed_turn" in exposure and set(exposure["signed_turn"]) not in (base_turn, turn_keys):
+                raise ValueError("Signed turn schedule fields differ from the registered set")
             if "signed_turn" in exposure:
                 delta = load_json(Path(root) / "configs/training_delta.json")
                 if {k: v for k, v in exposure.items() if k != "source_sha256"} != delta.get("forward_exposure"):
                     raise ValueError("Signed turn command schedule differs from its training configuration")
+                if (set(exposure["signed_turn"]) == turn_keys
+                        and (not isinstance(delta.get("forward_exposure", {}).get("signed_turn"), dict)
+                             or delta["forward_exposure"]["signed_turn"].get("turn_s") != exposure["signed_turn"]["turn_s"])):
+                    raise ValueError("Registered turn_s differs from the training configuration")
         forward_gait = objective.get("forward_gait")
         if forward_gait is not None:
             from .forward_gait import ALTERNATING_ADAPTER, ALTERNATING_METHOD, METHOD, SOURCE_PATH, SPEED_MATCH_METHOD

@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_window_gate_v12",
+  "format": "f1_yaw_turn_window_v13",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "r39 showed window scoring opens the right-turn channel (differential -0.118) but credits slow straight drift (+0.135) and coincides with stop jitter. Restricting the window to forward turning states should keep the turn-channel benefit while straight walking reverts to instantaneous scoring (r37 straight -0.017).",
-  "side_effects": "Turn-response gains may partly depend on straight-state window credit; stop jitter may persist since it originates in the policy targets. Speed, tilt, alternating support and stop quiescence re-checked; no other variable changes.",
+  "hypothesis": "r40 ordering passed and right differential persists but absolute right turn collapses after ~5-8 s; the signed-turn sampling window was only 5 s per 10 s cycle, so sustained turning was never sampled. Extending the dedicated signed-turn groups to a continuous 13 s turn inside each cycle should align the sampled objective with the 13 s frozen window and let the policy learn sustained turning.",
+  "side_effects": "Longer turns reduce pure-forward exposure for groups 0/1 within each cycle; speed, tilt, alternating support and stop quiescence re-checked. Straight (wz=0) and stopped states keep instantaneous scoring; window reward only while forward and wz!=0. No other variable changes.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -69,7 +69,8 @@
     "group_modulus": 10,
     "signed_turn": {
       "straight_s": 5.0,
-      "yaw_rate": 0.1
+      "yaw_rate": 0.1,
+      "turn_s": 13.0
     }
   },
   "yaw_window_override": {
