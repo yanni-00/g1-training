@@ -82,6 +82,10 @@
   {
    "path": "source/f1_rl_lab/f1_rl_lab/utils/export_deploy_cfg.py",
    "sha256": "77619a05ccf6c16a823108117ca04e325120d150c49ba2c828d60faf48ea0a64"
+  },
+  {
+   "path": "source/f1_rl_lab/f1_rl_lab/command_exposure.py",
+   "sha256": "f1698fe845a401e8c659fcc90033f5fbb61af9517a68631ca3a3da8246e4d3c7"
   }
  ]
 }
