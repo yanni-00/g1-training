@@ -14,12 +14,12 @@
     "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
   "resume": {
-    "sha256": "aae57ff8dea3c25258b689d28166091f9b1015d678c85fdd96a7a6836cdc5ad9",
+    "sha256": "1b01a1b6a11fde54a1aa7a811eece4f5957c38c86efccab2f40f105644307623",
     "iteration": 13699,
     "optimizerStep": 274080,
     "optimizer_learning_rate": 0.0002562890625000001,
     "producer_runtime_format": "f1_fullbody_runtime_v6",
-    "producer_root": "configs/parent_producer_13699_fixed"
+    "producer_root": "configs/parent_producer_13699_r41"
   },
   "training_delta": "configs/training_delta.json",
   "verify_saved_checkpoint_feedback": true

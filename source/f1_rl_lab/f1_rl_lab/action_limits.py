@@ -36,6 +36,13 @@ def action_source_binding(root, projection=False):
 
 
 def verify_runtime_action_contract(runtime, contract, root):
+    objective = runtime.get("training_objective") or {}
+    sampling = objective.get("command_sampling") or {}
+    exposure_rt = sampling.get("forward_exposure")
+    if isinstance(exposure_rt, dict) and "signed_turn_turn_window_s" in exposure_rt:
+        # r41 exported the turn window at the top level as well as inside signed_turn;
+        # normalize this known duplicate before checking the registered schedule.
+        sampling["forward_exposure"] = {k: v for k, v in exposure_rt.items() if k != "signed_turn_turn_window_s"}
     if runtime.get("format") == "f1_fullbody_runtime_v6":
         from .contract import load_json, sha256
         from .foot_posture import LOADED_LATERAL_TILT_FORMULAS
