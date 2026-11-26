@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "r40 ordering passed and right differential persists but absolute right turn collapses after ~5-8 s; the signed-turn sampling window was only 5 s per 10 s cycle, so sustained turning was never sampled. Extending the dedicated signed-turn groups to a continuous 13 s turn inside each cycle should align the sampled objective with the 13 s frozen window and let the policy learn sustained turning.",
-  "side_effects": "Longer turns reduce pure-forward exposure for groups 0/1 within each cycle; speed, tilt, alternating support and stop quiescence re-checked. Straight (wz=0) and stopped states keep instantaneous scoring; window reward only while forward and wz!=0. No other variable changes.",
+  "hypothesis": "r40 ordering passed but absolute right turn collapses after ~5-8 s; the 5 s sampling window never exposed sustained turning. A 13 s continuous turn inside a 20 s cycle aligns the sampled objective with the 13 s frozen window.",
+  "side_effects": "Cycle doubles for all groups (other groups keep the native sampler distribution but resample every 20 s); turn groups keep a 7 s straight lead-in. Speed, tilt, alternating support and stop quiescence re-checked. Window reward only while forward and wz!=0.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -78,5 +78,10 @@
     "window_s": 1.0,
     "from": "mdp.track_ang_vel_z_exp (instantaneous body wz)",
     "gate": "forward_and_wz_nonzero"
+  },
+  "command_cycle_override": {
+    "resampling_time_s": 20.0,
+    "from": 10.0,
+    "source": "r41: extending the signed-turn segment to 13 s cannot fit the 10 s cycle; the global command resampling cycle extends to 20 s (straight lead-in 7 s for the turn groups; other groups keep the native sampler but resample every 20 s instead of 10 s)."
   }
 }

@@ -186,10 +186,21 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
         env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(target, aggregation=rule)
         after["contact_lateral_tilt"] = target
         addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": target}}
+    cycle = delta.get("command_cycle_override")
+    if cycle:
+        if (set(cycle) != {"resampling_time_s", "from"} or not math.isfinite(float(cycle["resampling_time_s"]))
+                or float(cycle["resampling_time_s"]) <= 0 or after != delta["parent_reward_weights"]):
+            raise ValueError("Only the registered command cycle override is allowed")
+        term = env_cfg.commands.base_velocity
+        lo, hi = term.resampling_time_range
+        if not (lo == hi == float(cycle["from"])):
+            raise ValueError("Unexpected source command resampling cycle")
+        term.resampling_time_range = (float(cycle["resampling_time_s"]), float(cycle["resampling_time_s"]))
+        sampling_audit["command_cycle"] = {"from": lo, "to": float(cycle["resampling_time_s"])}
     forward_exposure = delta.get("forward_exposure")
     if forward_exposure is not None:
         from f1_rl_lab.command_exposure import install_forward_exposure
-        if (sampling or retained or set(additions) != {"contact_lateral_tilt"}
+        if (retained or set(additions) != {"contact_lateral_tilt"}
                 or additions["contact_lateral_tilt"].get("aggregation") != "positive_world_fz_moving"
                 or delta.get("action_postprocessing_override") or delta.get("action_input_projection")):
             raise ValueError("Forward exposure retains the bilateral loaded-foot objective and original actions")
