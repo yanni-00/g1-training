@@ -59,10 +59,9 @@ def verify_runtime_action_contract(runtime, contract, root):
             keys = {"source_sha256", "vx", "group_modulus"}
             turn_keys = {"straight_s", "yaw_rate", "turn_s"}
             base_turn = {"straight_s", "yaw_rate"}
-            window_keys = keys | {"signed_turn", "signed_turn_turn_window_s"}
+            allowed = keys | {"route_stop", "signed_turn", "signed_turn_turn_window_s", "ordinary_resample_s"}
             if (not isinstance(exposure, dict)
-                    or set(exposure) not in (keys, keys | {"route_stop"}, keys | {"signed_turn"}, window_keys,
-                                             keys | {"route_stop", "signed_turn", "signed_turn_turn_window_s"})
+                    or not keys <= set(exposure) or set(exposure) - allowed
                     or exposure["source_sha256"] != sha256(Path(root) / source)):
                 raise ValueError("Forward command exposure source binding changed")
             if "signed_turn_turn_window_s" in exposure and "signed_turn" in exposure:

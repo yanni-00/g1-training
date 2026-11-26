@@ -122,6 +122,8 @@ def install_yaw_diagnostics(runner, log_dir, *, std, every=10, dead_reward=0.05,
             "std": float(std),
             "dead_abs_error_rad_s": dead_abs_error,
             "final": final,
+            "walk_to_stop_unreset_total": int(getattr(term, "_walk_to_stop", 0)),
+            "turn_to_stop_unreset_total": int(getattr(term, "_turn_to_stop", 0)),
         }
         line.update({name: summarise(item) for name, item in acc.items()})
         payload = json.dumps(line, allow_nan=False)

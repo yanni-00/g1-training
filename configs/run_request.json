@@ -1,25 +1,25 @@
 {
-  "exp_id": "exp-20261126-004",
+  "exp_id": "exp-20261126-005",
   "phase": "formal",
   "task": "F1-29dof-Velocity",
   "num_envs": 4096,
   "max_iterations": 1000,
   "seed": 42,
-  "run_name": "f1_yaw_turn13_resume12700_formal1000_20261126",
+  "run_name": "f1_yaw_turn13_stopfix_resume13699_formal1000_20261126",
   "readiness_steps": 300,
   "limits_source": {
     "num_envs": "configs/reference/g1_original_velocity_env_cfg.py:RobotEnvCfg.scene.num_envs",
-    "max_iterations": "Bounded formal1000 from exp-20261124-001; one variable vs r40: signed-turn segment 5 s -> 13 s.",
+    "max_iterations": "Bounded formal1000 from verified r41 weights; one variable vs r41: ordinary groups restore 10 s resample while turn groups keep 13 s.",
     "seed": "Actual native seed42 observed in task214 readiness-feedback.json; explicitly retained",
     "readiness_steps": "Six seconds at the bound 0.020 s control step, spanning the scheduled five-second straight lead-in."
   },
   "resume": {
-    "sha256": "3247481b2df92eb046731d7712bd2ac9305af8241057fea021e86f3b0702206f",
-    "iteration": 12700,
-    "optimizerStep": 254080,
+    "sha256": "aae57ff8dea3c25258b689d28166091f9b1015d678c85fdd96a7a6836cdc5ad9",
+    "iteration": 13699,
+    "optimizerStep": 274080,
     "optimizer_learning_rate": 0.0002562890625000001,
     "producer_runtime_format": "f1_fullbody_runtime_v6",
-    "producer_root": "configs/parent_producer_12700"
+    "producer_root": "configs/parent_producer_13699_fixed"
   },
   "training_delta": "configs/training_delta.json",
   "verify_saved_checkpoint_feedback": true

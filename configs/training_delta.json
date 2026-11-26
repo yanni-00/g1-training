@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_turn_window_v13",
+  "format": "f1_yaw_turn_window_v14",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "r40 ordering passed but absolute right turn collapses after ~5-8 s; the 5 s sampling window never exposed sustained turning. A 13 s continuous turn inside a 20 s cycle aligns the sampled objective with the 13 s frozen window.",
-  "side_effects": "Cycle doubles for all groups (other groups keep the native sampler distribution but resample every 20 s); turn groups keep a 7 s straight lead-in. Speed, tilt, alternating support and stop quiescence re-checked. Window reward only while forward and wz!=0.",
+  "hypothesis": "r41 showed the 13 s turn window fixes sustained right turn but the global 20 s cycle also lengthened ordinary groups, likely reducing walk-to-stop exposure and degrading stops. Restoring ordinary groups to a 10 s cycle while keeping the turn groups at 7 s straight + 13 s turn should preserve the turn gain and recover stop quiescence.",
+  "side_effects": "Per-group resampling adds a mid-cycle resample for ordinary groups; counts of unreset walk-to-stop transitions are logged. Turn, route, foot tilt and stop gates all checked; no other variable changes.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -71,7 +71,8 @@
       "straight_s": 5.0,
       "yaw_rate": 0.1,
       "turn_s": 13.0
-    }
+    },
+    "ordinary_resample_s": 10.0
   },
   "yaw_window_override": {
     "function": "track_ang_vel_z_window_exp",

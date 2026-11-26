@@ -166,3 +166,56 @@ class SignedTurnWindowTests(ForwardExposureTests):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class OrdinaryResampleTests(ForwardExposureTests):
+    def test_ordinary_groups_keep_10s_cycle_inside_20s_turn_cycle(self):
+        module = self.module()
+        cfg = SimpleNamespace(class_type=UniformCommandFixture, heading_command=False,
+                              resampling_time_range=(20., 20.),
+                              ranges=SimpleNamespace(lin_vel_x=(-.5, 1.), ang_vel_z=(-.1, .1)))
+        exposure = {"vx": .5, "group_modulus": 5, "ordinary_resample_s": 10.,
+                    "signed_turn": {"straight_s": 5., "yaw_rate": .1, "turn_s": 13.}}
+        module.install_forward_exposure(cfg, exposure)
+        term = cfg.class_type(cfg, None)
+        term._env = SimpleNamespace(step_dt=0.02, episode_length_buf=torch.full((10,), 10, dtype=torch.long))
+        term._resample_command(torch.arange(term.num_envs))
+        ordinary = ~(term._left | term._right)
+        turn = term._left | term._right
+        original = term._resample_command
+        seen = {"ordinary": 0, "turn": 0}
+        def counted(ids):
+            ids = torch.as_tensor(ids)
+            seen["ordinary"] += int((ordinary[ids]).sum().item())
+            seen["turn"] += int((turn[ids]).sum().item())
+            return original(ids)
+        term._resample_command = counted
+        for _ in range(501):
+            term._update_command()
+        # ordinary groups were re-sampled at 10 s inside the 20 s cycle, turn groups were not
+        self.assertGreaterEqual(seen["ordinary"], int((ordinary & ~term.is_standing_env).sum().item()))
+        self.assertEqual(seen["turn"], 0)
+        self.assertTrue(torch.all(term.command[term._left & ~term.is_standing_env, 2] == .1))
+        self.assertTrue(torch.all(term.command[term._right & ~term.is_standing_env, 2] == -.1))
+
+    def test_unreset_walk_to_stop_transitions_are_counted(self):
+        module = self.module()
+        cfg = SimpleNamespace(class_type=UniformCommandFixture, heading_command=False,
+                              resampling_time_range=(20., 20.),
+                              ranges=SimpleNamespace(lin_vel_x=(-.5, 1.), ang_vel_z=(-.1, .1)))
+        exposure = {"vx": .5, "group_modulus": 5, "ordinary_resample_s": 10.,
+                    "signed_turn": {"straight_s": 5., "yaw_rate": .1, "turn_s": 13.}}
+        module.install_forward_exposure(cfg, exposure)
+        term = cfg.class_type(cfg, None)
+        term._env = SimpleNamespace(step_dt=0.02, episode_length_buf=torch.full((10,), 10, dtype=torch.long))
+        term.vel_command_b[:] = 0.0
+        term._prev_cmd = torch.full((10, 3), 0.1)
+        term.is_standing_env[:] = False
+        term.time_left[:] = 14.0  # outside the turn window so turn groups stay stopped
+        term._update_command()
+        self.assertEqual(term._walk_to_stop, 10)
+        self.assertEqual(term._turn_to_stop, 4)
+
+
+if __name__ == "__main__":
+    unittest.main()

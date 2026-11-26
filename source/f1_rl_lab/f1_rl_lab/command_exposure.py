@@ -68,6 +68,13 @@ class SignedTurnVelocityCommand(UniformVelocityCommand):
             self._turn_time_left = float(turn_s)
         else:
             self._turn_time_left = cfg.resampling_time_range[0] - exposure["signed_turn"]["straight_s"]
+        self._ordinary = ~(self._left | self._right)
+        self._ordinary_resample_s = exposure.get("ordinary_resample_s")
+        self._ordinary_elapsed = torch.zeros(self.num_envs, device=self.device)
+        self._prev_cmd = self.command.clone()
+        self._walk_to_stop = 0
+        self._turn_to_stop = 0
+        self._stop_transitions_since_reset = 0
 
     def _resample_command(self, env_ids):
         super()._resample_command(env_ids)
@@ -81,11 +88,29 @@ class SignedTurnVelocityCommand(UniformVelocityCommand):
         return turning & self._left, turning & self._right
 
     def _update_command(self):
+        if self._ordinary_resample_s:
+            dt = float(getattr(getattr(self, "_env", None), "step_dt", 0.02))
+            self._ordinary_elapsed += dt
+            due = self._ordinary & (self._ordinary_elapsed >= float(self._ordinary_resample_s))
+            if due.any():
+                self._resample_command(due.nonzero().flatten())
+                self._ordinary_elapsed[due] = 0.0
+        previous = self._prev_cmd.clone()
         super()._update_command()
         left, right = self._turn_masks()
         yaw_rate = self.cfg.forward_exposure["signed_turn"]["yaw_rate"]
         self.vel_command_b[left, 2] = yaw_rate
         self.vel_command_b[right, 2] = -yaw_rate
+        current = self.command
+        valid = torch.ones_like(previous[:, 0], dtype=torch.bool)
+        episode = getattr(getattr(self, "_env", None), "episode_length_buf", None)
+        if episode is not None:
+            valid = episode > 1
+        stopped = (previous.abs().sum(dim=1) > 1e-6) & (current.abs().sum(dim=1) <= 1e-6) & valid
+        self._walk_to_stop += int(stopped.sum().item())
+        self._turn_to_stop += int((stopped & (self._left | self._right)).sum().item())
+        self._stop_transitions_since_reset = self._walk_to_stop
+        self._prev_cmd = current.clone()
 
     def audit_forward_commands(self, *, after_step=True):
         moving = ~self.is_standing_env
@@ -112,6 +137,9 @@ class SignedTurnVelocityCommand(UniformVelocityCommand):
             "positive_yaw_active": int(left.sum().item()),
             "negative_yaw_active": int(right.sum().item()),
             "turn_window_s": float(self._turn_time_left),
+            "ordinary_resample_s": self._ordinary_resample_s,
+            "walk_to_stop_unreset": int(self._walk_to_stop),
+            "turn_to_stop_unreset": int(self._turn_to_stop),
         }
         if not after_step and (not counts["left_group_moving"] or not counts["right_group_moving"]):
             raise ValueError("Native command snapshot lacks a signed turn group")
@@ -178,7 +206,8 @@ class WalkingRouteVelocityCommand(ForwardExposureVelocityCommand):
 
 def install_forward_exposure(cfg, exposure):
     required = {"vx", "group_modulus"}
-    if set(exposure) not in (required, required | {"route_stop"}, required | {"signed_turn"}):
+    allowed = required | {"route_stop", "signed_turn", "ordinary_resample_s"}
+    if not required <= set(exposure) or set(exposure) - allowed:
         raise ValueError("Forward exposure requires its nominal speed and group modulus")
     vx, modulus = exposure["vx"], exposure["group_modulus"]
     routes = exposure.get("route_stop")
@@ -198,11 +227,13 @@ def install_forward_exposure(cfg, exposure):
         turn = exposure["signed_turn"]
         period_lo, period_hi = cfg.resampling_time_range
         turn_fields = {"straight_s", "yaw_rate"} | ({"turn_s"} if "turn_s" in turn else set())
+        ordinary = exposure.get("ordinary_resample_s")
         if (set(turn) != turn_fields
                 or period_lo != period_hi
                 or not 0 < turn["straight_s"] < period_lo
                 or not 0 < turn["yaw_rate"] < math.inf
-                or ("turn_s" in turn and not 0 < turn["turn_s"] < period_lo - turn["straight_s"])):
+                or ("turn_s" in turn and not 0 < turn["turn_s"] < period_lo - turn["straight_s"])
+                or (ordinary is not None and not 0 < float(ordinary) <= period_lo)):
             raise ValueError("Invalid signed turn timing or yaw rate")
         yaw_lo, yaw_hi = cfg.ranges.ang_vel_z
         if not (yaw_lo <= -turn["yaw_rate"] and turn["yaw_rate"] <= yaw_hi):
