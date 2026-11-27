@@ -81,5 +81,35 @@ class ActionLimitTests(unittest.TestCase):
             apply_delta(env, delta)
 
 
+    def test_runtime_v6_loaded_foot_and_standing_coexist_and_r41_backward_compatible(self):
+        from f1_rl_lab.contract import sha256
+        from f1_rl_lab.foot_posture import LOADED_LATERAL_TILT_FORMULAS
+        agg = "positive_world_fz_moving"
+        feet = ["left_ankle_roll", "right_ankle_roll"]
+        ankles = [f"{s}_ankle_{a}_joint" for s in ("left", "right") for a in ("pitch", "roll")]
+        ids = [self.contract["model_joint_names"].index(n) for n in ankles]
+        foot = "source/f1_rl_lab/f1_rl_lab/foot_posture.py"
+        stand = "source/f1_rl_lab/f1_rl_lab/standing_smoothness.py"
+
+        def runtime(with_standing):
+            obj = {"contact_lateral_tilt": {"aggregation": agg, "formula": LOADED_LATERAL_TILT_FORMULAS[agg],
+                                            "function": "feet_loaded_lateral_tilt", "command_name": "base_velocity",
+                                            "asset_body_names": feet, "sensor_body_names": feet},
+                   "custom_reward_sources": {foot: sha256(ROOT / foot)}}
+            if with_standing:
+                obj["custom_reward_sources"][stand] = sha256(ROOT / stand)
+                obj["zero_command_ankle_action_rate_l2"] = {"ankle_joint_names": ankles, "ankle_action_ids": ids,
+                                                            "gate": "all(command_vx,command_vy,command_wz)==0"}
+            return {"format": "f1_fullbody_runtime_v6", "action_clip": None, "action_input_projection": None,
+                    "action_interface_sources": action_source_binding(ROOT, projection=True), "training_objective": obj}
+
+        verify_runtime_action_contract(runtime(False), self.contract, ROOT)  # original r41 checkpoint
+        verify_runtime_action_contract(runtime(True), self.contract, ROOT)   # both terms in one v6 checkpoint
+        bad = runtime(True)
+        bad["training_objective"]["zero_command_ankle_action_rate_l2"]["ankle_action_ids"] = ids[::-1]
+        with self.assertRaisesRegex(ValueError, "Loaded-foot runtime_v6"):
+            verify_runtime_action_contract(bad, self.contract, ROOT)
+
+
 if __name__ == "__main__":
     unittest.main()

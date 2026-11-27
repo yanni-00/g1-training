@@ -30,6 +30,28 @@ class ContinuationTests(unittest.TestCase):
             bad=copy.deepcopy(delta);bad["reward_addition"]["contact_lateral_tilt"]["to"]=value
             with self.assertRaises(ValueError):module.apply_delta(copy.deepcopy(original),bad)
 
+    def test_contact_tilt_and_zero_command_ankle_coexist_on_parent_inventory(self):
+        import copy
+        from unittest.mock import patch
+        env=NS(rewards=NS(gait=NS(weight=.5),track_ang_vel_z=NS(weight=.5,params={"std":.3})),
+               commands=NS(base_velocity=NS(ranges=NS())))
+        parent={"gait":1.,"track_ang_vel_z":.5,"contact_lateral_tilt":-5.}
+        delta={"reward_override":{"gait":{"from":.5,"to":1.}},
+               "parent_reward_weights":parent,
+               "reward_addition":{"contact_lateral_tilt":{"from":0.,"to":-5.,"aggregation":"positive_world_fz_moving"},
+                                  "zero_command_ankle_action_rate_l2":{"from":0.,"to":-0.10}},
+               "resume_command_ranges":{"ang_vel_z":[-.1,.1]}}
+        original=copy.deepcopy(env)
+        with patch.object(module,"contact_tilt_term",return_value=NS(weight=-5.)) as ct, \
+             patch.object(module,"standing_smoothness_term",return_value=NS(weight=-.10)) as ss:
+            result=module.apply_delta(env,delta)
+        ct.assert_called_once_with(-5., aggregation="positive_world_fz_moving")
+        ss.assert_called_once_with(-0.10)
+        self.assertEqual(result["reward_weights_after"], {**parent,"zero_command_ankle_action_rate_l2":-0.10})
+        for bad in (0.,float("nan"),1.):
+            b=copy.deepcopy(delta); b["reward_addition"]["zero_command_ankle_action_rate_l2"]["to"]=bad
+            with self.assertRaises(ValueError): module.apply_delta(copy.deepcopy(original),b)
+
     def test_yaw_width_preserves_actual_parent_weights_and_other_parameters(self):
         import copy
         env=NS(rewards=NS(gait=NS(weight=.5,params={"period":.8}),

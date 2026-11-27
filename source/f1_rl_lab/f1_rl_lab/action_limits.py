@@ -52,9 +52,20 @@ def verify_runtime_action_contract(runtime, contract, root):
         aggregation = tilt.get("aggregation")
         exposure = objective.get("command_sampling", {}).get("forward_exposure")
         feet = ["left_ankle_roll", "right_ankle_roll"]
+        standing = objective.get("zero_command_ankle_action_rate_l2")
+        standing_path = "source/f1_rl_lab/f1_rl_lab/standing_smoothness.py"
+        expected_custom = {name: sha256(Path(root) / name)}
+        standing_ok = True
+        if standing is not None:
+            ankles = [f"{side}_ankle_{axis}_joint" for side in ("left", "right") for axis in ("pitch", "roll")]
+            expected_custom[standing_path] = sha256(Path(root) / standing_path)
+            standing_ok = (standing.get("ankle_joint_names") == ankles
+                           and standing.get("ankle_action_ids") == [contract["model_joint_names"].index(n) for n in ankles]
+                           and standing.get("gate") == "all(command_vx,command_vy,command_wz)==0")
         if (runtime.get("action_clip") is not None or runtime.get("action_input_projection") is not None
                 or runtime.get("action_interface_sources") != action_source_binding(root, projection=True)
-                or objective.get("custom_reward_sources") != {name: sha256(Path(root) / name)}
+                or objective.get("custom_reward_sources") != expected_custom
+                or not standing_ok
                 or aggregation not in LOADED_LATERAL_TILT_FORMULAS
                 or tilt.get("formula") != LOADED_LATERAL_TILT_FORMULAS[aggregation]
                 or tilt.get("function") != "feet_loaded_lateral_tilt"

@@ -169,6 +169,31 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
         env_cfg.rewards.yaw_rate_error_l2 = yaw_tracking_term(target)
         after["yaw_rate_error_l2"] = target
         addition_audit = {"yaw_rate_error_l2": {"from": 0.0, "to": target}}
+    elif set(additions) == {"contact_lateral_tilt", "zero_command_ankle_action_rate_l2"}:
+        # Restore the parent's already-active loaded-foot tilt, then add the single new
+        # zero-command ankle smoothness term on top of the exact parent reward inventory.
+        tilt = additions["contact_lateral_tilt"]
+        stand = additions["zero_command_ankle_action_rate_l2"]
+        if (hasattr(env_cfg.rewards, "contact_lateral_tilt") or tilt["from"] != 0.0
+                or "contact_lateral_tilt" in after):
+            raise ValueError("Contact tilt must not exist in the original base")
+        tilt_target = float(tilt["to"])
+        if not math.isfinite(tilt_target) or tilt_target >= 0:
+            raise ValueError("Contact tilt cost must have a finite negative weight")
+        if (hasattr(env_cfg.rewards, "zero_command_ankle_action_rate_l2") or stand["from"] != 0.0):
+            raise ValueError("Zero-command ankle smoothness must be a new term")
+        stand_target = float(stand["to"])
+        if not math.isfinite(stand_target) or stand_target >= 0:
+            raise ValueError("Standing action-rate cost must have a finite negative weight")
+        if {**after, "contact_lateral_tilt": tilt_target} != delta["parent_reward_weights"]:
+            raise ValueError("Existing parent reward inventory changed while adding contact tilt")
+        env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(
+            tilt_target, aggregation=tilt.get("aggregation", "equal_contact"))
+        after["contact_lateral_tilt"] = tilt_target
+        env_cfg.rewards.zero_command_ankle_action_rate_l2 = standing_smoothness_term(stand_target)
+        after["zero_command_ankle_action_rate_l2"] = stand_target
+        addition_audit = {"contact_lateral_tilt": {"from": 0.0, "to": tilt_target},
+                          "zero_command_ankle_action_rate_l2": {"from": 0.0, "to": stand_target}}
     elif additions:
         if set(additions) != {"contact_lateral_tilt"}:
             raise ValueError("Only the registered contact tilt term can be added")
@@ -201,7 +226,9 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
     forward_exposure = delta.get("forward_exposure")
     if forward_exposure is not None:
         from f1_rl_lab.command_exposure import install_forward_exposure
-        if (retained or set(additions) != {"contact_lateral_tilt"}
+        if (retained
+                or set(additions) not in ({"contact_lateral_tilt"},
+                                          {"contact_lateral_tilt", "zero_command_ankle_action_rate_l2"})
                 or additions["contact_lateral_tilt"].get("aggregation") != "positive_world_fz_moving"
                 or delta.get("action_postprocessing_override") or delta.get("action_input_projection")):
             raise ValueError("Forward exposure retains the bilateral loaded-foot objective and original actions")

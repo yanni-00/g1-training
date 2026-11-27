@@ -204,6 +204,11 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
             previous = parent_identity["runtime"]["training_objective"]
             expected_weights = (continuation["reward_weights_after"] if delta.get("forward_exposure")
                                 else delta["parent_reward_weights"])
+            # A newly added reward (ankle smoothness / yaw) is absent from the loaded parent;
+            # compare the parent against the inventory BEFORE the addition.
+            newly_added = {"zero_command_ankle_action_rate_l2", "yaw_rate_error_l2"} & set(delta.get("reward_addition") or {})
+            if newly_added and isinstance(expected_weights, dict):
+                expected_weights = {k: v for k, v in expected_weights.items() if k not in newly_added}
             if (previous["reward_weights"] != expected_weights
                     or previous["yaw_tracking_std"] != delta["parent_yaw_tracking_std"]):
                 raise ValueError("Actual parent objective differs from registered continuation")
