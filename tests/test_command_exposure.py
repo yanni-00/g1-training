@@ -289,6 +289,21 @@ class OrdinaryResampleTests(ForwardExposureTests):
         self.assertEqual(len([x for x in env_times if abs(x - 10.0) <= 0.04]), 0, env_times)
         self.assertEqual(len([x for x in env_times if abs(x - 17.0) <= 0.04]), 1, env_times)
 
+    def test_audit_command_cycle_function(self):
+        module = load_module(NativeCycleFixture)
+        cfg = SimpleNamespace(class_type=NativeCycleFixture, heading_command=False,
+                              resampling_time_range=(20., 20.),
+                              ranges=SimpleNamespace(lin_vel_x=(-.5, 1.), ang_vel_z=(-.1, .1)))
+        exposure = {"vx": .5, "group_modulus": 5, "ordinary_resample_s": 10.,
+                    "signed_turn": {"straight_s": 5., "yaw_rate": .1, "turn_s": 13.}}
+        module.install_forward_exposure(cfg, exposure)
+        term = cfg.class_type(cfg, None)
+        term.reset(torch.arange(term.num_envs))
+        report = module.audit_command_cycle(term, 0.02, seconds=21.0)
+        self.assertTrue(report["ok"], report)
+        self.assertAlmostEqual(report["observed_turn_start_s"], 7.0, delta=0.06)
+        self.assertTrue(report["ordinary_ok"] and report["turn_ok"])
+
     def test_unreset_walk_to_stop_transitions_are_counted(self):
         module = self.module()
         cfg = SimpleNamespace(class_type=UniformCommandFixture, heading_command=False,

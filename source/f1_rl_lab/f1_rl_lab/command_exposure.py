@@ -242,3 +242,99 @@ def install_forward_exposure(cfg, exposure):
     else:
         cfg.class_type = ForwardExposureVelocityCommand
     cfg.forward_exposure = dict(exposure)
+
+
+def audit_command_cycle(term, step_dt, seconds=21.0, tol=0.04):
+    """Verify the real command term's native resampling cycle before PPO.
+
+    Drives CommandTerm.compute over simulated time (the same per-step path used in
+    training) and records every _resample_command call. Confirms: ordinary groups
+    expire once near ordinary_resample_s and once per native period (no double
+    sample), turn groups expire once per native period (not at the ordinary mark),
+    and the turn window starts after the registered straight lead-in.
+    """
+    dt = float(step_dt)
+    steps = int(round(float(seconds) / dt))
+    events = []
+    clock = [0.0]
+    original = term._resample_command
+
+    def wrapped(env_ids):
+        ids = torch.as_tensor(env_ids, device=term.device, dtype=torch.long)
+        events.append((clock[0], ids.clone()))
+        return original(env_ids)
+
+    turn_first = [None]
+    term._resample_command = wrapped
+    try:
+        for i in range(steps):
+            term.compute(dt)
+            clock[0] = round((i + 1) * dt, 4)
+            if turn_first[0] is None:
+                turning = ((term._left | term._right) & ~term.is_standing_env
+                           & (term.command[:, 2].abs() > 0))
+                if turning.any():
+                    turn_first[0] = clock[0]
+    finally:
+        term._resample_command = original
+    # Restore a clean, deterministic command state so training diagnostics start from zero.
+    try:
+        term.reset(torch.arange(term.num_envs, device=term.device))
+    except Exception:
+        pass
+    for attr in ("_walk_to_stop", "_turn_to_stop", "_stop_transitions_since_reset"):
+        if hasattr(term, attr):
+            setattr(term, attr, 0)
+    if hasattr(term, "_prev_cmd"):
+        term._prev_cmd = term.command.clone()
+
+    moving = ~term.is_standing_env
+
+    def per_env(mask):
+        out = {int(e): [] for e in torch.nonzero(mask & moving).flatten().tolist()}
+        for (et, ids) in events:
+            for e in ids.tolist():
+                if e in out:
+                    out[e].append(et)
+        return out
+
+    def near(ts, target):
+        return [x for x in ts if abs(x - target) <= tol]
+
+    period = float(term.cfg.resampling_time_range[1])
+    ordinary_s = float(term._ordinary_resample_s) if term._ordinary_resample_s else period
+    ordinary_times = per_env(term._ordinary)
+    turn_times = per_env(term._left | term._right)
+    separate = abs(ordinary_s - period) > 1e-9
+
+    def ordinary_ok(times):
+        if not times:
+            return False
+        ok = True
+        for ts in times.values():
+            ok &= len(near(ts, period)) == 1
+            if separate:
+                ok &= len(near(ts, ordinary_s)) == 1
+        return ok
+
+    def turn_ok(times):
+        if not times:
+            return False
+        ok = True
+        for ts in times.values():
+            ok &= len(near(ts, period)) == 1
+            if separate:
+                ok &= len(near(ts, ordinary_s)) == 0
+        return ok
+
+    turn_start = period - float(term._turn_time_left)
+    turn_lead_ok = turn_first[0] is not None and abs(turn_first[0] - turn_start) <= dt * 1.5
+    report = {
+        "step_dt": dt, "steps": steps, "period_s": period, "ordinary_s": ordinary_s,
+        "turn_start_s": turn_start, "observed_turn_start_s": turn_first[0],
+        "ordinary_envs": len(ordinary_times), "turn_envs": len(turn_times),
+        "ordinary_ok": ordinary_ok(ordinary_times), "turn_ok": turn_ok(turn_times),
+        "turn_lead_ok": turn_lead_ok,
+    }
+    report["ok"] = bool(report["ordinary_ok"] and report["turn_ok"] and report["turn_lead_ok"])
+    return report

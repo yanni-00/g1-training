@@ -268,6 +268,12 @@ def main(env_cfg: ManagerBasedRLEnvCfg | DirectRLEnvCfg | DirectMARLEnvCfg, agen
     if delta.get("forward_exposure"):
         command_term = env.unwrapped.command_manager.get_term("base_velocity")
         print("[F1_FORWARD_EXPOSURE]", command_term.audit_forward_commands(after_step=False), flush=True)
+        if "signed_turn" in delta["forward_exposure"]:
+            from f1_rl_lab.command_exposure import audit_command_cycle
+            cycle = audit_command_cycle(command_term, float(getattr(env.unwrapped, "step_dt", 0.02)), seconds=21.0)
+            print("[F1_COMMAND_CYCLE]", cycle, flush=True)
+            if not cycle["ok"]:
+                raise ValueError("Registered command-cycle audit failed before PPO update: " + str(cycle))
 
     # dump the configuration into log-directory
     dump_yaml(os.path.join(log_dir, "params", "env.yaml"), env_cfg)
