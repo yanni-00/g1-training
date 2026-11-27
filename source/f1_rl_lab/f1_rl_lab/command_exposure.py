@@ -70,7 +70,6 @@ class SignedTurnVelocityCommand(UniformVelocityCommand):
             self._turn_time_left = cfg.resampling_time_range[0] - exposure["signed_turn"]["straight_s"]
         self._ordinary = ~(self._left | self._right)
         self._ordinary_resample_s = exposure.get("ordinary_resample_s")
-        self._ordinary_elapsed = torch.zeros(self.num_envs, device=self.device)
         self._prev_cmd = self.command.clone()
         self._walk_to_stop = 0
         self._turn_to_stop = 0
@@ -82,19 +81,20 @@ class SignedTurnVelocityCommand(UniformVelocityCommand):
         targeted = ids[(self._left[ids] | self._right[ids]) & ~self.is_standing_env[ids]]
         self.vel_command_b[targeted, 0] = self.cfg.forward_exposure["vx"]
         self.vel_command_b[targeted, 1:] = 0
+        # Single native countdown: CommandTerm._resample already wrote cfg.resampling_time_range
+        # into time_left before this call, so override per group here (ordinary 10 s, turn 20 s).
+        ordinary_ids = ids[self._ordinary[ids]]
+        turn_ids = ids[self._left[ids] | self._right[ids]]
+        if self._ordinary_resample_s and ordinary_ids.numel():
+            self.time_left[ordinary_ids] = float(self._ordinary_resample_s)
+        if turn_ids.numel():
+            self.time_left[turn_ids] = float(self.cfg.resampling_time_range[1])
 
     def _turn_masks(self):
         turning = (self.time_left <= self._turn_time_left) & ~self.is_standing_env
         return turning & self._left, turning & self._right
 
     def _update_command(self):
-        if self._ordinary_resample_s:
-            dt = float(getattr(getattr(self, "_env", None), "step_dt", 0.02))
-            self._ordinary_elapsed += dt
-            due = self._ordinary & (self._ordinary_elapsed >= float(self._ordinary_resample_s))
-            if due.any():
-                self._resample_command(due.nonzero().flatten())
-                self._ordinary_elapsed[due] = 0.0
         previous = self._prev_cmd.clone()
         super()._update_command()
         left, right = self._turn_masks()
