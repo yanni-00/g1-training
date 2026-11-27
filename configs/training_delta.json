@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_turn_window_v14",
+  "format": "f1_yaw_turn_window_ankle_smooth_v15",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "r41 showed the 13 s turn window fixes sustained right turn but the global 20 s cycle also lengthened ordinary groups, likely reducing walk-to-stop exposure and degrading stops. Restoring ordinary groups to a 10 s cycle while keeping the turn groups at 7 s straight + 13 s turn should preserve the turn gain and recover stop quiescence.",
-  "side_effects": "Per-group resampling adds a mid-cycle resample for ordinary groups; counts of unreset walk-to-stop transitions are logged. Turn, route, foot tilt and stop gates all checked; no other variable changes.",
+  "hypothesis": "r41 walks and sustains the right turn; its remaining defect is ankle target motion after the zero-speed stop. Keep r41 sampling/rewards unchanged and add ONE zero-command ankle action-rate term (-0.10) to quiesce the stopped ankles without harming turn/route.",
+  "side_effects": "A finite ankle action-rate cost under exactly zero command can resist corrective ankle reactions or delay stopping; it does not gate nonzero commands but shared PPO updates can still affect walking. Protect signed turn, route, pitch and no-fall.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -43,14 +43,15 @@
     "gait": 1.0,
     "feet_slide": -0.2,
     "feet_clearance": 1.0,
-    "undesired_contacts": -1.0
+    "undesired_contacts": -1.0,
+    "contact_lateral_tilt": -5.0
   },
   "reward_param_override": {
     "track_ang_vel_z": {
       "std": {
         "from": 0.5,
         "to": 0.3,
-        "source": "Carried unchanged from the verified r41 parent runtime: yaw kernel std 0.3; original bound source default0.5 overridden to the same target."
+        "source": "Reconstruct the verified r41 parent runtime yaw std 0.3 from the original base default 0.5. The yaw tracking reward is unchanged relative to r41."
       }
     }
   },
@@ -61,6 +62,11 @@
       "to": -5.0,
       "aggregation": "positive_world_fz_moving",
       "source": "Reconstruct exact saved12700 bilateral normal-force weighted moving cost from the original base."
+    },
+    "zero_command_ankle_action_rate_l2": {
+      "from": 0.0,
+      "to": -0.1,
+      "source": "First-round candidate: on r41 zero-command replay frames the -0.10 ankle penalty is ~0.85x the whole-body action-rate at initial stand and 0.95-1.05x at late stop (offline recompute). Training-only reward on the 4 ankle raw-action increments under exactly zero command."
     }
   },
   "rollout_recovery": "finite_raw_action_failure_v1",
@@ -71,8 +77,7 @@
       "straight_s": 5.0,
       "yaw_rate": 0.1,
       "turn_s": 13.0
-    },
-    "ordinary_resample_s": 10.0
+    }
   },
   "yaw_window_override": {
     "function": "track_ang_vel_z_window_exp",
