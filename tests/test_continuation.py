@@ -35,7 +35,7 @@ class ContinuationTests(unittest.TestCase):
         from unittest.mock import patch
         env=NS(rewards=NS(gait=NS(weight=.5),track_ang_vel_z=NS(weight=.5,params={"std":.3})),
                commands=NS(base_velocity=NS(ranges=NS())))
-        parent={"gait":1.,"track_ang_vel_z":.5,"contact_lateral_tilt":-5.}
+        parent={"gait":1.,"track_ang_vel_z":.5}
         delta={"reward_override":{"gait":{"from":.5,"to":1.}},
                "parent_reward_weights":parent,
                "reward_addition":{"contact_lateral_tilt":{"from":0.,"to":-5.,"aggregation":"positive_world_fz_moving"},
@@ -47,7 +47,7 @@ class ContinuationTests(unittest.TestCase):
             result=module.apply_delta(env,delta)
         ct.assert_called_once_with(-5., aggregation="positive_world_fz_moving")
         ss.assert_called_once_with(-0.10)
-        self.assertEqual(result["reward_weights_after"], {**parent,"zero_command_ankle_action_rate_l2":-0.10})
+        self.assertEqual(result["reward_weights_after"], {**parent,"contact_lateral_tilt":-5.,"zero_command_ankle_action_rate_l2":-0.10})
         for bad in (0.,float("nan"),1.):
             b=copy.deepcopy(delta); b["reward_addition"]["zero_command_ankle_action_rate_l2"]["to"]=bad
             with self.assertRaises(ValueError): module.apply_delta(copy.deepcopy(original),b)

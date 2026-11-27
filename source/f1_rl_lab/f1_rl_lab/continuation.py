@@ -185,8 +185,11 @@ def apply_delta(env_cfg, delta, *, initial_training=False):
         stand_target = float(stand["to"])
         if not math.isfinite(stand_target) or stand_target >= 0:
             raise ValueError("Standing action-rate cost must have a finite negative weight")
-        if {**after, "contact_lateral_tilt": tilt_target} != delta["parent_reward_weights"]:
-            raise ValueError("Existing parent reward inventory changed while adding contact tilt")
+        # parent_reward_weights is the base env inventory BEFORE optional additions;
+        # the loaded parent's active tilt is reconstructed here and the single new
+        # ankle term is added on top, so both additions sit above this exact base.
+        if after != delta["parent_reward_weights"]:
+            raise ValueError("Existing parent reward inventory changed while adding the reward additions")
         env_cfg.rewards.contact_lateral_tilt = contact_tilt_term(
             tilt_target, aggregation=tilt.get("aggregation", "equal_contact"))
         after["contact_lateral_tilt"] = tilt_target
