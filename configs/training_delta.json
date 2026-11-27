@@ -54,7 +54,7 @@
       }
     }
   },
-  "parent_yaw_tracking_std": 0.1,
+  "parent_yaw_tracking_std": 0.3,
   "reward_addition": {
     "contact_lateral_tilt": {
       "from": 0.0,
