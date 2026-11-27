@@ -1,5 +1,5 @@
 {
-  "format": "f1_yaw_turn_window_ankle_smooth_v15",
+  "format": "f1_yaw_turn_window_ankle_smooth_v16",
   "reward_override": {
     "gait": {
       "from": 0.5,
@@ -22,8 +22,8 @@
     ]
   },
   "command_provenance": "Exact saved12700 command ranges. Two of ten environment-index groups use the matched yaw audit vx and yaw magnitude. Both begin straight, then group 0 receives positive yaw and group 1 negative yaw. Original standing selection takes priority and the other groups retain the native sampler.",
-  "hypothesis": "r41 walks and sustains the right turn; remaining defect is ankle target motion after the zero-speed stop. Keep r41 sampling/rewards unchanged and add ONE zero-command ankle action-rate term (-0.10) to quiesce stopped ankles without harming turn/route.",
-  "side_effects": "A finite ankle action-rate cost under exactly zero command can resist corrective ankle reactions or delay stopping; it does not gate nonzero commands but shared PPO updates can still affect walking. Protect signed turn, route, pitch and no-fall.",
+  "hypothesis": "r41 walks, sustains right turn (2nd-half increment ~-0.10) and keeps foot tilt; its stop ankles still swing. Add ONLY a half-strength (-0.05) zero-command ankle action-rate term so the stop is quieter without the r44 over-constraint that zeroed the second-half right-turn pull and worsened speed/tilt.",
+  "side_effects": "A finite ankle action-rate cost under exactly zero command can resist ankle reactions or delay stopping; weaker than r44 -0.10. Protect signed right turn (incl 17-23s increment vs straight), forward speed MAE, route, left-foot loaded tilt and no-fall.",
   "parent_reward_weights": {
     "track_lin_vel_xy": 1.0,
     "track_ang_vel_z": 0.5,
@@ -64,8 +64,8 @@
     },
     "zero_command_ankle_action_rate_l2": {
       "from": 0.0,
-      "to": -0.1,
-      "source": "First-round candidate: on r41 zero-command replay frames the -0.10 ankle penalty is ~0.85x the whole-body action-rate at initial stand and 0.95-1.05x at late stop (offline recompute). Training-only reward on the 4 ankle raw-action increments under exactly zero command."
+      "to": -0.05,
+      "source": "Half-strength stop constraint (r45): -0.05 gives ~0.47-0.53x the whole-body action-rate at late stop on r41 frames. Training-only reward on the 4 ankle raw-action increments under exactly zero command; retain r41 turn/speed/route/foot-tilt."
     }
   },
   "rollout_recovery": "finite_raw_action_failure_v1",
